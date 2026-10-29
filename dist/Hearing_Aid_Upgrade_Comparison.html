@@ -43,7 +43,7 @@ h1 { margin: 4px 0 0; font-size: clamp(1.5rem, 3vw, 2.1rem); }
 
 /* Setup panel */
 .panel { background: var(--card); border-radius: var(--radius); box-shadow: 0 6px 24px rgba(11, 42, 91, .08); padding: 20px; margin: -14px 0 24px; position: relative; }
-.setup-grid { display: grid; grid-template-columns: 1fr 1.3fr .9fr 1.3fr auto; gap: 16px; align-items: end; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1.6fr 1.3fr auto; gap: 16px; align-items: end; }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-weight: 600; font-size: .9rem; }
 .hint { font-weight: 400; color: var(--muted); }
@@ -148,6 +148,63 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 .checklist tr.group-row th { background: #f4f6fa; color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; }
 .upsell { margin: -18px 0 28px; padding: 10px 14px; background: var(--blue-soft); border-radius: 10px; font-size: .9rem; color: var(--navy); }
 
+
+/* Type-ahead for the current aid */
+.combo { position: relative; }
+.combo-list { position: absolute; top: 100%; left: 0; right: 0; z-index: 20; margin: 4px 0 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 28px rgba(11, 42, 91, .18); max-height: 340px; overflow-y: auto; }
+.combo-group { padding: 8px 12px 4px; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.combo-opt { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; cursor: pointer; }
+.combo-opt small { color: var(--muted); white-space: nowrap; }
+.combo-opt.active, .combo-opt:hover { background: var(--blue-soft); }
+.combo-empty { padding: 10px 12px; color: var(--muted); }
+
+/* Concerns, fitting, discount */
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { font-weight: 600; font-size: .9rem; padding: 0; margin-bottom: 6px; }
+.concerns { margin-top: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; font-size: .9rem; background: #fff; }
+.chip:has(input:checked) { background: var(--blue); border-color: var(--blue); color: #fff; }
+.chip input { accent-color: var(--blue); }
+.options-grid { display: grid; grid-template-columns: auto minmax(220px, 320px) 1fr; gap: 16px; align-items: end; margin-top: 16px; }
+.fitting { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fitting legend { width: 100%; }
+.seg { display: inline-flex; gap: 6px; align-items: center; padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.seg:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); font-weight: 600; }
+.options-note { margin: 0 0 10px; }
+
+/* Concern emphasis */
+.concern-line { background: var(--blue-soft); color: var(--navy); border-radius: 12px; padding: 10px 16px; margin: 0 0 16px; }
+.card.matters { border-top-color: var(--blue); box-shadow: 0 0 0 2px var(--blue), 0 6px 22px rgba(11, 42, 91, .12); }
+.matters-tag { align-self: flex-start; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: var(--blue); color: #fff; border-radius: 999px; padding: 2px 9px; }
+.matters-pill { display: inline-block; font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; background: var(--blue); color: #fff; border-radius: 999px; padding: 1px 7px; vertical-align: middle; margin-left: 4px; }
+.checklist tr.feat-matters th { box-shadow: inset 4px 0 0 var(--blue); }
+
+/* Price box (inside the green hero panel) */
+.price-box { margin-top: 14px; background: rgba(255, 255, 255, .14); border-radius: 12px; padding: 12px 14px; }
+.price-line { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; font-size: .95rem; }
+.price-line s { opacity: .7; font-weight: 400; margin-right: 4px; }
+.price-line.saving { color: #d5ffe6; font-weight: 600; }
+.price-line.total { border-top: 1px solid rgba(255, 255, 255, .35); margin-top: 6px; padding-top: 8px; font-size: 1.3rem; font-weight: 800; }
+.price-meta { margin: 8px 0 0; font-size: .78rem; opacity: .9; }
+
+/* Listening plans */
+.plans { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 12px; }
+.plan-card { font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 16px; cursor: pointer; color: var(--ink); }
+.plan-card:hover { border-color: var(--blue); }
+.plan-card.chosen { border-color: var(--now-strong); background: var(--now-bg); box-shadow: 0 6px 18px rgba(18, 161, 80, .18); }
+.plan-card.suits:not(.chosen) { border-color: var(--blue); }
+.plan-name { font-weight: 800; font-size: 1.05rem; color: var(--navy); }
+.plan-acc { font-weight: 600; color: var(--blue); }
+.plan-benefit { font-size: .9rem; color: var(--ink); }
+.plan-cost { font-weight: 700; margin-top: auto; }
+.plan-ins { font-size: .8rem; color: var(--now-ink); font-weight: 600; }
+.plan-suits { font-size: .78rem; background: var(--blue-soft); color: var(--navy); border-radius: 8px; padding: 3px 8px; }
+.plan-tick { font-size: .8rem; font-weight: 700; color: var(--now-ink); }
+.plan-none { color: var(--muted); }
+.ins-opt { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 28px; }
+.print-only { display: none; }
+
 /* Script */
 .script { margin: 0 0 12px; background: var(--card); border-left: 6px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; font-size: 1.15rem; line-height: 1.6; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
 
@@ -159,10 +216,11 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 
 @media (max-width: 980px) {
   .setup-grid { grid-template-columns: 1fr 1fr; }
-  .cards { grid-template-columns: repeat(2, 1fr); }
+  .cards, .plans { grid-template-columns: repeat(2, 1fr); }
+  .options-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
-  .setup-grid, .cards { grid-template-columns: 1fr; }
+  .setup-grid, .cards, .plans, .options-grid { grid-template-columns: 1fr; }
   .scoreboard { grid-template-columns: 1fr; }
   .bar-row { grid-template-columns: 1fr auto; }
   .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
@@ -171,6 +229,8 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 }
 
 @media print {
+  .print-only { display: block; }
+  .print-head { font-size: .8rem; color: var(--muted); margin: 0 0 8px; }
   .no-print, .topbar .credit { display: none !important; }
   body { background: #fff; }
   .panel { box-shadow: none; }
@@ -195,33 +255,46 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
   <main class="wrap">
     <section class="panel no-print" aria-labelledby="setup-title">
       <h2 id="setup-title" class="sr-only">Set up the comparison</h2>
-      <form id="setup" class="setup-grid" novalidate>
-        <div class="field">
-          <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
-          <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+      <form id="setup" novalidate>
+        <div class="setup-grid">
+          <div class="field">
+            <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
+            <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+          </div>
+          <div class="field combo">
+            <label for="old-search">Customer's current hearing aid</label>
+            <input id="old-search" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+                   aria-controls="old-list" autocomplete="off" placeholder="Type e.g. Q90, Quest 70, Audéo P50-R">
+            <ul id="old-list" role="listbox" class="combo-list" hidden></ul>
+          </div>
+          <div class="field">
+            <label for="new-model">New Phonak model to show</label>
+            <select id="new-model" required>
+              <option value="">Select new model…</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn primary">Generate Comparison</button>
+            <button type="button" id="print" class="btn ghost" disabled>Print</button>
+          </div>
         </div>
-        <div class="field">
-          <label for="old-filter">Customer's current hearing aid</label>
-          <input id="old-filter" type="search" placeholder="Type to filter, e.g. Audéo Q" autocomplete="off" aria-controls="old-model">
-          <select id="old-model" required>
-            <option value="">Select current model…</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="old-level">Current technology level</label>
-          <select id="old-level" disabled>
-            <option value="">Choose a model first</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="new-model">New Phonak model to show</label>
-          <select id="new-model" required>
-            <option value="">Select new model…</option>
-          </select>
-        </div>
-        <div class="actions">
-          <button type="submit" class="btn primary">Generate Comparison</button>
-          <button type="button" id="print" class="btn ghost" disabled>Print</button>
+
+        <fieldset class="concerns">
+          <legend>What bothers them most? <span class="hint">(optional: puts these first and shapes the script)</span></legend>
+          <div id="concern-chips" class="chips"></div>
+        </fieldset>
+
+        <div class="options-grid">
+          <fieldset class="field fitting">
+            <legend>Fitting</legend>
+            <label class="seg"><input type="radio" name="fitting" value="pair" checked> Pair</label>
+            <label class="seg"><input type="radio" name="fitting" value="single"> Single</label>
+          </fieldset>
+          <div class="field">
+            <label for="discount">Discount <span class="hint">(one only; hearing aids only)</span></label>
+            <select id="discount"></select>
+          </div>
+          <p class="hint options-note">Choose a listening plan in the results; its benefits are listed there.</p>
         </div>
       </form>
       <p id="form-error" class="form-error" role="alert" hidden></p>
@@ -264,6 +337,11 @@ window.HC_SOURCES = {
       'https://hearingreview.com/hearing-products/hearing-aids/phonak-launches-eon-hearing-aids-with-new-hypersonic-chip-and-auracast',
       'https://hearingtracker.com/news/phonak-eon-debuts-smaller-sphere-auracast-and-windblock',
     ],
+  },
+  eonEvidence: {
+    kind: 'web',
+    title: 'Phonak Audiology Blog “EON: Adaptive clarity that speaks for itself” (37% less listening effort vs same aids without Spheric Speech Clarity; Latzel et al. 2025)',
+    urls: ['https://audiologyblog.phonakpro.com/eon-adaptive-clarity-that-speaks-for-itself/'],
   },
   quest: {
     kind: 'web',
@@ -423,6 +501,7 @@ window.HC_SOURCES = {
 window.HC_PRICING = {
   "source": "CATALOGUE_AND_PAYMENT_DATA.json",
   "importedOn": "2026-10-29",
+  "pricesAsOf": "2026-10-24",
   "models": [
     {
       "id": "e30",
@@ -624,8 +703,695 @@ window.HC_PRICING = {
       "singleIsSupplied": false,
       "pairOnly": true
     }
-  ]
+  ],
+  "engine": {
+    "aids": [
+      {
+        "id": "e30",
+        "name": "E30-R CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Bronze",
+        "eligible": true,
+        "starkey": false,
+        "price": 2595.0
+      },
+      {
+        "id": "e50",
+        "name": "E50 Sphere CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Gold",
+        "eligible": true,
+        "starkey": false,
+        "price": 3695.0
+      },
+      {
+        "id": "e70",
+        "name": "E70 Sphere CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Platinum",
+        "eligible": true,
+        "starkey": false,
+        "price": 3995.0
+      },
+      {
+        "id": "e90",
+        "name": "E90 Sphere CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Platinum Plus",
+        "eligible": true,
+        "starkey": false,
+        "price": 4195.0
+      },
+      {
+        "id": "naida30",
+        "name": "L30-BTE",
+        "family": "Phonak Naida",
+        "tier": "Bronze",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 2395,
+        "singlePrice": 1675
+      },
+      {
+        "id": "naida50",
+        "name": "L50-BTE",
+        "family": "Phonak Naida",
+        "tier": "Silver",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 2995,
+        "singlePrice": 2095
+      },
+      {
+        "id": "naida70",
+        "name": "L70-BTE",
+        "family": "Phonak Naida",
+        "tier": "Gold",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 3295,
+        "singlePrice": 2305
+      },
+      {
+        "id": "naida90",
+        "name": "L90-BTE",
+        "family": "Phonak Naida",
+        "tier": "Platinum",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 3595,
+        "singlePrice": 2515
+      },
+      {
+        "id": "virto_i30_10nwo",
+        "family": "Phonak Virto",
+        "name": "I30-10 NW O",
+        "singlePrice": 1675,
+        "price": 2395,
+        "tier": "Bronze",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i30_r",
+        "family": "Phonak Virto",
+        "name": "I30-R",
+        "singlePrice": 2095,
+        "price": 2995,
+        "tier": "Bronze",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i50_10nwo",
+        "family": "Phonak Virto",
+        "name": "I50-10 NW O",
+        "singlePrice": 2095,
+        "price": 2995,
+        "tier": "Silver",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i50_r",
+        "family": "Phonak Virto",
+        "name": "I50-R",
+        "singlePrice": 2375,
+        "price": 3395,
+        "tier": "Silver",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i70_10nwo",
+        "family": "Phonak Virto",
+        "name": "I70-10 NW O",
+        "singlePrice": 2375,
+        "price": 3395,
+        "tier": "Gold",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i70_r",
+        "family": "Phonak Virto",
+        "name": "I70-R",
+        "singlePrice": 2585,
+        "price": 3695,
+        "tier": "Gold",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i70_titanium",
+        "family": "Phonak Virto",
+        "name": "I70-Titanium",
+        "singlePrice": 2375,
+        "price": 3395,
+        "tier": "Gold",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i90_10nwo",
+        "family": "Phonak Virto",
+        "name": "I90-10 NW O",
+        "singlePrice": 2585,
+        "price": 3695,
+        "tier": "Platinum",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i90_r",
+        "family": "Phonak Virto",
+        "name": "I90-R",
+        "singlePrice": 2795,
+        "price": 3995,
+        "tier": "Platinum",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i90_titanium",
+        "family": "Phonak Virto",
+        "name": "I90-Titanium",
+        "singlePrice": 2585,
+        "price": 3695,
+        "tier": "Platinum",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "cros_e30",
+        "family": "Phonak CROS",
+        "name": "E30-R",
+        "price": 2457,
+        "tier": "Bronze",
+        "starkey": false,
+        "eligible": true,
+        "priceSource": "owner",
+        "pairOnly": true,
+        "style": "cros",
+        "planEligible": true,
+        "priceDate": "20 October 2026"
+      },
+      {
+        "id": "cros_e90",
+        "family": "Phonak CROS",
+        "name": "E90-R",
+        "price": 3241,
+        "tier": "Platinum Plus",
+        "starkey": false,
+        "eligible": true,
+        "priceSource": "owner",
+        "pairOnly": true,
+        "style": "cros",
+        "planEligible": true,
+        "priceDate": "20 October 2026"
+      }
+    ],
+    "breakdown": {
+      "e30|0|home": {
+        "total": 2737.5,
+        "deposit": 273.75,
+        "balance": 2463.75,
+        "monthly": [
+          205.31,
+          113.1,
+          78.9,
+          61.87
+        ],
+        "totals": [
+          2737.5,
+          2988.15,
+          3114.15,
+          3243.51
+        ]
+      },
+      "e50|0|home": {
+        "total": 3837.5,
+        "deposit": 383.75,
+        "balance": 3453.75,
+        "monthly": [
+          287.81,
+          158.54,
+          110.6,
+          86.73
+        ],
+        "totals": [
+          3837.5,
+          4188.71,
+          4365.35,
+          4546.79
+        ]
+      },
+      "e70|0|home": {
+        "total": 4137.5,
+        "deposit": 413.75,
+        "balance": 3723.75,
+        "monthly": [
+          310.31,
+          170.94,
+          119.24,
+          93.51
+        ],
+        "totals": [
+          4137.5,
+          4516.31,
+          4706.39,
+          4902.23
+        ]
+      },
+      "e90|0|home": {
+        "total": 4337.5,
+        "deposit": 433.75,
+        "balance": 3903.75,
+        "monthly": [
+          325.31,
+          179.2,
+          125.01,
+          98.03
+        ],
+        "totals": [
+          4337.5,
+          4734.55,
+          4934.11,
+          5139.19
+        ]
+      },
+      "e30|0|together": {
+        "total": 2842.91,
+        "deposit": 284.29,
+        "balance": 2558.62,
+        "monthly": [
+          213.22,
+          117.45,
+          81.93,
+          64.25
+        ],
+        "totals": [
+          2842.91,
+          3103.09,
+          3233.77,
+          3368.29
+        ]
+      },
+      "e50|0|together": {
+        "total": 3942.91,
+        "deposit": 394.29,
+        "balance": 3548.62,
+        "monthly": [
+          295.72,
+          162.9,
+          113.64,
+          89.11
+        ],
+        "totals": [
+          3942.91,
+          4303.89,
+          4485.33,
+          4671.57
+        ]
+      },
+      "e70|0|together": {
+        "total": 4242.91,
+        "deposit": 424.29,
+        "balance": 3818.62,
+        "monthly": [
+          318.22,
+          175.29,
+          122.28,
+          95.89
+        ],
+        "totals": [
+          4242.91,
+          4631.25,
+          4826.37,
+          5027.01
+        ]
+      },
+      "e90|0|together": {
+        "total": 4442.91,
+        "deposit": 444.29,
+        "balance": 3998.62,
+        "monthly": [
+          333.22,
+          183.55,
+          128.05,
+          100.41
+        ],
+        "totals": [
+          4442.91,
+          4849.49,
+          5054.09,
+          5263.97
+        ]
+      },
+      "e30|0|everywhere": {
+        "total": 3595.0,
+        "deposit": 359.5,
+        "balance": 3235.5,
+        "monthly": [
+          269.63,
+          148.52,
+          103.61,
+          81.25
+        ],
+        "totals": [
+          3595.0,
+          3923.98,
+          4089.46,
+          4259.5
+        ]
+      },
+      "e50|0|everywhere": {
+        "total": 4695.0,
+        "deposit": 469.5,
+        "balance": 4225.5,
+        "monthly": [
+          352.13,
+          193.97,
+          135.31,
+          106.11
+        ],
+        "totals": [
+          4695.0,
+          5124.78,
+          5340.66,
+          5562.78
+        ]
+      },
+      "e70|0|everywhere": {
+        "total": 4995.0,
+        "deposit": 499.5,
+        "balance": 4495.5,
+        "monthly": [
+          374.63,
+          206.36,
+          143.96,
+          112.89
+        ],
+        "totals": [
+          4995.0,
+          5452.14,
+          5682.06,
+          5918.22
+        ]
+      },
+      "e90|0|everywhere": {
+        "total": 5195.0,
+        "deposit": 519.5,
+        "balance": 4675.5,
+        "monthly": [
+          389.63,
+          214.62,
+          149.72,
+          117.41
+        ],
+        "totals": [
+          5195.0,
+          5670.38,
+          5909.42,
+          6155.18
+        ]
+      },
+      "e30|1|home": {
+        "total": 2478.0,
+        "deposit": 247.8,
+        "balance": 2230.2,
+        "monthly": [
+          185.85,
+          102.38,
+          71.42,
+          56.01
+        ],
+        "totals": [
+          2478.0,
+          2704.92,
+          2818.92,
+          2936.28
+        ]
+      },
+      "e50|1|home": {
+        "total": 3468.0,
+        "deposit": 346.8,
+        "balance": 3121.2,
+        "monthly": [
+          260.1,
+          143.28,
+          99.95,
+          78.38
+        ],
+        "totals": [
+          3468.0,
+          3785.52,
+          3945.0,
+          4109.04
+        ]
+      },
+      "e70|1|home": {
+        "total": 3738.0,
+        "deposit": 373.8,
+        "balance": 3364.2,
+        "monthly": [
+          280.35,
+          154.43,
+          107.73,
+          84.48
+        ],
+        "totals": [
+          3738.0,
+          4080.12,
+          4252.08,
+          4428.84
+        ]
+      },
+      "e90|1|home": {
+        "total": 3918.0,
+        "deposit": 391.8,
+        "balance": 3526.2,
+        "monthly": [
+          293.85,
+          161.87,
+          112.92,
+          88.55
+        ],
+        "totals": [
+          3918.0,
+          4276.68,
+          4456.92,
+          4642.2
+        ]
+      },
+      "e30|1|together": {
+        "total": 2583.41,
+        "deposit": 258.34,
+        "balance": 2325.07,
+        "monthly": [
+          193.76,
+          106.73,
+          74.45,
+          58.39
+        ],
+        "totals": [
+          2583.41,
+          2819.86,
+          2938.54,
+          3061.06
+        ]
+      },
+      "e50|1|together": {
+        "total": 3573.41,
+        "deposit": 357.34,
+        "balance": 3216.07,
+        "monthly": [
+          268.01,
+          147.63,
+          102.99,
+          80.76
+        ],
+        "totals": [
+          3573.41,
+          3900.46,
+          4064.98,
+          4233.82
+        ]
+      },
+      "e70|1|together": {
+        "total": 3843.41,
+        "deposit": 384.34,
+        "balance": 3459.07,
+        "monthly": [
+          288.26,
+          158.79,
+          110.77,
+          86.87
+        ],
+        "totals": [
+          3843.41,
+          4195.3,
+          4372.06,
+          4554.1
+        ]
+      },
+      "e90|1|together": {
+        "total": 4023.41,
+        "deposit": 402.34,
+        "balance": 3621.07,
+        "monthly": [
+          301.76,
+          166.22,
+          115.96,
+          90.93
+        ],
+        "totals": [
+          4023.41,
+          4391.62,
+          4576.9,
+          4766.98
+        ]
+      },
+      "e30|1|everywhere": {
+        "total": 3335.5,
+        "deposit": 333.55,
+        "balance": 3001.95,
+        "monthly": [
+          250.16,
+          137.8,
+          96.13,
+          75.39
+        ],
+        "totals": [
+          3335.5,
+          3640.75,
+          3794.23,
+          3952.27
+        ]
+      },
+      "e50|1|everywhere": {
+        "total": 4325.5,
+        "deposit": 432.55,
+        "balance": 3892.95,
+        "monthly": [
+          324.41,
+          178.7,
+          124.66,
+          97.76
+        ],
+        "totals": [
+          4325.5,
+          4721.35,
+          4920.31,
+          5125.03
+        ]
+      },
+      "e70|1|everywhere": {
+        "total": 4595.5,
+        "deposit": 459.55,
+        "balance": 4135.95,
+        "monthly": [
+          344.66,
+          189.86,
+          132.44,
+          103.86
+        ],
+        "totals": [
+          4595.5,
+          5016.19,
+          5227.39,
+          5444.83
+        ]
+      },
+      "e90|1|everywhere": {
+        "total": 4775.5,
+        "deposit": 477.55,
+        "balance": 4297.95,
+        "monthly": [
+          358.16,
+          197.29,
+          137.63,
+          107.93
+        ],
+        "totals": [
+          4775.5,
+          5212.51,
+          5432.23,
+          5658.19
+        ]
+      }
+    }
+  }
 };
+</script>
+  <script>
+// Listening plans: names and prices come from the pricing tool's engine
+// (assets/pricing-engine.js). This file only adds the customer benefit of each
+// plan's accessory, worded as in Zahid's three-way comparison tool.
+window.HC_PLANS = {
+  home: { accessory: 'TV Connector', benefit: 'Hear TV dialogue through the aids while others keep a comfortable room volume' },
+  together: { accessory: 'PartnerMic', benefit: 'A companion wears the microphone to bring one voice closer, useful when walking or sitting apart' },
+  everywhere: { accessory: 'Roger On', benefit: 'Bring speech closer at a busy table, across a room or during a presentation' },
+};
+</script>
+  <script>
+// "What bothers you most?" Each concern lifts its matching cards, checklist
+// features and listening plan to the top, and steers the read-aloud script.
+window.HC_CONCERNS = [
+  { id: 'noise', say: 'noisy places', label: 'Noisy places & groups', card: 'speech', plan: 'everywhere',
+    features: ['ai_chip', 'ai_auto', 'dnc', 'stereozoom2', 'loud_noise', 'speechsensor', 'speech360', 'motion'] },
+  { id: 'soft', say: 'soft voices', label: 'Soft or distant voices', card: 'speech',
+    features: ['speech_enhancer', 'speechsensor', 'speech360'] },
+  { id: 'partner', say: 'hearing one person', label: 'Hearing one person, e.g. a partner', card: 'speech', plan: 'together',
+    features: ['speechsensor', 'speech360', 'stereozoom2'] },
+  { id: 'tv', say: 'TV', label: 'TV & music', card: 'connect', plan: 'home',
+    features: ['stream', 'auracast'] },
+  { id: 'phone', say: 'phone calls', label: 'Phone calls', card: 'connect',
+    features: ['handsfree', 'stream', 'tap', 'app'] },
+  { id: 'wind', say: 'wind', label: 'Wind & outdoors', card: null,
+    features: ['windblock2', 'windblock', 'motion'] },
+  { id: 'battery', say: 'battery changes', label: 'Changing batteries', card: 'power',
+    features: ['rechargeable', 'battery38'] },
+  { id: 'discreet', say: 'being noticed', label: 'Being noticed wearing them', card: 'size', features: [] },
+];
 </script>
   <script>
 // Specs for the NEW Phonak models being pitched, taken from the supplied spec
@@ -675,8 +1441,8 @@ window.HC_PRICING = {
           speech: v('Automatic Spheric Speech Clarity 3.0 at highest strength, plus Speech Enhancer, SpeechSensor, StereoZoom 2.0 and Dynamic Noise Cancellation', S),
           speechShort: v('AI chip separates speech from noise automatically, at maximum strength', S),
           stats: [
-            { value: '37%', label: 'less listening effort', source: 'eonLaunch', note: 'Phonak-reported study result for EON Sphere' },
-            { value: '2×', label: 'as likely to understand every word, from any direction', source: 'eonLaunch', note: 'Phonak-reported claim for EON Sphere' },
+            { value: '37%', label: 'less listening effort', source: 'eonEvidence', status: 'verified', vs: 'compared with the same hearing aids with Spheric Speech Clarity switched off', note: 'Phonak field study (Latzel et al., 2025)' },
+            { value: '2×', label: 'as likely to understand every word, from any direction', source: 'eonLaunch', status: 'check', vs: null, note: 'Phonak claim; comparison basis not stated in the sources reviewed' },
           ],
           channels: '20',
         },
@@ -684,7 +1450,7 @@ window.HC_PRICING = {
           speech: v('Automatic Spheric Speech Clarity 3.0 at high strength, plus SpeechSensor, StereoZoom 2.0 and Dynamic Noise Cancellation', S),
           speechShort: v('AI chip separates speech from noise automatically', S),
           stats: [
-            { value: '37%', label: 'less listening effort', source: 'eonLaunch', note: 'Phonak-reported result for EON Sphere; strength is “high” at 70 (“highest” at 90)' },
+            { value: '37%', label: 'less listening effort', source: 'eonEvidence', status: 'verified', vs: 'compared with the same hearing aids with Spheric Speech Clarity switched off', note: 'Phonak field study (Latzel et al., 2025); strength is “high” at 70 (“highest” at 90)' },
           ],
           channels: '20',
         },
@@ -692,7 +1458,7 @@ window.HC_PRICING = {
           speech: v('Spheric Speech Clarity 3.0 as a manual programme (moderate strength), plus Motion Sensor Hearing', S),
           speechShort: v('AI speech-from-noise programme, switched on manually', S),
           stats: [
-            { value: 'AI', label: 'speech-from-noise programme you switch on in noisy places', source: S, note: 'Manual activation, moderate strength at the 50 level' },
+            { value: 'AI', label: 'speech-from-noise programme you switch on in noisy places', source: S, status: 'verified', note: 'Manual activation, moderate strength at the 50 level' },
           ],
           channels: '16',
         },
@@ -739,11 +1505,11 @@ window.HC_PRICING = {
       levels: {
         90: { speech: v('SpeechSensor, Speech Enhancer, StereoZoom 2.0, Dynamic Noise Cancellation and Speech in Loud Noise', M),
               speechShort: v('Premium directional processing with SpeechSensor', M),
-              stats: [{ value: '45%', label: 'less listening effort', source: 'infinio', note: 'Phonak-reported claim for Infinio SmartSpeech' }],
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier StereoZoom', note: 'Phonak figure for StereoZoom 2.0 (2022); sources describe the comparison differently' }],
               channels: '20' },
         70: { speech: v('StereoZoom 2.0, Dynamic Noise Cancellation and Motion Sensor Hearing', M),
               speechShort: v('Advanced directional processing and noise cancellation', M),
-              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', note: 'Phonak-reported StereoZoom 2.0 vs StereoZoom' }],
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier StereoZoom', note: 'Phonak figure for StereoZoom 2.0 (2022); sources describe the comparison differently' }],
               channels: '20' },
         50: { speech: v('Motion Sensor Hearing, Speech in Noise and UltraZoom', M),
               speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '16' },
@@ -784,11 +1550,11 @@ window.HC_PRICING = {
       levels: {
         90: { speech: v('SpeechSensor, Speech Enhancer, StereoZoom 2.0, Dynamic Noise Cancellation and EchoBlock', M),
               speechShort: v('Premium directional processing with SpeechSensor', M),
-              stats: [{ value: '15%', label: 'better understanding of speech from the side and behind', source: 'lumity', note: 'Phonak-reported SpeechSensor result' }],
+              stats: [{ value: '15%', label: 'better understanding of speech from the side and behind', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier directional settings', note: 'Phonak figure for SpeechSensor (2022); sources describe the comparison differently' }],
               channels: '20' },
         70: { speech: v('StereoZoom 2.0, Dynamic Noise Cancellation and Motion Sensor Hearing', M),
               speechShort: v('Advanced directional processing and noise cancellation', M),
-              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', note: 'Phonak-reported StereoZoom 2.0 vs StereoZoom' }],
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier StereoZoom', note: 'Phonak figure for StereoZoom 2.0 (2022); sources describe the comparison differently' }],
               channels: '20' },
         50: { speech: v('Motion Sensor Hearing, Speech in Noise and UltraZoom', M),
               speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '16' },
@@ -1414,6 +2180,158 @@ window.HC_PRICING = {
 })();
 </script>
   <script>
+/* Copied unchanged from the Hearingcare Price & Plan tool (source/dist/pricing.js, offline release v23).
+   Do not edit here: update it in the pricing tool and copy it across, so both tools quote identically. */
+/* Pure pricing rules. No DOM, storage, network or patient information. */
+(function (root) {
+  'use strict';
+  const TERMS = Object.freeze([12, 24, 36, 48]);
+  const SINGLE_FACTOR = 0.699450507240;
+  const PLANS = Object.freeze({
+    none: { name: 'No plan', accessory: 'No accessory', cost: 0 },
+    home: { name: 'Hear at Home', accessory: 'TV Connector', cost: 142.50 },
+    together: { name: 'Hear Together', accessory: 'Partner Mic', cost: 247.91 },
+    everywhere: { name: 'Hear Everywhere', accessory: 'Roger On', cost: 1000 }
+  });
+  Object.values(PLANS).forEach(Object.freeze);
+  const DISCOUNTS = Object.freeze({
+    none: { name: 'No additional discount', rate: 0, rule: 'all' },
+    blue: { name: 'Blue Light Card', rate: 0.15, rule: 'premium' },
+    dds: { name: 'DDS', rate: 0.15, rule: 'premium' },
+    staff: { name: 'Boots staff', rate: 0.25, rule: 'all' },
+    friends: { name: 'Boots staff friends and family', rate: 0.20, rule: 'all' },
+    opticians: { name: 'Opticians customer', rate: 0.10, rule: 'gold' }
+  });
+  Object.values(DISCOUNTS).forEach(Object.freeze);
+  const round = value => Math.round((value + Number.EPSILON) * 100) / 100;
+  // Round down so a penny-rounded deposit never exceeds the configured cap.
+  const maxDeposit = total => Math.floor(total * 0.495798319328 * 100) / 100;
+  const normal = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  function requireValue(condition, message) { if (!condition) throw new Error(message); }
+  function isMoney(value) { return Number.isFinite(value) && value >= 0 && value < 1000000; }
+  function create(input) {
+    requireValue(input && Array.isArray(input.aids) && input.aids.length && input.breakdown, 'Price catalogue is unavailable.');
+    const data = JSON.parse(JSON.stringify(input));
+    const byId = new Map();
+    for (const aid of data.aids) {
+      requireValue(aid && typeof aid.id === 'string' && !byId.has(aid.id), 'Invalid or duplicate aid ID.');
+      requireValue(['name', 'family', 'tier'].every(key => typeof aid[key] === 'string' && aid[key].length), 'Missing aid description.');
+      requireValue(isMoney(aid.price) && typeof aid.eligible === 'boolean' && typeof aid.starkey === 'boolean', 'Invalid aid pricing rules.');
+      requireValue(aid.priceSource === undefined || aid.priceSource === 'owner', 'Invalid price source.');
+      requireValue(aid.planEligible === undefined || typeof aid.planEligible === 'boolean', 'Invalid plan eligibility.');
+      requireValue(aid.pairOnly === undefined || typeof aid.pairOnly === 'boolean', 'Invalid pair-only rule.');
+      if (aid.pairOnly) requireValue(aid.priceSource === 'owner' && aid.price > 0 && aid.singlePrice === undefined, 'Pair-only systems require a supplied pair price and no single price.');
+      if (aid.priceSource === 'owner' && !aid.pairOnly) requireValue(isMoney(aid.singlePrice) && aid.singlePrice > 0 && aid.price > 0, 'Missing or invalid supplied single-aid price.');
+      byId.set(aid.id, Object.freeze(aid));
+    }
+    for (const aid of data.aids.filter(item => item.priceSource !== 'owner')) for (const customer of ['0', '1']) for (const plan of ['home', 'together', 'everywhere']) {
+      const row = data.breakdown[`${aid.id}|${customer}|${plan}`];
+      requireValue(row && ['total', 'deposit', 'balance'].every(key => isMoney(row[key])), 'Missing or invalid PDF price row.');
+      const expectedTotal = round(aid.price * (customer === '1' ? 0.9 : 1) + (aid.starkey ? 0 : PLANS[plan].cost));
+      requireValue(row.total === expectedTotal && row.deposit === round(row.total * 0.1), 'PDF cash price or deposit conflicts with catalogue rules.');
+      requireValue(round(row.deposit + row.balance) === row.total, 'PDF deposit and balance do not reconcile.');
+      requireValue(Array.isArray(row.monthly) && Array.isArray(row.totals) && row.monthly.length === 4 && row.totals.length === 4, 'Invalid payment terms.');
+      TERMS.forEach((months, index) => {
+        if (!aid.eligible && index === 0) {
+          requireValue(row.monthly[index] === null && row.totals[index] === null, 'Unexpected Essentials finance eligibility.');
+        } else {
+          requireValue(isMoney(row.monthly[index]) && isMoney(row.totals[index]) && row.totals[index] >= row.total, 'Invalid monthly payment.');
+          if (index > 0) {
+            const rate = Math.pow(1.099, 1 / 12) - 1;
+            const expectedPayment = row.balance * rate / (1 - Math.pow(1 + rate, -months));
+            requireValue(Math.abs(row.monthly[index] - expectedPayment) <= 0.005001, 'PDF repayment conflicts with the stated APR method.');
+          }
+          if (index === 0) requireValue(Math.abs(row.monthly[index] - row.balance / months) <= 0.005001, 'Invalid interest-free monthly instalment.');
+          requireValue(index === 0 ? row.totals[index] === row.total : round(row.deposit + row.monthly[index] * months) === row.totals[index], 'PDF repayments do not reconcile.');
+        }
+      });
+    }
+    function validate(aidId, customer, plan, fitting) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      requireValue(['0', '1'].includes(customer), 'Choose a valid customer price.');
+      requireValue(Object.prototype.hasOwnProperty.call(PLANS, plan), 'Choose a valid listening plan.');
+      requireValue(['pair', 'single'].includes(fitting), 'Choose pair or single fitting.');
+      const aid = byId.get(aidId);
+      requireValue(!aid.pairOnly || fitting === 'pair', 'CROS systems are available as a pair only in this catalogue.');
+      requireValue(plan === 'none' || planEligible(aidId), 'Listening plans are not available for this hearing aid.');
+      return aid;
+    }
+    function planEligible(aidId) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      const aid = byId.get(aidId);
+      return !aid.starkey && aid.planEligible !== false;
+    }
+    function warrantyYears(aidId) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      return /^Essentials/i.test(byId.get(aidId).tier) ? 2 : 4;
+    }
+    function discountEligible(aidId, discount) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      requireValue(Object.prototype.hasOwnProperty.call(DISCOUNTS, discount), 'Choose one valid discount.');
+      const aid = byId.get(aidId);
+      const rule = DISCOUNTS[discount].rule;
+      return rule === 'all' || (rule === 'premium' ? ['Bronze', 'Silver', 'Gold', 'Platinum', 'Platinum +', 'Platinum Plus'].includes(aid.tier) : ['Gold', 'Platinum', 'Platinum +', 'Platinum Plus'].includes(aid.tier));
+    }
+    function discountDetails(aidId, customer, discount) {
+      requireValue(discountEligible(aidId, discount), 'This discount is not available for the selected hearing aid.');
+      requireValue(customer !== '1' || discount === 'none', 'Existing customer discount cannot be combined with another discount.');
+      return customer === '1' ? { name: 'Existing customer', rate: 0.10 } : DISCOUNTS[discount];
+    }
+    function aidPrice(aidId, customer, fitting = 'pair', discount = 'none') {
+      const aid = validate(aidId, customer, 'none', fitting);
+      const benefit = discountDetails(aidId, customer, discount);
+      // Explicit business convention: round full single price, then apply discount.
+      const base = fitting === 'single' ? (aid.priceSource === 'owner' ? aid.singlePrice : Math.round(aid.price * SINGLE_FACTOR / 5) * 5) : aid.price;
+      return round(base * (1 - benefit.rate));
+    }
+    function optionalInsuranceEligible(aidId, plan) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      if (plan === 'none') return true;
+      return planEligible(aidId) && ['home', 'together', 'everywhere'].includes(plan)
+        && ['b1312', 'b1r', 'b3r', 's3r', 'custom_b1_312', 'custom_b3_312'].includes(aidId);
+    }
+    function insurance(aidId, plan, fitting = 'pair', purchaseInsurance = false) {
+      const aid = validate(aidId, '0', plan, fitting);
+      requireValue(typeof purchaseInsurance === 'boolean' && (!purchaseInsurance || optionalInsuranceEligible(aidId, plan)), 'Optional purchase insurance is not available for this selection.');
+      if (purchaseInsurance) return { status: 'Added', reason: `Optional purchase insurance added for ${fitting === 'single' ? 'one hearing aid at £99' : 'two hearing aids at £198'}. Confirm policy duration, excess and exclusions. This premium is not discounted.` };
+      if (plan === 'none') return { status: 'Not included', reason: 'No listening plan selected. Monthly finance alone does not include insurance.' };
+      if (['s5r', 's7r', 's9r'].includes(aid.id)) return { status: 'Included', reason: 'Included with this plan under your AudioNova S5-and-upwards rule, for pair or single fittings.' };
+      if (aid.family.startsWith('Phonak ')) return { status: 'Included', reason: 'Insurance is included with every Phonak model when a listening plan is selected, for pair or single fittings.' };
+      if (['custom_b5_312', 'custom_b7_312'].includes(aid.id)) return { status: 'Included', reason: 'Insurance is included with AudioNova Custom B5/B7 when purchased with an eligible listening plan, for pair or single fittings.' };
+      return { status: 'Not included', reason: 'Insurance is not included with this plan. You can add optional purchase insurance at the displayed price.' };
+    }
+    function quote(aidId, customer, plan, fitting = 'pair', purchaseInsurance = false, discount = 'none', depositOverride = null) {
+      const aid = validate(aidId, customer, plan, fitting);
+      const benefit = discountDetails(aidId, customer, discount);
+      const netAidPrice = aidPrice(aidId, customer, fitting, discount);
+      const fullAidPrice = aidPrice(aidId, '0', fitting);
+      const cover = insurance(aidId, plan, fitting, purchaseInsurance);
+      const insurancePrice = purchaseInsurance ? (fitting === 'single' ? 99 : 198) : 0;
+      const cashTotal = round(netAidPrice + PLANS[plan].cost + insurancePrice);
+      const defaultDeposit = round(cashTotal * 0.1);
+      requireValue(depositOverride === null || (isMoney(depositOverride) && round(depositOverride) === depositOverride && depositOverride >= defaultDeposit && depositOverride <= maxDeposit(cashTotal)), 'Enter a deposit between 10% and the maximum allowed deposit, to the nearest penny.');
+      const customDeposit = depositOverride !== null && depositOverride !== defaultDeposit;
+      const exact = !customDeposit && aid.priceSource !== 'owner' && fitting === 'pair' && !purchaseInsurance && discount === 'none' ? data.breakdown[`${aidId}|${customer}|${aid.starkey ? 'home' : plan}`] : null;
+      let result;
+      if (exact) result = { ...exact, monthly: [...exact.monthly], totals: [...exact.totals], kind: 'listed' };
+      else {
+        const total = round(netAidPrice + PLANS[plan].cost + insurancePrice);
+        const deposit = depositOverride === null ? defaultDeposit : depositOverride;
+        const balance = round(total - deposit);
+        const monthlyRate = Math.pow(1.099, 1 / 12) - 1;
+        const monthly = TERMS.map((months, i) => i === 0 ? (aid.eligible ? round(balance / months) : null) : round(balance * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months))));
+        result = { total, deposit, balance, monthly, totals: monthly.map((payment, i) => payment === null ? null : i === 0 ? total : round(deposit + payment * TERMS[i])), kind: 'calculated' };
+      }
+      return { ...result, customDeposit, warrantyYears: warrantyYears(aidId), aidId, customer, plan, fitting, purchaseInsurance, insurancePrice, discount, discountName: benefit.name, discountRate: benefit.rate, discountSaving: round(fullAidPrice - netAidPrice), fullAidPrice, aidPrice: netAidPrice, accessoryPrice: PLANS[plan].cost, insurance: cover };
+    }
+    return Object.freeze({ aids: Object.freeze([...byId.values()]), plans: PLANS, planEligible, optionalInsuranceEligible, discounts: DISCOUNTS, discountEligible, aidPrice, quote, insurance, warrantyYears, normal, round, maxDeposit });
+  }
+  const api = { create, round, normal, TERMS, SINGLE_FACTOR };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.Pricing = api;
+})(typeof globalThis !== 'undefined' ? globalThis : window);
+</script>
+  <script>
 // Pure comparison logic: no DOM access, so it runs in the browser and in Node tests.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -1473,6 +2391,38 @@ window.HC_PRICING = {
     const [loL, lo] = facts[facts.length - 1];
     return { text: `${hi.text} (${platform.prefix}${hiL}) down to ${lo.text} (${platform.prefix}${loL}), depending on level`,
       status: 'check', source: hi.source };
+  }
+
+  // ---------- type-ahead search for the current aid ----------
+  // One entry per model and level (plus "level not sure"). Every typed word must
+  // start a word of the entry, so "q90", "quest 70" or "audeo p50 r" all work.
+  const normal = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const words = (t) => normal(t).split(/[^a-z0-9]+/).filter(Boolean);
+  const searchCache = new WeakMap();
+
+  function oldEntries(data) {
+    if (searchCache.has(data.legacy)) return searchCache.get(data.legacy);
+    const out = [];
+    for (const m of data.legacy.models) {
+      const p = data.legacy.platforms[m.platform];
+      const common = [m.name, p.name, m.style, m.style === 'RIC' ? 'receiver canal' : m.style === 'BTE' ? 'behind ear' : 'in ear ite'];
+      for (const l of m.levels || DEFAULT_LEVELS) {
+        const label = m.tmpl ? m.tmpl.replace('{L}', l) : `${m.name} ${p.prefix}${l}`;
+        out.push({ id: m.id, level: l, label, sub: `${p.name} · ${data.legacy.levelNames[l]} · ${m.launched || p.launched}`, platform: p.name,
+          words: new Set(words([label, ...common, `${p.prefix}${l}`, l, data.legacy.levelNames[l]].join(' '))) });
+      }
+      out.push({ id: m.id, level: null, label: `${m.name} (level not sure)`, sub: `${p.name} · ${m.launched || p.launched}`, platform: p.name,
+        words: new Set(words([...common, 'level not sure unknown'].join(' '))) });
+    }
+    searchCache.set(data.legacy, out);
+    return out;
+  }
+
+  function searchOld(data, query, limit = 60) {
+    const q = words(query);
+    const all = oldEntries(data);
+    if (!q.length) return all.slice(0, limit);
+    return all.filter((e) => q.every((t) => [...e.words].some((w) => w.startsWith(t)))).slice(0, limit);
   }
 
   function resolveNew(data, pricingId) {
@@ -1558,13 +2508,13 @@ window.HC_PRICING = {
   //   both        both have it
   //   unconfirmed new has it, old not confirmed: listed, but left out of the score
   // The score only counts confirmed rows, so research gaps never count against the old aid.
-  function checklist(data, oldM, newM) {
+  function checklist(data, oldM, newM, concernFeatures = new Set()) {
     const items = [];
     const upsell = [];
     for (const f of data.features.features) {
       const nv = newFeatureValue(f, newM.familyKey, newM.level, newM.variant);
       const old = oldFeature(data, f, oldM);
-      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old };
+      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old, matters: concernFeatures.has(f.id) };
       if (nv === 1 || nv === 'c') {
         const kind = old.state === 'yes' ? 'both' : old.state === '?' ? 'unconfirmed' : 'gain';
         items.push({ ...base, kind, new: { state: 'yes', text: 'Included', status: nv === 'c' ? 'check' : 'verified' } });
@@ -1575,7 +2525,7 @@ window.HC_PRICING = {
       }
     }
     const rank = { gain: 0, lost: 1, both: 2, unconfirmed: 3 };
-    items.sort((a, b) => rank[a.kind] - rank[b.kind]);
+    items.sort((a, b) => rank[a.kind] - rank[b.kind] || Number(b.matters) - Number(a.matters));
     const count = (kind) => items.filter((i) => i.kind === kind).length;
     const confirmed = items.length - count('unconfirmed');
     return {
@@ -1652,6 +2602,50 @@ window.HC_PRICING = {
     return [speech, connect, power, fourth];
   }
 
+  function orderCards(list, concerns) {
+    const wanted = concerns.map((c) => c.card).filter(Boolean);
+    for (const c of list) c.matters = wanted.includes(c.key) || (c.key === 'age' && wanted.includes('size'));
+    return list.sort((a, b) => Number(b.matters) - Number(a.matters));
+  }
+
+  // Plans, discounts, insurance and warranty come from the pricing tool's own
+  // engine, so this tool can never quote differently from it. Invalid choices
+  // (e.g. a plan on a model without plans) fall back to safe defaults.
+  const DISCOUNT_ORDER = ['none', 'existing', 'staff', 'friends', 'blue', 'dds', 'opticians'];
+
+  function priceInfo(data, newM, opts, concerns) {
+    const eng = data.engine;
+    if (!eng) return null;
+    const id = newM.price.id;
+    const pairOnly = newM.price.pairOnly;
+    const fitting = opts.fitting === 'single' && !pairOnly ? 'single' : 'pair';
+    const planEligible = eng.planEligible(id);
+    const plan = Object.prototype.hasOwnProperty.call(eng.plans, opts.plan || '') && (opts.plan === 'none' || planEligible) ? opts.plan : 'none';
+    const discountOptions = DISCOUNT_ORDER.map((key) => {
+      if (key === 'none') return { id: key, name: 'No discount', rate: 0, eligible: true };
+      if (key === 'existing') return { id: key, name: 'Existing customer', rate: 0.10, eligible: true };
+      const d = eng.discounts[key];
+      return { id: key, name: d.name, rate: d.rate, eligible: eng.discountEligible(id, key) };
+    });
+    const chosen = discountOptions.find((d) => d.id === opts.discount && d.eligible) || discountOptions[0];
+    const customer = chosen.id === 'existing' ? '1' : '0';
+    const discount = chosen.id === 'existing' ? 'none' : chosen.id;
+    const purchaseInsurance = Boolean(opts.purchaseInsurance) && eng.optionalInsuranceEligible(id, plan);
+    const quote = eng.quote(id, customer, plan, fitting, purchaseInsurance, discount);
+    const planOptions = Object.entries(eng.plans).map(([key, p]) => ({
+      id: key, name: p.name, accessory: key === 'none' ? null : p.accessory, cost: p.cost,
+      eligible: key === 'none' || planEligible,
+      benefit: key === 'none' ? 'Hearing aids only' : (data.plans || {})[key] ? data.plans[key].benefit : '',
+      suits: concerns.filter((c) => c.plan === key).map((c) => c.label),
+    }));
+    return {
+      quote, fitting, pairOnly, plan, discount: chosen.id, purchaseInsurance,
+      insuranceOptional: eng.optionalInsuranceEligible(id, plan),
+      planEligible, planOptions, discountOptions, pricesAsOf: data.pricing.pricesAsOf,
+      planDetail: plan === 'none' ? null : planOptions.find((p) => p.id === plan),
+    };
+  }
+
   function warnings(oldM, newM, list) {
     const out = [];
     if (!newM.mapped) out.push('This model from the pricing file has no spec mapping yet. Add it to data/new-specs.js.');
@@ -1671,7 +2665,7 @@ window.HC_PRICING = {
     return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
   }
 
-  function narrative(oldM, newM, list, patientName) {
+  function narrative(oldM, newM, list, patientName, concerns = []) {
     const who = (patientName || '').trim();
     const opener = who ? `${who}, your` : 'Your';
     const era = oldM.launched;
@@ -1679,8 +2673,13 @@ window.HC_PRICING = {
     const oldName = oldM.displayName.replace(/^Phonak /, '').replace(/ \([^)]*\)$/, '');
     const newName = newM.name.replace(/^Phonak /, '');
     const s1 = `${opener} ${oldName} hearing aids were good technology for ${era}, built on Phonak's ${oldM.platformName} platform with ${lowerFirst(oldTech)}.`;
-    const stat = (newM.stats || [])[0];
-    const statTail = stat ? `, and in Phonak's own testing that means ${stat.value} ${stat.label}` : '';
+    const stat = (newM.stats || []).find((st) => /\d/.test(st.value));
+    let statTail = '';
+    if (stat) {
+      statTail = stat.status === 'verified'
+        ? `; Phonak's own study found ${stat.value} ${stat.label}${stat.vs ? ` ${stat.vs}` : ''}`
+        : `; Phonak reports ${stat.value} ${stat.label}${stat.vs ? ` ${stat.vs}` : ''}`;
+    }
     let s2;
     if (newM.familyKey === 'eonSphere') {
       s2 = `The new ${newName} has a dedicated AI chip, so instead of just turning sound up it separates speech from background noise in real time${newM.level === 50 ? ' when you switch on its speech-in-noise programme' : ''}${statTail}.`;
@@ -1690,9 +2689,13 @@ window.HC_PRICING = {
     // Highlight the most customer-relevant gains not already mentioned above.
     const said = new Set(['ai_chip', 'ai_auto', 'rechargeable']);
     const gainedIds = new Set(list.items.filter((i) => i.old.state === 'notyet' || i.old.state === 'no').map((i) => i.id));
-    const highlights = SAY_ORDER.filter((id) => gainedIds.has(id) && !said.has(id)).slice(0, 3).map((id) => SAY[id]);
+    const wanted = new Set(concerns.flatMap((c) => c.features));
+    const order = [...SAY_ORDER.filter((id) => wanted.has(id)), ...SAY_ORDER.filter((id) => !wanted.has(id))];
+    const picks = order.filter((id) => gainedIds.has(id) && !said.has(id)).slice(0, 3);
+    const highlights = picks.map((id) => SAY[id]);
+    const tackled = concerns.filter((c) => c.features.some((id) => picks.includes(id) || (gainedIds.has(id) && said.has(id))));
     const s3 = list.gained
-      ? `Altogether it brings ${list.gained} feature${list.gained === 1 ? '' : 's'} your current aids don't have${highlights.length ? `, including ${joinList(highlights)}` : ''}.`
+      ? `Altogether it brings ${list.gained} feature${list.gained === 1 ? '' : 's'} your current aids don't have${highlights.length ? `, including ${joinList(highlights)}` : ''}${tackled.length ? `, which go straight at the ${joinList(tackled.map((c) => c.say))} you mentioned` : ''}.`
       : '';
     let s4 = '';
     if (oldM.rechargeable === false && newM.rechargeable === true) {
@@ -1734,6 +2737,7 @@ window.HC_PRICING = {
     for (const r of rowsOut) for (const side of [r.old, r.new]) if (side.source) keys.add(side.source);
     for (const c of cardsOut) {
       for (const side of [c.old, c.new]) if (side.source) keys.add(side.source);
+      for (const st of newM.stats || []) if (st.source) keys.add(st.source);
       if (c.stat && c.stat.source) keys.add(c.stat.source);
     }
     for (const i of list.items) for (const s of i.sources || []) keys.add(s);
@@ -1747,9 +2751,10 @@ window.HC_PRICING = {
     if (!newM.mapped) {
       return { old: oldM, new: newM, cards: [], rows: [], features: null, warnings: warnings(oldM, newM, null), narrative: '', sources: [] };
     }
-    const list = checklist(data, oldM, newM);
+    const concerns = (data.concerns || []).filter((c) => (opts.concerns || []).includes(c.id));
+    const list = checklist(data, oldM, newM, new Set(concerns.flatMap((c) => c.features)));
     const rowsOut = rows(oldM, newM);
-    const cardsOut = cards(oldM, newM);
+    const cardsOut = orderCards(cards(oldM, newM), concerns);
     return {
       old: oldM,
       new: newM,
@@ -1757,7 +2762,9 @@ window.HC_PRICING = {
       rows: rowsOut,
       features: list,
       warnings: warnings(oldM, newM, list),
-      narrative: narrative(oldM, newM, list, opts.patientName),
+      narrative: narrative(oldM, newM, list, opts.patientName, concerns),
+      concerns,
+      price: priceInfo(data, newM, opts, concerns),
       sources: usedSources(rowsOut, cardsOut, list, newM),
     };
   }
@@ -1768,26 +2775,34 @@ window.HC_PRICING = {
     return `${gbp(p.pairPrice)} pair · ${gbp(p.singlePrice)} single`;
   }
 
-  return { compare, resolveOld, resolveNew, oldLevels, priceText, NOT_FOUND, NOT_SUPPLIED, CURRENT_YEAR };
+  return { compare, resolveOld, resolveNew, oldLevels, searchOld, priceText, NOT_FOUND, NOT_SUPPLIED, CURRENT_YEAR };
 });
 </script>
   <script>
-// UI wiring for index.html. All comparison rules live in compare.js.
+// UI wiring for index.html. Comparison rules live in compare.js; prices,
+// plans and discounts come from pricing-engine.js (the pricing tool's engine).
 (function () {
+  const BUILD = '29 Oct 2026 (678babb)'; // replaced by scripts/build_single.py
   const DATA = {
     pricing: window.HC_PRICING,
     specs: window.HC_NEW_SPECS,
     legacy: window.HC_LEGACY,
     sources: window.HC_SOURCES,
     features: window.HC_FEATURES,
+    concerns: window.HC_CONCERNS,
+    plans: window.HC_PLANS,
+    engine: window.Pricing.create(window.HC_PRICING.engine),
   };
 
   const $ = (id) => document.getElementById(id);
   const els = {
-    form: $('setup'), patient: $('patient'), oldFilter: $('old-filter'), oldModel: $('old-model'), oldLevel: $('old-level'),
-    newModel: $('new-model'), print: $('print'),
+    form: $('setup'), patient: $('patient'), oldSearch: $('old-search'), oldList: $('old-list'),
+    newModel: $('new-model'), discount: $('discount'), chips: $('concern-chips'), print: $('print'),
     error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
   };
+
+  // Everything the comparison depends on. Plan and insurance are chosen in the results.
+  const state = { old: null, concerns: [], plan: 'none', purchaseInsurance: false, generated: false };
 
   const ICONS = {
     speech: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
@@ -1797,8 +2812,10 @@ window.HC_PRICING = {
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="icon">${ICONS[name] || ''}</svg>`;
-
   const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const money = (n) => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  const longDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const version = () => (BUILD.startsWith('__') ? 'development copy' : BUILD);
 
   function badge(c) {
     if (c.status === 'check') {
@@ -1809,51 +2826,79 @@ window.HC_PRICING = {
   }
   const cellHtml = (c) => `<span class="${c.status === 'unknown' ? 'unknown' : ''}">${esc(c.text)}</span>${badge(c)}`;
 
-  // ---------- selectors ----------
-  function fillOld(filter = '') {
-    const q = filter.trim().toLowerCase();
-    const current = els.oldModel.value;
-    const groups = {};
-    for (const m of DATA.legacy.models) {
-      const p = DATA.legacy.platforms[m.platform];
-      if (q && !`${m.name} ${p.name}`.toLowerCase().includes(q)) continue;
-      (groups[m.platform] ||= []).push(m);
-    }
-    let html = '<option value="">Select current model…</option>';
-    for (const [key, list] of Object.entries(groups)) {
-      const p = DATA.legacy.platforms[key];
-      html += `<optgroup label="${esc(p.name)} platform (from ${p.launched})">`;
-      html += list.map((m) => `<option value="${m.id}">${esc(m.name)}</option>`).join('');
-      html += '</optgroup>';
-    }
-    els.oldModel.innerHTML = html;
-    if (current && [...els.oldModel.options].some((o) => o.value === current)) els.oldModel.value = current;
-    else if (q && els.oldModel.options.length === 2) {
-      els.oldModel.selectedIndex = 1; // a single match: pick it
-      onOldModel();
-    }
+  // ---------- current-aid type-ahead ----------
+  let active = -1;
+  let matches = [];
+
+  function openList() {
+    matches = HCCompare.searchOld(DATA, els.oldSearch.value);
+    active = matches.length ? 0 : -1;
+    let html = '';
+    let group = '';
+    matches.forEach((m, i) => {
+      if (m.platform !== group) {
+        group = m.platform;
+        html += `<li class="combo-group" role="presentation">${esc(group)}</li>`;
+      }
+      html += `<li role="option" id="old-opt-${i}" data-i="${i}" class="combo-opt${i === active ? ' active' : ''}" aria-selected="${i === active}">
+        <span>${esc(m.label.replace(/^Phonak /, ''))}</span><small>${esc(m.sub)}</small></li>`;
+    });
+    if (!matches.length) html = '<li class="combo-empty" role="presentation">No match. Try a model letter and level, e.g. “M70” or “Paradise 90”.</li>';
+    els.oldList.innerHTML = html;
+    els.oldList.hidden = false;
+    els.oldSearch.setAttribute('aria-expanded', 'true');
+    syncActive();
   }
 
-  function fillLevels() {
-    const id = els.oldModel.value;
-    const m = DATA.legacy.models.find((x) => x.id === id);
-    if (!m) {
-      els.oldLevel.innerHTML = '<option value="">Choose a model first</option>';
-      els.oldLevel.disabled = true;
-      return;
+  function closeList() {
+    els.oldList.hidden = true;
+    els.oldSearch.setAttribute('aria-expanded', 'false');
+    els.oldSearch.removeAttribute('aria-activedescendant');
+  }
+
+  function syncActive() {
+    els.oldList.querySelectorAll('.combo-opt').forEach((li) => {
+      const on = Number(li.dataset.i) === active;
+      li.classList.toggle('active', on);
+      li.setAttribute('aria-selected', String(on));
+      if (on) li.scrollIntoView({ block: 'nearest' });
+    });
+    if (active >= 0) els.oldSearch.setAttribute('aria-activedescendant', `old-opt-${active}`);
+  }
+
+  function chooseOld(i) {
+    const m = matches[i];
+    if (!m) return;
+    state.old = { id: m.id, level: m.level };
+    els.oldSearch.value = m.label.replace(/^Phonak /, '');
+    closeList();
+    suggestNew(m.id);
+    if (state.generated) generate();
+  }
+
+  els.oldSearch.addEventListener('input', () => { state.old = null; openList(); });
+  els.oldSearch.addEventListener('focus', openList);
+  els.oldSearch.addEventListener('blur', () => setTimeout(closeList, 150));
+  els.oldSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (els.oldList.hidden) openList();
+      e.preventDefault();
+      if (!matches.length) return;
+      active = (active + (e.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length;
+      syncActive();
+    } else if (e.key === 'Enter' && !els.oldList.hidden && active >= 0) {
+      e.preventDefault();
+      chooseOld(active);
+    } else if (e.key === 'Escape') {
+      closeList();
     }
-    const p = DATA.legacy.platforms[m.platform];
-    const opts = HCCompare.oldLevels(DATA, id).map((l) =>
-      `<option value="${l}">${esc(m.tmpl ? m.tmpl.replace('{L}', l).replace(/^Phonak /, '') : p.prefix + l)} · ${esc(DATA.legacy.levelNames[l])}</option>`);
-    els.oldLevel.innerHTML = '<option value="">Not sure</option>' + opts.join('');
-    els.oldLevel.disabled = false;
-  }
+  });
+  els.oldList.addEventListener('mousedown', (e) => {
+    const li = e.target.closest('.combo-opt');
+    if (li) { e.preventDefault(); chooseOld(Number(li.dataset.i)); }
+  });
 
-  function onOldModel() {
-    fillLevels();
-    suggestNew();
-  }
-
+  // ---------- other controls ----------
   function fillNew() {
     const groups = {};
     for (const m of DATA.pricing.models) (groups[m.family] ||= []).push(m);
@@ -1866,14 +2911,36 @@ window.HC_PRICING = {
     els.newModel.innerHTML = html;
   }
 
-  // Suggest a like-for-like style when the salesperson picks the current aid.
-  function suggestNew() {
-    if (els.newModel.value) return;
-    const m = DATA.legacy.models.find((x) => x.id === els.oldModel.value);
-    if (!m) return;
-    const pick = { RIC: 'e70', BTE: 'naida70', Custom: 'virto_i70_r' }[m.style];
-    if (pick && DATA.pricing.models.some((x) => x.id === pick)) els.newModel.value = pick;
+  // Discount list: ineligible offers stay visible but disabled, as in the pricing tool.
+  function fillDiscounts() {
+    const id = els.newModel.value;
+    const current = els.discount.value || 'none';
+    const opts = [['none', 'No discount', 0], ['existing', 'Existing customer', 0.1],
+      ...Object.entries(DATA.engine.discounts).filter(([k]) => k !== 'none').map(([k, d]) => [k, d.name, d.rate])];
+    els.discount.innerHTML = opts.map(([k, name, rate]) => {
+      const ok = k === 'none' || k === 'existing' || !id || DATA.engine.discountEligible(id, k);
+      return `<option value="${k}"${ok ? '' : ' disabled'}>${esc(name)}${rate ? ` (${Math.round(rate * 100)}%)` : ''}${ok ? '' : ' – not for this model'}</option>`;
+    }).join('');
+    const still = [...els.discount.options].find((o) => o.value === current && !o.disabled);
+    els.discount.value = still ? current : 'none';
   }
+
+  function fillConcerns() {
+    els.chips.innerHTML = DATA.concerns.map((c) =>
+      `<label class="chip"><input type="checkbox" value="${c.id}"> ${esc(c.label)}</label>`).join('');
+  }
+
+  function suggestNew(oldId) {
+    if (els.newModel.value) return;
+    const m = DATA.legacy.models.find((x) => x.id === oldId);
+    const pick = m && { RIC: 'e70', BTE: 'naida70', Custom: 'virto_i70_r' }[m.style];
+    if (pick && DATA.pricing.models.some((x) => x.id === pick)) {
+      els.newModel.value = pick;
+      fillDiscounts();
+    }
+  }
+
+  const fitting = () => (els.form.querySelector('input[name="fitting"]:checked') || {}).value || 'pair';
 
   // Name of the same new family at another level, e.g. "E90 Sphere CRT".
   function levelName(n, level) {
@@ -1886,11 +2953,43 @@ window.HC_PRICING = {
   }
 
   // ---------- rendering ----------
+  function priceBox(pr) {
+    const q = pr.quote;
+    const unit = pr.fitting === 'single' ? 'Hearing aid (single)' : pr.pairOnly ? 'CROS system (pair)' : 'Hearing aids (pair)';
+    const lines = [`<div class="price-line"><span>${unit}</span><span>${q.discountRate ? `<s>${money(q.fullAidPrice)}</s> ` : ''}${money(q.aidPrice)}</span></div>`];
+    if (q.discountRate) lines.push(`<div class="price-line saving"><span>${esc(q.discountName)} discount (${Math.round(q.discountRate * 100)}%)</span><span>−${money(q.discountSaving)}</span></div>`);
+    if (pr.planDetail) lines.push(`<div class="price-line"><span>${esc(pr.planDetail.name)} plan · ${esc(pr.planDetail.accessory)}</span><span>${money(q.accessoryPrice)}</span></div>`);
+    if (q.insurancePrice) lines.push(`<div class="price-line"><span>Purchase insurance</span><span>${money(q.insurancePrice)}</span></div>`);
+    return `
+      <div class="price-box">
+        ${lines.join('')}
+        <div class="price-line total"><span>Total</span><span>${money(q.total)}</span></div>
+        <p class="price-meta">Insurance: ${esc(q.insurance.status.toLowerCase())}${q.insurance.status === 'Included' ? ' with plan' : ''} · ${q.warrantyYears}-year warranty · excl. VAT · Prices as of ${esc(longDate(pr.pricesAsOf))}</p>
+      </div>`;
+  }
+
+  function planSection(pr) {
+    if (!pr.planEligible) {
+      return '<p class="plan-none">Listening plans are not available for this model.</p>';
+    }
+    const cards = pr.planOptions.map((p) => `
+      <button type="button" class="plan-card${p.id === pr.plan ? ' chosen' : ''}${p.suits.length ? ' suits' : ''}" data-plan="${p.id}" aria-pressed="${p.id === pr.plan}">
+        <span class="plan-name">${esc(p.name)}</span>
+        ${p.accessory ? `<span class="plan-acc">${esc(p.accessory)}</span>` : ''}
+        <span class="plan-benefit">${esc(p.benefit)}</span>
+        <span class="plan-cost">${p.cost ? `+ ${money(p.cost)}` : 'No extra cost'}</span>
+        ${p.id !== 'none' ? '<span class="plan-ins">Insurance included</span>' : ''}
+        ${p.suits.length ? `<span class="plan-suits">Good for: ${esc(p.suits.join(', '))}</span>` : ''}
+        ${p.id === pr.plan ? '<span class="plan-tick">✓ Selected</span>' : ''}
+      </button>`).join('');
+    const ins = pr.insuranceOptional
+      ? `<label class="ins-opt no-print"><input type="checkbox" id="buy-insurance"${pr.purchaseInsurance ? ' checked' : ''}> Add purchase insurance (${pr.fitting === 'single' ? '£99 for one aid' : '£198 for two aids'}; not discounted)</label>` : '';
+    return `<div class="plans">${cards}</div>${ins}`;
+  }
+
   function render(result) {
     const o = result.old;
     const n = result.new;
-    const priceLine = `<p class="price">${esc(HCCompare.priceText(n.price))}</p>`;
-
     const warn = result.warnings.length
       ? `<div class="warnings no-print"><p class="warnings-title">For the dispenser (not printed)</p>${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
 
@@ -1898,8 +2997,12 @@ window.HC_PRICING = {
       els.output.innerHTML = `<section class="panel">${warn}</section>`;
       return;
     }
+    const pr = result.price;
+    const concernLine = result.concerns.length
+      ? `<p class="concern-line">You told us the hardest things are: <strong>${esc(result.concerns.map((c) => c.label).join(' · '))}</strong>. These are shown first.</p>` : '';
 
     const hero = `
+      ${concernLine}
       <section class="hero">
         <div class="hero-side then">
           <p class="hero-label">Your current hearing aids</p>
@@ -1911,15 +3014,21 @@ window.HC_PRICING = {
           <p class="hero-label">The new generation</p>
           <p class="hero-name">${esc(n.name)}</p>
           <p class="hero-year">${esc(n.platform)} technology · ${n.launched} · ${esc(n.price.tier)}</p>
-          ${priceLine}
+          ${pr ? priceBox(pr) : ''}
         </div>
       </section>`;
 
+    const statBlock = (st) => {
+      if (!st) return '';
+      const basis = st.vs ? `${st.note ? `${st.note}, ` : ''}${st.vs}` : (st.note || '');
+      return `<p class="stat"><span class="stat-value">${esc(st.value)}</span> <span class="stat-label">${esc(st.label)}</span></p>
+        ${basis ? `<p class="stat-note">${/\d/.test(st.value) ? 'Phonak figure: ' : ''}${esc(basis)}${st.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</p>` : ''}`;
+    };
     const cards = result.cards.map((c) => `
-      <article class="card">
+      <article class="card${c.matters ? ' matters' : ''}">
+        ${c.matters ? '<span class="matters-tag">Matters to you</span>' : ''}
         <header class="card-head">${icon(c.icon)}<h3>${esc(c.title)}</h3></header>
-        ${c.stat ? `<p class="stat"><span class="stat-value">${esc(c.stat.value)}</span> <span class="stat-label">${esc(c.stat.label)}</span></p>
-          ${c.stat.note ? `<p class="stat-note">${esc(c.stat.note)}</p>` : ''}` : ''}
+        ${statBlock(c.stat)}
         <div class="compare-line then"><span class="tag">Then</span><p>${cellHtml(c.old)}</p></div>
         <div class="compare-line now"><span class="tag">Now</span><p>${cellHtml(c.new)}</p></div>
         ${c.footnote ? `<p class="card-foot">${esc(c.footnote)}</p>` : ''}
@@ -1936,8 +3045,8 @@ window.HC_PRICING = {
     const mark = (st) => ({ yes: '✓', no: '✗', notyet: '✗', '?': '?' }[st]);
     const stateClass = (st) => (st === 'notyet' ? 'no' : st === '?' ? 'unk' : st);
     const featureRow = (i) => `
-      <tr class="feat-${i.kind}">
-        <th scope="row"><span class="feat-name">${esc(i.label)}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
+      <tr class="feat-${i.kind}${i.matters ? ' feat-matters' : ''}">
+        <th scope="row"><span class="feat-name">${esc(i.label)}${i.matters ? ' <span class="matters-pill">Matters to you</span>' : ''}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
         <td class="then state-${stateClass(i.old.state)}">
           <span class="mark" aria-hidden="true">${mark(i.old.state)}</span><span class="mark-text">${esc(i.old.text)}</span></td>
         <td class="now state-${i.new.state}"><span class="mark" aria-hidden="true">${mark(i.new.state)}</span><span class="mark-text">${esc(i.new.text)}${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
@@ -1973,8 +3082,10 @@ window.HC_PRICING = {
       return `<li><strong>${s.kind === 'supplied' ? 'Supplied file' : 'Web'}:</strong> ${esc(s.title)}${links ? ` (${links})` : ''}</li>`;
     }).join('');
 
+    const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     els.output.innerHTML = `
       ${warn}
+      <p class="print-only print-head">Prepared ${esc(today)} · Prices as of ${esc(longDate(DATA.pricing.pricesAsOf))} · Tool ${esc(version())}</p>
       ${hero}
       <section aria-labelledby="a-title">
         <h2 id="a-title" class="section-title"><span class="section-letter">A</span> What changes for you</h2>
@@ -2002,8 +3113,12 @@ window.HC_PRICING = {
           </table>
         </div>
       </section>
-      <section aria-labelledby="c-title">
-        <h2 id="c-title" class="section-title"><span class="section-letter">C</span> Why upgrade now</h2>
+      ${pr ? `<section aria-labelledby="c-title">
+        <h2 id="c-title" class="section-title"><span class="section-letter">C</span> Listening plans</h2>
+        ${planSection(pr)}
+      </section>` : ''}
+      <section aria-labelledby="d-title">
+        <h2 id="d-title" class="section-title"><span class="section-letter">D</span> Why upgrade now</h2>
         <blockquote class="script" id="script">${esc(result.narrative)}</blockquote>
         <button type="button" class="btn ghost no-print" id="copy-script">Copy script</button>
       </section>
@@ -2021,32 +3136,59 @@ window.HC_PRICING = {
         e.target.textContent = 'Select the text to copy';
       }
     });
+    els.output.querySelectorAll('.plan-card').forEach((b) => b.addEventListener('click', () => {
+      state.plan = b.dataset.plan;
+      generate();
+    }));
+    const ins = $('buy-insurance');
+    if (ins) ins.addEventListener('change', () => { state.purchaseInsurance = ins.checked; generate(); });
     els.print.disabled = false;
   }
 
   function generate(evt) {
     if (evt) evt.preventDefault();
-    const oldId = els.oldModel.value;
     const newId = els.newModel.value;
-    if (!oldId || !newId) {
-      els.error.textContent = !oldId ? 'Choose the customer’s current hearing aid.' : 'Choose the new model to show.';
+    if (!state.old || !newId) {
+      els.error.textContent = !state.old ? 'Choose the customer’s current hearing aid from the list.' : 'Choose the new model to show.';
       els.error.hidden = false;
-      (oldId ? els.newModel : els.oldModel).focus();
+      (state.old ? els.newModel : els.oldSearch).focus();
       return;
     }
     els.error.hidden = true;
-    render(HCCompare.compare(DATA, oldId, newId, { patientName: els.patient.value, oldLevel: els.oldLevel.value }));
-    els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const first = !state.generated;
+    const result = HCCompare.compare(DATA, state.old.id, newId, {
+      patientName: els.patient.value, oldLevel: state.old.level, concerns: state.concerns,
+      plan: state.plan, discount: els.discount.value, fitting: fitting(), purchaseInsurance: state.purchaseInsurance,
+    });
+    // Keep controls in step with what the engine accepted (e.g. no plan on a non-plan model).
+    if (result.price) {
+      state.plan = result.price.plan;
+      state.purchaseInsurance = result.price.purchaseInsurance;
+      if (result.price.pairOnly) els.form.querySelector('input[value="pair"]').checked = true;
+    }
+    render(result);
+    state.generated = true;
+    if (first) els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ---------- init ----------
-  fillOld();
   fillNew();
-  fillLevels();
-  els.stamp.textContent = `New-model prices: ${DATA.pricing.source}, imported ${DATA.pricing.importedOn}. Older-model research: 29 October 2026.`;
-  els.oldFilter.addEventListener('input', () => fillOld(els.oldFilter.value));
-  els.oldModel.addEventListener('change', onOldModel);
+  fillDiscounts();
+  fillConcerns();
+  els.stamp.textContent = `Prices as of ${longDate(DATA.pricing.pricesAsOf)} (from ${DATA.pricing.source}). Older-model research: 29 October 2026. Tool version: ${version()}.`;
   els.form.addEventListener('submit', generate);
+  els.newModel.addEventListener('change', () => {
+    fillDiscounts();
+    state.plan = 'none';
+    if (state.generated) generate();
+  });
+  els.discount.addEventListener('change', () => { if (state.generated) generate(); });
+  els.form.querySelectorAll('input[name="fitting"]').forEach((r) => r.addEventListener('change', () => { if (state.generated) generate(); }));
+  els.patient.addEventListener('input', () => { if (state.generated) generate(); });
+  els.chips.addEventListener('change', () => {
+    state.concerns = [...els.chips.querySelectorAll('input:checked')].map((i) => i.value);
+    if (state.generated) generate();
+  });
   els.print.addEventListener('click', () => window.print());
 })();
 </script>
