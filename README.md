@@ -11,8 +11,9 @@ An offline, single-page tool for a consultation. It compares a customer's older 
 
 ## What it shows
 - **A. Headline cards** cover speech in noise, connectivity, power and convenience, and size. When there is no size data for the new model, the size card becomes "Years of progress".
-- **B. Then vs. now table** puts the old aid in pale red and the new aid in green. Rows cover processor, AutoSense version, speech in noise, wind, feedback, app, streaming, calls and battery.
-- **C. Why upgrade now** is a 3–4 sentence script built from the data, with an optional customer name.
+- **B. Then vs. now** has a two-way feature checklist and scoreboard (gains, losses, unconfirmed shown separately), then a detail table with the old aid in pale red and the new aid in green.
+- **C. Listening plans** shows plan cards with each accessory's benefit, price and insurance; tap one to add it to the price.
+- **D. Why upgrade now** is a 3–4 sentence script built from the data, with an optional customer name.
 - Print button and copy-script button.
 - The price on the green panel: aid price, discount saving, plan accessory, total, insurance status and warranty, with "Prices as of" the import date.
 - Every Phonak percentage states what it was compared with, or carries a Verify tag where sources disagree.
