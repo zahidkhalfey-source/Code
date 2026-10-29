@@ -44,7 +44,6 @@ input[type="text"], input[type="search"], select {
   font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; width: 100%;
 }
 input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 196, .35); outline-offset: 1px; border-color: var(--blue); }
-.check { display: flex; gap: 8px; align-items: center; font-weight: 400 !important; color: var(--muted); }
 .actions { display: flex; flex-direction: column; gap: 8px; }
 .btn { font: inherit; font-weight: 600; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1px solid transparent; }
 .btn.primary { background: var(--blue); color: #fff; }

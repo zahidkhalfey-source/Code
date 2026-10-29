@@ -9,7 +9,7 @@ An offline, single-page tool for a consultation. It compares a customer's older 
 - **B. Then vs. now table** puts the old aid in pale red and the new aid in green. Rows cover processor, AutoSense version, speech in noise, wind, feedback, app, streaming, calls and battery.
 - **C. Why upgrade now** is a 3–4 sentence script built from the data, with an optional customer name.
 - Print button and copy-script button.
-- An optional on-screen price, which is off by default.
+- The new model's pair and single price from the pricing file, always shown on the green "new generation" panel and in print.
 
 ## Evidence rules
 Each fact carries a status:

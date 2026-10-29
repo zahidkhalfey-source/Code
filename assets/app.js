@@ -10,7 +10,7 @@
   const $ = (id) => document.getElementById(id);
   const els = {
     form: $('setup'), patient: $('patient'), oldFilter: $('old-filter'), oldModel: $('old-model'),
-    newModel: $('new-model'), showPrice: $('show-price'), print: $('print'),
+    newModel: $('new-model'), print: $('print'),
     error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
   };
 
@@ -84,8 +84,7 @@
   function render(result) {
     const o = result.old;
     const n = result.new;
-    const priceLine = els.showPrice.checked
-      ? `<p class="price">${esc(HCCompare.priceText(n.price))} <span class="muted">from the pricing file; confirm before quoting</span></p>` : '';
+    const priceLine = `<p class="price">${esc(HCCompare.priceText(n.price))}</p>`;
 
     const warn = result.warnings.length
       ? `<div class="warnings">${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
@@ -197,6 +196,5 @@
   els.oldFilter.addEventListener('input', () => fillOld(els.oldFilter.value));
   els.oldModel.addEventListener('change', suggestNew);
   els.form.addEventListener('submit', generate);
-  els.showPrice.addEventListener('change', () => { if (els.output.innerHTML.trim()) generate(); });
   els.print.addEventListener('click', () => window.print());
 })();
