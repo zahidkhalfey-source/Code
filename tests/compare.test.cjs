@@ -39,7 +39,10 @@ test('all old x level x new combinations render complete output', () => {
     assert.strictEqual(r.rows.length, 12);
     for (const row of r.rows) for (const side of [row.old, row.new]) assert.ok(side.text, `${o.id}/${lvl}/${p.id} ${row.label}`);
     assert.ok(r.narrative.startsWith('Mr Jones, your'), r.narrative);
-    assert.ok(r.features.total > 0 && r.features.oldCount <= r.features.total);
+    const f = r.features;
+    assert.strictEqual(f.items.length, f.confirmed + f.unconfirmed);
+    assert.strictEqual(f.newCount, f.confirmed - f.lostCount);
+    assert.strictEqual(f.oldCount, f.confirmed - f.gained);
     const visible = r.cards.map((c) => [c.old.text, c.new.text, c.stat && c.stat.value, c.stat && c.stat.label, c.footnote].join(' ')).join(' ')
       + r.narrative + r.features.items.map((i) => i.old.text).join(' ');
     assert.ok(!/undefined|null|NaN/.test(visible), `${o.id}/${lvl}/${p.id}: ${visible}`);
@@ -72,7 +75,10 @@ test('Sphere Infinio offers only I90 and I70', () => {
 
 test('downgrade in features is flagged for the dispenser and higher levels are suggested', () => {
   const r = HCCompare.compare(DATA, 'audeo_q', 'e30', { oldLevel: '90' });
-  assert.ok(r.warnings.some((w) => /Heads-up/.test(w) && /focus in loud noise/.test(w)), r.warnings.join('|'));
+  assert.ok(r.warnings.some((w) => /focus in loud noise/.test(w)), r.warnings.join('|'));
+  const lostRow = r.features.items.find((i) => i.id === 'loud_noise');
+  assert.strictEqual(lostRow.kind, 'lost'); // shown to the patient, not hidden
+  assert.strictEqual(r.features.newCount, r.features.confirmed - r.features.lostCount);
   assert.ok(r.features.upsell.some((u) => /Speech Enhancer/.test(u.label) && u.from === 90));
 });
 
@@ -116,6 +122,20 @@ test('price text follows pricing-file values', () => {
   assert.strictEqual(HCCompare.priceText(e30), '£2,595 pair · £1,815 single');
   const cros = DATA.pricing.models.find((m) => m.id === 'cros_e90');
   assert.match(HCCompare.priceText(cros), /pair-only/);
+});
+
+test('unconfirmed features never count against the old aid', () => {
+  const r = HCCompare.compare(DATA, 'naida_l_old', 'naida90', { oldLevel: '90' });
+  const f = r.features;
+  assert.strictEqual(f.gained, 0);
+  assert.strictEqual(f.oldCount, f.newCount, `old ${f.oldCount} vs new ${f.newCount}`);
+  assert.ok(f.unconfirmed > 0);
+  assert.ok(f.items.filter((i) => i.kind === 'unconfirmed').every((i) => i.old.state === '?'));
+});
+
+test('a feature only the old aid has is listed as lost', () => {
+  const r = HCCompare.compare(DATA, 'audeo_sphere_i', 'e30', { oldLevel: '90' });
+  assert.ok(r.features.items.some((i) => i.id === 'ai_chip' && i.kind === 'lost'));
 });
 
 console.log(`\n${n} tests passed`);

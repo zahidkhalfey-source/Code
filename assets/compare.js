@@ -136,27 +136,43 @@
     return val === undefined ? 0 : val;
   }
 
+  // Both-way checklist. Each item has a kind:
+  //   gain        new has it, old doesn't (didn't exist yet / not at that level)
+  //   lost        old has it, new doesn't: shown to the patient, not hidden
+  //   both        both have it
+  //   unconfirmed new has it, old not confirmed: listed, but left out of the score
+  // The score only counts confirmed rows, so research gaps never count against the old aid.
   function checklist(data, oldM, newM) {
     const items = [];
-    const lost = [];
     const upsell = [];
     for (const f of data.features.features) {
       const nv = newFeatureValue(f, newM.familyKey, newM.level, newM.variant);
       const old = oldFeature(data, f, oldM);
+      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old };
       if (nv === 1 || nv === 'c') {
-        items.push({ id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources,
-          old, new: { state: 'yes', text: 'Yes', status: nv === 'c' ? 'check' : 'verified' } });
+        const kind = old.state === 'yes' ? 'both' : old.state === '?' ? 'unconfirmed' : 'gain';
+        items.push({ ...base, kind, new: { state: 'yes', text: 'Included', status: nv === 'c' ? 'check' : 'verified' } });
       } else if (nv === 0) {
-        if (old.state === 'yes') lost.push(f.label);
+        if (old.state === 'yes') items.push({ ...base, kind: 'lost', new: { state: 'no', text: 'Not on this model', status: 'verified' } });
         const higher = newM.familyLevels.filter((l) => l > newM.level && newFeatureValue(f, newM.familyKey, l, newM.variant) === 1);
         if (higher.length) upsell.push({ label: f.label, from: Math.min(...higher) });
       }
     }
-    const rank = { notyet: 0, no: 1, '?': 2, yes: 3 };
-    items.sort((a, b) => rank[a.old.state] - rank[b.old.state]);
-    const oldCount = items.filter((i) => i.old.state === 'yes').length;
-    const gained = items.filter((i) => i.old.state === 'notyet' || i.old.state === 'no').length;
-    return { items, total: items.length, oldCount, gained, lost, upsell };
+    const rank = { gain: 0, lost: 1, both: 2, unconfirmed: 3 };
+    items.sort((a, b) => rank[a.kind] - rank[b.kind]);
+    const count = (kind) => items.filter((i) => i.kind === kind).length;
+    const confirmed = items.length - count('unconfirmed');
+    return {
+      items,
+      confirmed,
+      oldCount: count('both') + count('lost'),
+      newCount: count('both') + count('gain'),
+      gained: count('gain'),
+      lostCount: count('lost'),
+      unconfirmed: count('unconfirmed'),
+      lost: items.filter((i) => i.kind === 'lost').map((i) => i.label),
+      upsell,
+    };
   }
 
   // ---------- sections ----------
@@ -228,7 +244,7 @@
     }
     if (!oldM.level) out.push('Choose the current technology level (e.g. Q50) for a sharper comparison. Some features show as "Depends on technology level" until you do.');
     if (list && list.lost.length) {
-      out.push(`Heads-up for you: the customer's current aid has ${joinList(list.lost)}, which the ${newM.name} does not. Consider a higher level.`);
+      out.push(`The customer's current aid has ${joinList(list.lost)}, which the ${newM.name} does not. This is shown to the customer in the checklist; consider a higher level.`);
     }
     if (newM.note) out.push(newM.note);
     return out;

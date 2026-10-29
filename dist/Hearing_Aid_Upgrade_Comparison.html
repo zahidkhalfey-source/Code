@@ -140,6 +140,12 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 .checklist td.state-unk { color: var(--muted); font-style: italic; }
 .checklist tr.feat-gain td.now { background: #d9f3e4; }
 .mark-text { vertical-align: middle; }
+.score-zero { color: var(--muted); }
+.score-lost { margin-top: 8px; font-size: .85rem; font-weight: 600; color: var(--then-ink); }
+.score-note { margin: 0; font-size: .8rem; color: var(--muted); }
+.checklist td.now.state-no { background: var(--then-bg); color: var(--then-ink); font-weight: 400; }
+.checklist td.now.state-no .mark { background: #f6d4d4; color: #b42318; }
+.checklist tr.group-row th { background: #f4f6fa; color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; }
 .upsell { margin: -18px 0 28px; padding: 10px 14px; background: var(--blue-soft); border-radius: 10px; font-size: .9rem; color: var(--navy); }
 
 /* Script */
@@ -1546,27 +1552,43 @@ window.HC_PRICING = {
     return val === undefined ? 0 : val;
   }
 
+  // Both-way checklist. Each item has a kind:
+  //   gain        new has it, old doesn't (didn't exist yet / not at that level)
+  //   lost        old has it, new doesn't: shown to the patient, not hidden
+  //   both        both have it
+  //   unconfirmed new has it, old not confirmed: listed, but left out of the score
+  // The score only counts confirmed rows, so research gaps never count against the old aid.
   function checklist(data, oldM, newM) {
     const items = [];
-    const lost = [];
     const upsell = [];
     for (const f of data.features.features) {
       const nv = newFeatureValue(f, newM.familyKey, newM.level, newM.variant);
       const old = oldFeature(data, f, oldM);
+      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old };
       if (nv === 1 || nv === 'c') {
-        items.push({ id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources,
-          old, new: { state: 'yes', text: 'Yes', status: nv === 'c' ? 'check' : 'verified' } });
+        const kind = old.state === 'yes' ? 'both' : old.state === '?' ? 'unconfirmed' : 'gain';
+        items.push({ ...base, kind, new: { state: 'yes', text: 'Included', status: nv === 'c' ? 'check' : 'verified' } });
       } else if (nv === 0) {
-        if (old.state === 'yes') lost.push(f.label);
+        if (old.state === 'yes') items.push({ ...base, kind: 'lost', new: { state: 'no', text: 'Not on this model', status: 'verified' } });
         const higher = newM.familyLevels.filter((l) => l > newM.level && newFeatureValue(f, newM.familyKey, l, newM.variant) === 1);
         if (higher.length) upsell.push({ label: f.label, from: Math.min(...higher) });
       }
     }
-    const rank = { notyet: 0, no: 1, '?': 2, yes: 3 };
-    items.sort((a, b) => rank[a.old.state] - rank[b.old.state]);
-    const oldCount = items.filter((i) => i.old.state === 'yes').length;
-    const gained = items.filter((i) => i.old.state === 'notyet' || i.old.state === 'no').length;
-    return { items, total: items.length, oldCount, gained, lost, upsell };
+    const rank = { gain: 0, lost: 1, both: 2, unconfirmed: 3 };
+    items.sort((a, b) => rank[a.kind] - rank[b.kind]);
+    const count = (kind) => items.filter((i) => i.kind === kind).length;
+    const confirmed = items.length - count('unconfirmed');
+    return {
+      items,
+      confirmed,
+      oldCount: count('both') + count('lost'),
+      newCount: count('both') + count('gain'),
+      gained: count('gain'),
+      lostCount: count('lost'),
+      unconfirmed: count('unconfirmed'),
+      lost: items.filter((i) => i.kind === 'lost').map((i) => i.label),
+      upsell,
+    };
   }
 
   // ---------- sections ----------
@@ -1638,7 +1660,7 @@ window.HC_PRICING = {
     }
     if (!oldM.level) out.push('Choose the current technology level (e.g. Q50) for a sharper comparison. Some features show as "Depends on technology level" until you do.');
     if (list && list.lost.length) {
-      out.push(`Heads-up for you: the customer's current aid has ${joinList(list.lost)}, which the ${newM.name} does not. Consider a higher level.`);
+      out.push(`The customer's current aid has ${joinList(list.lost)}, which the ${newM.name} does not. This is shown to the customer in the checklist; consider a higher level.`);
     }
     if (newM.note) out.push(newM.note);
     return out;
@@ -1912,24 +1934,35 @@ window.HC_PRICING = {
 
     const f = result.features;
     const mark = (st) => ({ yes: '✓', no: '✗', notyet: '✗', '?': '?' }[st]);
-    const featureRows = f.items.map((i) => `
-      <tr class="feat-${i.old.state === 'yes' ? 'both' : 'gain'}">
+    const stateClass = (st) => (st === 'notyet' ? 'no' : st === '?' ? 'unk' : st);
+    const featureRow = (i) => `
+      <tr class="feat-${i.kind}">
         <th scope="row"><span class="feat-name">${esc(i.label)}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
-        <td class="then state-${i.old.state === 'notyet' ? 'no' : i.old.state === '?' ? 'unk' : i.old.state}">
+        <td class="then state-${stateClass(i.old.state)}">
           <span class="mark" aria-hidden="true">${mark(i.old.state)}</span><span class="mark-text">${esc(i.old.text)}</span></td>
-        <td class="now state-yes"><span class="mark" aria-hidden="true">✓</span><span class="mark-text">Included${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
-      </tr>`).join('');
-    const pct = (k) => (f.total ? Math.round((k / f.total) * 100) : 0);
+        <td class="now state-${i.new.state}"><span class="mark" aria-hidden="true">${mark(i.new.state)}</span><span class="mark-text">${esc(i.new.text)}${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
+      </tr>`;
+    const counted = f.items.filter((i) => i.kind !== 'unconfirmed');
+    const unconfirmed = f.items.filter((i) => i.kind === 'unconfirmed');
+    const featureRows = counted.map(featureRow).join('') + (unconfirmed.length ? `
+      <tr class="group-row"><th colspan="3">Not confirmed for your current aid, so not counted in the score above</th></tr>
+      ${unconfirmed.map(featureRow).join('')}` : '');
+    const pct = (k) => (f.confirmed ? Math.round((k / f.confirmed) * 100) : 0);
     const upsell = f.upsell.length
       ? `<p class="upsell"><strong>Step up for even more:</strong> ${f.upsell.map((u) => `${esc(u.label)} (from ${esc(levelName(n, u.from))})`).join(' · ')}</p>` : '';
+    const headline = f.gained
+      ? `<span class="score-num">+${f.gained}</span><span class="score-cap">feature${f.gained === 1 ? '' : 's'} your current aids don't have</span>`
+      : '<span class="score-num score-zero">0</span><span class="score-cap">new features at this level</span>';
     const scoreboard = `
       <div class="scoreboard">
-        <div class="score-big"><span class="score-num">+${f.gained}</span><span class="score-cap">features your current aids don't have</span></div>
+        <div class="score-big">${headline}
+          ${f.lostCount ? `<span class="score-lost">${f.lostCount} feature${f.lostCount === 1 ? '' : 's'} you would give up (shown below)</span>` : ''}</div>
         <div class="score-bars">
           <div class="bar-row"><span class="bar-label">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</span>
-            <span class="bar then"><span style="width:${pct(f.oldCount)}%"></span></span><span class="bar-val">${f.oldCount} of ${f.total}</span></div>
+            <span class="bar then"><span style="width:${pct(f.oldCount)}%"></span></span><span class="bar-val">${f.oldCount} of ${f.confirmed}</span></div>
           <div class="bar-row"><span class="bar-label">The new ${esc(n.name.replace(/^Phonak /, ''))}</span>
-            <span class="bar now"><span style="width:100%"></span></span><span class="bar-val">${f.total} of ${f.total}</span></div>
+            <span class="bar now"><span style="width:${pct(f.newCount)}%"></span></span><span class="bar-val">${f.newCount} of ${f.confirmed}</span></div>
+          <p class="score-note">Compared on ${f.confirmed} feature${f.confirmed === 1 ? '' : 's'} we could confirm for both hearing aids${f.unconfirmed ? `. ${f.unconfirmed} more could not be confirmed for your current aid and are not counted` : ''}.</p>
         </div>
       </div>`;
 
@@ -1952,7 +1985,7 @@ window.HC_PRICING = {
         ${scoreboard}
         <div class="table-wrap">
           <table class="versus checklist">
-            <thead><tr><th scope="col">What the new hearing aid gives you</th>
+            <thead><tr><th scope="col">Feature</th>
               <th scope="col" class="then">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</th>
               <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
             <tbody>${featureRows}</tbody>

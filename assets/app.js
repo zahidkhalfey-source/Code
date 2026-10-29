@@ -160,24 +160,35 @@
 
     const f = result.features;
     const mark = (st) => ({ yes: '✓', no: '✗', notyet: '✗', '?': '?' }[st]);
-    const featureRows = f.items.map((i) => `
-      <tr class="feat-${i.old.state === 'yes' ? 'both' : 'gain'}">
+    const stateClass = (st) => (st === 'notyet' ? 'no' : st === '?' ? 'unk' : st);
+    const featureRow = (i) => `
+      <tr class="feat-${i.kind}">
         <th scope="row"><span class="feat-name">${esc(i.label)}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
-        <td class="then state-${i.old.state === 'notyet' ? 'no' : i.old.state === '?' ? 'unk' : i.old.state}">
+        <td class="then state-${stateClass(i.old.state)}">
           <span class="mark" aria-hidden="true">${mark(i.old.state)}</span><span class="mark-text">${esc(i.old.text)}</span></td>
-        <td class="now state-yes"><span class="mark" aria-hidden="true">✓</span><span class="mark-text">Included${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
-      </tr>`).join('');
-    const pct = (k) => (f.total ? Math.round((k / f.total) * 100) : 0);
+        <td class="now state-${i.new.state}"><span class="mark" aria-hidden="true">${mark(i.new.state)}</span><span class="mark-text">${esc(i.new.text)}${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
+      </tr>`;
+    const counted = f.items.filter((i) => i.kind !== 'unconfirmed');
+    const unconfirmed = f.items.filter((i) => i.kind === 'unconfirmed');
+    const featureRows = counted.map(featureRow).join('') + (unconfirmed.length ? `
+      <tr class="group-row"><th colspan="3">Not confirmed for your current aid, so not counted in the score above</th></tr>
+      ${unconfirmed.map(featureRow).join('')}` : '');
+    const pct = (k) => (f.confirmed ? Math.round((k / f.confirmed) * 100) : 0);
     const upsell = f.upsell.length
       ? `<p class="upsell"><strong>Step up for even more:</strong> ${f.upsell.map((u) => `${esc(u.label)} (from ${esc(levelName(n, u.from))})`).join(' · ')}</p>` : '';
+    const headline = f.gained
+      ? `<span class="score-num">+${f.gained}</span><span class="score-cap">feature${f.gained === 1 ? '' : 's'} your current aids don't have</span>`
+      : '<span class="score-num score-zero">0</span><span class="score-cap">new features at this level</span>';
     const scoreboard = `
       <div class="scoreboard">
-        <div class="score-big"><span class="score-num">+${f.gained}</span><span class="score-cap">features your current aids don't have</span></div>
+        <div class="score-big">${headline}
+          ${f.lostCount ? `<span class="score-lost">${f.lostCount} feature${f.lostCount === 1 ? '' : 's'} you would give up (shown below)</span>` : ''}</div>
         <div class="score-bars">
           <div class="bar-row"><span class="bar-label">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</span>
-            <span class="bar then"><span style="width:${pct(f.oldCount)}%"></span></span><span class="bar-val">${f.oldCount} of ${f.total}</span></div>
+            <span class="bar then"><span style="width:${pct(f.oldCount)}%"></span></span><span class="bar-val">${f.oldCount} of ${f.confirmed}</span></div>
           <div class="bar-row"><span class="bar-label">The new ${esc(n.name.replace(/^Phonak /, ''))}</span>
-            <span class="bar now"><span style="width:100%"></span></span><span class="bar-val">${f.total} of ${f.total}</span></div>
+            <span class="bar now"><span style="width:${pct(f.newCount)}%"></span></span><span class="bar-val">${f.newCount} of ${f.confirmed}</span></div>
+          <p class="score-note">Compared on ${f.confirmed} feature${f.confirmed === 1 ? '' : 's'} we could confirm for both hearing aids${f.unconfirmed ? `. ${f.unconfirmed} more could not be confirmed for your current aid and are not counted` : ''}.</p>
         </div>
       </div>`;
 
@@ -200,7 +211,7 @@
         ${scoreboard}
         <div class="table-wrap">
           <table class="versus checklist">
-            <thead><tr><th scope="col">What the new hearing aid gives you</th>
+            <thead><tr><th scope="col">Feature</th>
               <th scope="col" class="then">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</th>
               <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
             <tbody>${featureRows}</tbody>

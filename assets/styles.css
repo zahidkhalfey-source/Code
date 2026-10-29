@@ -133,6 +133,12 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 .checklist td.state-unk { color: var(--muted); font-style: italic; }
 .checklist tr.feat-gain td.now { background: #d9f3e4; }
 .mark-text { vertical-align: middle; }
+.score-zero { color: var(--muted); }
+.score-lost { margin-top: 8px; font-size: .85rem; font-weight: 600; color: var(--then-ink); }
+.score-note { margin: 0; font-size: .8rem; color: var(--muted); }
+.checklist td.now.state-no { background: var(--then-bg); color: var(--then-ink); font-weight: 400; }
+.checklist td.now.state-no .mark { background: #f6d4d4; color: #b42318; }
+.checklist tr.group-row th { background: #f4f6fa; color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; }
 .upsell { margin: -18px 0 28px; padding: 10px 14px; background: var(--blue-soft); border-radius: 10px; font-size: .9rem; color: var(--navy); }
 
 /* Script */
