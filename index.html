@@ -49,6 +49,17 @@
           <div id="concern-chips" class="chips"></div>
         </fieldset>
 
+        <fieldset class="words">
+          <legend>In their words <span class="hint">(tap what they said, or type it; shown in Conversation mode)</span></legend>
+          <div id="word-presets" class="chips"></div>
+          <div class="word-add">
+            <input id="word-text" type="text" placeholder="Or type their exact words, e.g. “I just nod along at the pub”" autocomplete="off" aria-label="Customer's words">
+            <select id="word-concern" aria-label="What it is about"></select>
+            <button type="button" id="word-add" class="btn ghost">Add</button>
+          </div>
+          <ul id="word-list" class="word-list"></ul>
+        </fieldset>
+
         <div class="options-grid">
           <fieldset class="field fitting">
             <legend>Fitting</legend>
@@ -77,6 +88,7 @@
   <script src="data/pricing.js"></script>
   <script src="data/plans.js"></script>
   <script src="data/concerns.js"></script>
+  <script src="data/words.js"></script>
   <script src="data/new-specs.js"></script>
   <script src="data/features.js"></script>
   <script src="data/legacy-platforms.js"></script>

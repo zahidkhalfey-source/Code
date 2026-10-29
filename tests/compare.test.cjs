@@ -7,13 +7,13 @@ const HCCompare = require('../assets/compare.js');
 
 const ctx = { window: {} };
 vm.createContext(ctx);
-for (const f of ['sources', 'pricing', 'plans', 'concerns', 'new-specs', 'features', 'legacy-platforms']) {
+for (const f of ['sources', 'pricing', 'plans', 'concerns', 'words', 'new-specs', 'features', 'legacy-platforms']) {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'data', `${f}.js`), 'utf8'), ctx);
 }
 const w = ctx.window;
 const Pricing = require('../assets/pricing-engine.js');
 const DATA = { pricing: w.HC_PRICING, specs: w.HC_NEW_SPECS, legacy: w.HC_LEGACY, sources: w.HC_SOURCES, features: w.HC_FEATURES,
-  concerns: w.HC_CONCERNS, plans: w.HC_PLANS, engine: Pricing.create(w.HC_PRICING.engine) };
+  concerns: w.HC_CONCERNS, plans: w.HC_PLANS, words: w.HC_WORDS, engine: Pricing.create(w.HC_PRICING.engine) };
 let n = 0;
 const test = (name, fn) => { fn(); n++; console.log('ok -', name); };
 
@@ -197,6 +197,26 @@ test('every headline percentage states what it was compared with or is marked to
   }
   const r = HCCompare.compare(DATA, 'audeo_q', 'e90', { oldLevel: 90 });
   assert.match(r.narrative, /switched off/);
+});
+
+test('their-words board only offers what the new model can do', () => {
+  const quotes = [{ text: 'I turn the TV up', concern: 'tv' }, { text: 'Restaurants are hopeless', concern: 'noise' },
+    { text: 'I can’t hear my wife', concern: 'partner' }];
+  const sphere = HCCompare.compare(DATA, 'audeo_q', 'e90', { oldLevel: 50, quotes }).words;
+  assert.strictEqual(sphere.length, 3);
+  assert.match(sphere[1].now, /AI chips/);
+  assert.match(sphere[2].question, /partner/);
+  const e30 = HCCompare.compare(DATA, 'audeo_q', 'e30', { quotes }).words;
+  assert.doesNotMatch(e30[1].now, /AI/); // E30-R has no AI chip
+  const nw = HCCompare.compare(DATA, 'virto_q', 'virto_i90_10nwo', { quotes }).words;
+  assert.strictEqual(nw[0].matched, false); // non-wireless: no TV streaming promise
+  assert.strictEqual(nw[2].matched, true); // falls back to SpeechSensor, which I90 has
+  const two = HCCompare.compare(DATA, 'audeo_q', 'e90', { quotes: [quotes[1], { text: 'I nod along at the pub', concern: 'noise' }] }).words;
+  assert.notStrictEqual(two[0].question, two[1].question);
+  for (const c of DATA.concerns) assert.ok(DATA.words[c.id] && DATA.words[c.id].presets.length, c.id);
+  for (const conf of Object.values(DATA.words)) for (const wi of conf.whatIf) for (const need of wi.needs) {
+    assert.ok(/^plan:|^size$/.test(need) || DATA.features.features.some((f) => f.id === need), need);
+  }
 });
 
 console.log(`\n${n} tests passed`);

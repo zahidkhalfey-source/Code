@@ -411,6 +411,34 @@
     return [...keys];
   }
 
+  // "In their words" board: each customer quote is paired with the first
+  // "What if…?" prompt the chosen new model can genuinely deliver.
+  function wordsBoard(data, newM, price, quotes) {
+    if (!data.words || !quotes || !quotes.length) return [];
+    const has = (need) => {
+      if (need.startsWith('plan:')) {
+        const plan = need.slice(5);
+        return Boolean(price && price.planEligible && price.planOptions.some((p) => p.id === plan));
+      }
+      if (need === 'size') return Boolean(newM.size && newM.size.status !== 'unknown');
+      const f = data.features.features.find((x) => x.id === need);
+      const v = f ? newFeatureValue(f, newM.familyKey, newM.level, newM.variant) : 0;
+      return v === 1 || v === 'c';
+    };
+    const seen = {};
+    return quotes.map((qt) => {
+      const conf = data.words[qt.concern] || { whatIf: [] };
+      // A second quote on the same concern gets the next deliverable prompt, not a repeat.
+      const options = conf.whatIf.filter((w) => w.needs.every(has));
+      const nth = (seen[qt.concern] = (seen[qt.concern] ?? -1) + 1);
+      const hit = options[nth % (options.length || 1)];
+      return hit
+        ? { quote: qt.text, concern: qt.concern, question: hit.q, now: hit.now, matched: true }
+        : { quote: qt.text, concern: qt.concern, question: 'What would make the biggest difference here?',
+            now: 'Ask about the options that would help with this.', matched: false };
+    });
+  }
+
   function compare(data, oldId, newId, opts = {}) {
     const oldM = resolveOld(data, oldId, opts.oldLevel);
     const newM = resolveNew(data, newId);
@@ -421,6 +449,7 @@
     const list = checklist(data, oldM, newM, new Set(concerns.flatMap((c) => c.features)));
     const rowsOut = rows(oldM, newM);
     const cardsOut = orderCards(cards(oldM, newM), concerns);
+    const price = priceInfo(data, newM, opts, concerns);
     return {
       old: oldM,
       new: newM,
@@ -430,7 +459,8 @@
       warnings: warnings(oldM, newM, list),
       narrative: narrative(oldM, newM, list, opts.patientName, concerns),
       concerns,
-      price: priceInfo(data, newM, opts, concerns),
+      price,
+      words: wordsBoard(data, newM, price, opts.quotes),
       sources: usedSources(rowsOut, cardsOut, list, newM),
     };
   }

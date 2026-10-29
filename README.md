@@ -9,7 +9,13 @@ An offline, single-page tool for a consultation. It compares a customer's older 
 - **What bothers them most:** optional chips (noise, TV, phone, wind, batteries…). The matching cards, checklist rows and listening plans move to the front and are tagged "Matters to you", and the script refers back to them.
 - **Fitting, discount and plan:** pair/single, one discount, and a listening plan chosen from cards that show each plan's benefits. These come from the Price & Plan tool's own engine (`assets/pricing-engine.js`, copied unchanged), so totals, eligibility, insurance and warranty always match that tool.
 
-## What it shows
+## Two views
+- **Conversation** (no product names or prices): opens by acknowledging the current aids were a sensible choice when bought, then shows the customer's own words beside a "What if…?" question and a "Now:" line about how the technology has moved on. Prompts come from `data/words.js` and only appear if the chosen new model can actually do it. A second quote on the same concern gets the next prompt, not a repeat. It ends with "Which of these would make the biggest difference to your week?".
+- **Comparison:** cards, scoreboard, checklist, plans, price and script (below).
+
+Add words under **In their words**: tap a common phrase or type their exact words. Each one also ticks its "What bothers them most" chip. If words are entered before the first Generate, the tool opens in Conversation view.
+
+## What it shows (Comparison)
 - **A. Headline cards** cover speech in noise, connectivity, power and convenience, and size. When there is no size data for the new model, the size card becomes "Years of progress".
 - **B. Then vs. now** has a two-way feature checklist and scoreboard (gains, losses, unconfirmed shown separately), then a detail table with the old aid in pale red and the new aid in green.
 - **C. Listening plans** shows plan cards with each accessory's benefit, price and insurance; tap one to add it to the price.
@@ -33,6 +39,7 @@ Percentages are Phonak-reported claims. Each one is scoped to the model and leve
 | `data/pricing.js` | **Generated** from the pricing tool export: `python3 scripts/import_pricing.py path/to/CATALOGUE_AND_PAYMENT_DATA.json --prices-as-of YYYY-MM-DD`. The date is shown beside every price and on printouts |
 | `assets/pricing-engine.js` | The Price & Plan tool's engine, copied unchanged. When that tool changes, copy it again |
 | `data/plans.js` | The customer benefit of each plan's accessory |
+| `data/words.js` | Quick-pick customer phrases and the "What if…?" prompts for each concern, with the features each prompt needs |
 | `data/concerns.js` | "What bothers you most" options and the cards, features and plans each one lifts |
 | `data/new-specs.js` | New-model specs from the supplied spec files, plus a `models` map from pricing id → family/level/variant |
 | `data/legacy-platforms.js` | Researched baseline per older platform, with per-model overrides |

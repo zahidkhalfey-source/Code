@@ -10,6 +10,7 @@
     features: window.HC_FEATURES,
     concerns: window.HC_CONCERNS,
     plans: window.HC_PLANS,
+    words: window.HC_WORDS,
     engine: window.Pricing.create(window.HC_PRICING.engine),
   };
 
@@ -18,10 +19,12 @@
     form: $('setup'), patient: $('patient'), oldSearch: $('old-search'), oldList: $('old-list'),
     newModel: $('new-model'), discount: $('discount'), chips: $('concern-chips'), print: $('print'),
     error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
+    wordPresets: $('word-presets'), wordText: $('word-text'), wordConcern: $('word-concern'),
+    wordAdd: $('word-add'), wordList: $('word-list'),
   };
 
   // Everything the comparison depends on. Plan and insurance are chosen in the results.
-  const state = { old: null, concerns: [], plan: 'none', purchaseInsurance: false, generated: false };
+  const state = { old: null, concerns: [], quotes: [], plan: 'none', purchaseInsurance: false, generated: false, mode: null };
 
   const ICONS = {
     speech: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
@@ -148,6 +151,51 @@
     els.chips.innerHTML = DATA.concerns.map((c) =>
       `<label class="chip"><input type="checkbox" value="${c.id}"> ${esc(c.label)}</label>`).join('');
   }
+
+  // ---------- "in their words" ----------
+  function fillWords() {
+    els.wordPresets.innerHTML = DATA.concerns.flatMap((c) => (DATA.words[c.id] || { presets: [] }).presets.map((t) =>
+      `<button type="button" class="chip preset" data-concern="${c.id}" data-text="${esc(t)}">“${esc(t)}”</button>`)).join('');
+    els.wordConcern.innerHTML = DATA.concerns.map((c) => `<option value="${c.id}">About: ${esc(c.label)}</option>`).join('');
+  }
+
+  function renderQuotes() {
+    els.wordList.innerHTML = state.quotes.map((q, i) =>
+      `<li><span>“${esc(q.text)}”</span> <small>${esc(DATA.concerns.find((c) => c.id === q.concern).label)}</small>
+        <button type="button" class="word-remove" data-i="${i}" aria-label="Remove">×</button></li>`).join('');
+    els.wordPresets.querySelectorAll('.preset').forEach((b) =>
+      b.classList.toggle('used', state.quotes.some((q) => q.text === b.dataset.text)));
+  }
+
+  // A quote also ticks its concern, so the Comparison view puts it first too.
+  function addQuote(text, concern) {
+    text = text.trim().replace(/^[“"']|[”"']$/g, '');
+    if (!text || state.quotes.some((q) => q.text === text)) return;
+    state.quotes.push({ text, concern });
+    const chip = els.chips.querySelector(`input[value="${concern}"]`);
+    if (chip && !chip.checked) {
+      chip.checked = true;
+      state.concerns = [...els.chips.querySelectorAll('input:checked')].map((i) => i.value);
+    }
+    renderQuotes();
+    if (state.generated) generate();
+  }
+
+  els.wordPresets.addEventListener('click', (e) => {
+    const b = e.target.closest('.preset');
+    if (b) addQuote(b.dataset.text, b.dataset.concern);
+  });
+  els.wordAdd.addEventListener('click', () => { addQuote(els.wordText.value, els.wordConcern.value); els.wordText.value = ''; els.wordText.focus(); });
+  els.wordText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); els.wordAdd.click(); }
+  });
+  els.wordList.addEventListener('click', (e) => {
+    const b = e.target.closest('.word-remove');
+    if (!b) return;
+    state.quotes.splice(Number(b.dataset.i), 1);
+    renderQuotes();
+    if (state.generated) generate();
+  });
 
   function suggestNew(oldId) {
     if (els.newModel.value) return;
@@ -302,7 +350,20 @@
     }).join('');
 
     const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const modeSwitch = `
+      <div class="mode-switch no-print" role="group" aria-label="View">
+        <button type="button" data-mode="conversation" aria-pressed="${state.mode === 'conversation'}">Conversation</button>
+        <button type="button" data-mode="comparison" aria-pressed="${state.mode === 'comparison'}">Comparison</button>
+      </div>`;
+
+    if (state.mode === 'conversation') {
+      els.output.innerHTML = `${modeSwitch}${conversationHtml(result)}`;
+      wireOutput(result);
+      return;
+    }
+
     els.output.innerHTML = `
+      ${modeSwitch}
       ${warn}
       <p class="print-only print-head">Prepared ${esc(today)} · Prices as of ${esc(longDate(DATA.pricing.pricesAsOf))} · Tool ${esc(version())}</p>
       ${hero}
@@ -347,7 +408,41 @@
         <p class="muted">Where nothing could be found for an older model, the tool says: “${esc(HCCompare.NOT_FOUND)}”.</p>
       </details>`;
 
-    $('copy-script').addEventListener('click', async (e) => {
+    wireOutput(result);
+  }
+
+  // Conversation mode: validate, mirror their words, then "what if". No product names or prices.
+  function conversationHtml(result) {
+    const o = result.old;
+    const oldName = o.displayName.replace(/^Phonak /, '').replace(/ \([^)]*\)$/, '');
+    const who = els.patient.value.trim();
+    const rows = result.words.map((w) => `
+      <div class="word-row">
+        <blockquote class="their"><span class="their-label">You said</span>“${esc(w.quote)}”</blockquote>
+        <div class="word-arrow" aria-hidden="true">→</div>
+        <div class="possible">
+          <p class="what-if">${esc(w.question)}</p>
+          <p class="now-line"><span>Now:</span> ${esc(w.now)}</p>
+        </div>
+      </div>`).join('');
+    return `
+      <section class="convo" aria-label="In your words">
+        <p class="convo-intro">${who ? `${esc(who)}, your` : 'Your'} ${esc(oldName)} hearing aids were a sensible choice in ${o.launched}.
+          Since then, hearing technology has moved on. Here’s what you told us, and what’s possible now.</p>
+        ${rows ? `<div class="words-board">${rows}</div>
+          <p class="convo-close">Which of these would make the biggest difference to your week?</p>`
+          : '<p class="convo-empty no-print">Add what the customer told you under “In their words” above, and it will appear here.</p>'}
+        <button type="button" class="btn ghost no-print" data-mode="comparison">See the full comparison</button>
+      </section>`;
+  }
+
+  function wireOutput(result) {
+    els.output.querySelectorAll('[data-mode]').forEach((b) => b.addEventListener('click', () => {
+      state.mode = b.dataset.mode;
+      generate();
+    }));
+    const copy = $('copy-script');
+    if (copy) copy.addEventListener('click', async (e) => {
       try {
         await navigator.clipboard.writeText(result.narrative);
         e.target.textContent = 'Copied';
@@ -375,9 +470,11 @@
     }
     els.error.hidden = true;
     const first = !state.generated;
+    if (!state.mode) state.mode = state.quotes.length ? 'conversation' : 'comparison';
     const result = HCCompare.compare(DATA, state.old.id, newId, {
       patientName: els.patient.value, oldLevel: state.old.level, concerns: state.concerns,
       plan: state.plan, discount: els.discount.value, fitting: fitting(), purchaseInsurance: state.purchaseInsurance,
+      quotes: state.quotes,
     });
     // Keep controls in step with what the engine accepted (e.g. no plan on a non-plan model).
     if (result.price) {
@@ -394,6 +491,7 @@
   fillNew();
   fillDiscounts();
   fillConcerns();
+  fillWords();
   els.stamp.textContent = `Prices as of ${longDate(DATA.pricing.pricesAsOf)} (from ${DATA.pricing.source}). Older-model research: 29 October 2026. Tool version: ${version()}.`;
   els.form.addEventListener('submit', generate);
   els.newModel.addEventListener('change', () => {
