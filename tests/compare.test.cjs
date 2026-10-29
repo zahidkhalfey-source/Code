@@ -7,11 +7,13 @@ const HCCompare = require('../assets/compare.js');
 
 const ctx = { window: {} };
 vm.createContext(ctx);
-for (const f of ['sources', 'pricing', 'new-specs', 'features', 'legacy-platforms']) {
+for (const f of ['sources', 'pricing', 'plans', 'concerns', 'new-specs', 'features', 'legacy-platforms']) {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'data', `${f}.js`), 'utf8'), ctx);
 }
 const w = ctx.window;
-const DATA = { pricing: w.HC_PRICING, specs: w.HC_NEW_SPECS, legacy: w.HC_LEGACY, sources: w.HC_SOURCES, features: w.HC_FEATURES };
+const Pricing = require('../assets/pricing-engine.js');
+const DATA = { pricing: w.HC_PRICING, specs: w.HC_NEW_SPECS, legacy: w.HC_LEGACY, sources: w.HC_SOURCES, features: w.HC_FEATURES,
+  concerns: w.HC_CONCERNS, plans: w.HC_PLANS, engine: Pricing.create(w.HC_PRICING.engine) };
 let n = 0;
 const test = (name, fn) => { fn(); n++; console.log('ok -', name); };
 
@@ -136,6 +138,65 @@ test('unconfirmed features never count against the old aid', () => {
 test('a feature only the old aid has is listed as lost', () => {
   const r = HCCompare.compare(DATA, 'audeo_sphere_i', 'e30', { oldLevel: '90' });
   assert.ok(r.features.items.some((i) => i.id === 'ai_chip' && i.kind === 'lost'));
+});
+
+test('type-ahead finds models by level code or platform name', () => {
+  const labels = (q) => HCCompare.searchOld(DATA, q).map((e) => e.label);
+  assert.deepStrictEqual(labels('q90'), ['Phonak Audéo Q90', 'Phonak Bolero Q90', 'Phonak Virto Q90', 'Phonak Naída Q90']);
+  assert.deepStrictEqual(labels('quest 70'), ['Phonak Audéo Q70', 'Phonak Bolero Q70', 'Phonak Virto Q70', 'Phonak Naída Q70']);
+  assert.ok(labels('audeo m70 r').includes('Phonak Audéo M70-R (Marvel)'));
+  assert.ok(labels('sphere').every((l) => /Sphere/.test(l)));
+  assert.strictEqual(labels('zzz').length, 0);
+  const e = HCCompare.searchOld(DATA, 'virto q50')[0];
+  assert.strictEqual(e.id, 'virto_q');
+  assert.strictEqual(e.level, 50);
+});
+
+test('plans, discount and fitting match the pricing tool engine', () => {
+  const r = HCCompare.compare(DATA, 'audeo_q', 'e90', { oldLevel: 90, plan: 'home', discount: 'staff', fitting: 'pair' });
+  const q = r.price.quote;
+  assert.strictEqual(q.fullAidPrice, 4195);
+  assert.strictEqual(q.aidPrice, 3146.25);
+  assert.strictEqual(q.accessoryPrice, 142.5);
+  assert.strictEqual(q.total, 3288.75);
+  assert.strictEqual(q.insurance.status, 'Included');
+  assert.strictEqual(q.warrantyYears, 4);
+  assert.strictEqual(r.price.planDetail.accessory, 'TV Connector');
+  assert.match(r.price.planDetail.benefit, /TV dialogue/);
+  const existing = HCCompare.compare(DATA, 'audeo_q', 'e70', { plan: 'none', discount: 'existing', fitting: 'single' });
+  assert.strictEqual(existing.price.quote.aidPrice, 2515.5); // 3995 x 0.69945 -> £2,795, then 10% off
+  assert.strictEqual(existing.price.quote.discountName, 'Existing customer');
+});
+
+test('ineligible plan, discount or fitting falls back safely', () => {
+  const nw = HCCompare.compare(DATA, 'virto_q', 'virto_i90_10nwo', { plan: 'home', discount: 'opticians' });
+  assert.strictEqual(nw.price.plan, 'none');
+  assert.strictEqual(nw.price.planEligible, false);
+  const e30 = HCCompare.compare(DATA, 'audeo_q', 'e30', { discount: 'opticians' });
+  assert.strictEqual(e30.price.discount, 'none'); // Opticians is Gold and above only
+  const cros = HCCompare.compare(DATA, 'audeo_q', 'cros_e90', { fitting: 'single' });
+  assert.strictEqual(cros.price.fitting, 'pair');
+});
+
+test('concerns move matching cards, features and plans to the front', () => {
+  const r = HCCompare.compare(DATA, 'audeo_q', 'e90', { oldLevel: 50, concerns: ['tv', 'battery'] });
+  assert.strictEqual(r.cards.filter((c) => c.matters).map((c) => c.key).join(','), 'connect,power');
+  assert.strictEqual(r.cards[0].key, 'connect');
+  assert.ok(r.features.items[0].matters);
+  assert.strictEqual(r.price.planOptions.find((p) => p.id === 'home').suits.join(), 'TV & music');
+  assert.match(r.narrative, /you mentioned/);
+});
+
+test('every headline percentage states what it was compared with or is marked to verify', () => {
+  for (const fam of Object.values(DATA.specs.families)) for (const lvl of Object.values(fam.levels || {})) {
+    for (const st of lvl.stats || []) {
+      if (!/\d/.test(st.value)) continue;
+      assert.ok(st.vs || st.status === 'check', `${fam.label} ${st.value}`);
+      assert.ok(['verified', 'check'].includes(st.status));
+    }
+  }
+  const r = HCCompare.compare(DATA, 'audeo_q', 'e90', { oldLevel: 90 });
+  assert.match(r.narrative, /switched off/);
 });
 
 console.log(`\n${n} tests passed`);

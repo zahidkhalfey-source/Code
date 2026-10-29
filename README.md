@@ -4,12 +4,19 @@ An offline, single-page tool for a consultation. It compares a customer's older 
 
 **To use it,** double-click `dist/Hearing_Aid_Upgrade_Comparison.html`. It is one self-contained file you can copy or email, with no install and no internet needed. After editing any source or data file, rebuild it with `python3 scripts/build_single.py`. (`index.html` also runs directly from the repo for development.)
 
+## Setting up a comparison
+- **Current aid:** type in the search box. It matches by level code or by platform, e.g. `q90`, `quest 70`, `audeo m70 r`, `sphere`. Every model is listed at each technology level, plus "level not sure".
+- **What bothers them most:** optional chips (noise, TV, phone, wind, batteries…). The matching cards, checklist rows and listening plans move to the front and are tagged "Matters to you", and the script refers back to them.
+- **Fitting, discount and plan:** pair/single, one discount, and a listening plan chosen from cards that show each plan's benefits. These come from the Price & Plan tool's own engine (`assets/pricing-engine.js`, copied unchanged), so totals, eligibility, insurance and warranty always match that tool.
+
 ## What it shows
 - **A. Headline cards** cover speech in noise, connectivity, power and convenience, and size. When there is no size data for the new model, the size card becomes "Years of progress".
 - **B. Then vs. now table** puts the old aid in pale red and the new aid in green. Rows cover processor, AutoSense version, speech in noise, wind, feedback, app, streaming, calls and battery.
 - **C. Why upgrade now** is a 3–4 sentence script built from the data, with an optional customer name.
 - Print button and copy-script button.
-- The new model's pair and single price from the pricing file, always shown on the green "new generation" panel and in print.
+- The price on the green panel: aid price, discount saving, plan accessory, total, insurance status and warranty, with "Prices as of" the import date.
+- Every Phonak percentage states what it was compared with, or carries a Verify tag where sources disagree.
+- The footer and printouts carry the build version (date and commit), so stale copies can be spotted.
 
 ## Evidence rules
 Each fact carries a status:
@@ -22,7 +29,10 @@ Percentages are Phonak-reported claims. Each one is scoped to the model and leve
 ## Data files (edit these, not the UI)
 | File | Contents |
 |---|---|
-| `data/pricing.js` | **Generated** from the pricing tool export: `python3 scripts/import_pricing.py path/to/CATALOGUE_AND_PAYMENT_DATA.json` |
+| `data/pricing.js` | **Generated** from the pricing tool export: `python3 scripts/import_pricing.py path/to/CATALOGUE_AND_PAYMENT_DATA.json --prices-as-of YYYY-MM-DD`. The date is shown beside every price and on printouts |
+| `assets/pricing-engine.js` | The Price & Plan tool's engine, copied unchanged. When that tool changes, copy it again |
+| `data/plans.js` | The customer benefit of each plan's accessory |
+| `data/concerns.js` | "What bothers you most" options and the cards, features and plans each one lifts |
 | `data/new-specs.js` | New-model specs from the supplied spec files, plus a `models` map from pricing id → family/level/variant |
 | `data/legacy-platforms.js` | Researched baseline per older platform, with per-model overrides |
 | `data/sources.js` | Evidence register cited by every fact |

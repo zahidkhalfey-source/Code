@@ -59,6 +59,38 @@
       status: 'check', source: hi.source };
   }
 
+  // ---------- type-ahead search for the current aid ----------
+  // One entry per model and level (plus "level not sure"). Every typed word must
+  // start a word of the entry, so "q90", "quest 70" or "audeo p50 r" all work.
+  const normal = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const words = (t) => normal(t).split(/[^a-z0-9]+/).filter(Boolean);
+  const searchCache = new WeakMap();
+
+  function oldEntries(data) {
+    if (searchCache.has(data.legacy)) return searchCache.get(data.legacy);
+    const out = [];
+    for (const m of data.legacy.models) {
+      const p = data.legacy.platforms[m.platform];
+      const common = [m.name, p.name, m.style, m.style === 'RIC' ? 'receiver canal' : m.style === 'BTE' ? 'behind ear' : 'in ear ite'];
+      for (const l of m.levels || DEFAULT_LEVELS) {
+        const label = m.tmpl ? m.tmpl.replace('{L}', l) : `${m.name} ${p.prefix}${l}`;
+        out.push({ id: m.id, level: l, label, sub: `${p.name} · ${data.legacy.levelNames[l]} · ${m.launched || p.launched}`, platform: p.name,
+          words: new Set(words([label, ...common, `${p.prefix}${l}`, l, data.legacy.levelNames[l]].join(' '))) });
+      }
+      out.push({ id: m.id, level: null, label: `${m.name} (level not sure)`, sub: `${p.name} · ${m.launched || p.launched}`, platform: p.name,
+        words: new Set(words([...common, 'level not sure unknown'].join(' '))) });
+    }
+    searchCache.set(data.legacy, out);
+    return out;
+  }
+
+  function searchOld(data, query, limit = 60) {
+    const q = words(query);
+    const all = oldEntries(data);
+    if (!q.length) return all.slice(0, limit);
+    return all.filter((e) => q.every((t) => [...e.words].some((w) => w.startsWith(t)))).slice(0, limit);
+  }
+
   function resolveNew(data, pricingId) {
     const price = data.pricing.models.find((m) => m.id === pricingId);
     if (!price) throw new Error(`Unknown new model: ${pricingId}`);
@@ -142,13 +174,13 @@
   //   both        both have it
   //   unconfirmed new has it, old not confirmed: listed, but left out of the score
   // The score only counts confirmed rows, so research gaps never count against the old aid.
-  function checklist(data, oldM, newM) {
+  function checklist(data, oldM, newM, concernFeatures = new Set()) {
     const items = [];
     const upsell = [];
     for (const f of data.features.features) {
       const nv = newFeatureValue(f, newM.familyKey, newM.level, newM.variant);
       const old = oldFeature(data, f, oldM);
-      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old };
+      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old, matters: concernFeatures.has(f.id) };
       if (nv === 1 || nv === 'c') {
         const kind = old.state === 'yes' ? 'both' : old.state === '?' ? 'unconfirmed' : 'gain';
         items.push({ ...base, kind, new: { state: 'yes', text: 'Included', status: nv === 'c' ? 'check' : 'verified' } });
@@ -159,7 +191,7 @@
       }
     }
     const rank = { gain: 0, lost: 1, both: 2, unconfirmed: 3 };
-    items.sort((a, b) => rank[a.kind] - rank[b.kind]);
+    items.sort((a, b) => rank[a.kind] - rank[b.kind] || Number(b.matters) - Number(a.matters));
     const count = (kind) => items.filter((i) => i.kind === kind).length;
     const confirmed = items.length - count('unconfirmed');
     return {
@@ -236,6 +268,50 @@
     return [speech, connect, power, fourth];
   }
 
+  function orderCards(list, concerns) {
+    const wanted = concerns.map((c) => c.card).filter(Boolean);
+    for (const c of list) c.matters = wanted.includes(c.key) || (c.key === 'age' && wanted.includes('size'));
+    return list.sort((a, b) => Number(b.matters) - Number(a.matters));
+  }
+
+  // Plans, discounts, insurance and warranty come from the pricing tool's own
+  // engine, so this tool can never quote differently from it. Invalid choices
+  // (e.g. a plan on a model without plans) fall back to safe defaults.
+  const DISCOUNT_ORDER = ['none', 'existing', 'staff', 'friends', 'blue', 'dds', 'opticians'];
+
+  function priceInfo(data, newM, opts, concerns) {
+    const eng = data.engine;
+    if (!eng) return null;
+    const id = newM.price.id;
+    const pairOnly = newM.price.pairOnly;
+    const fitting = opts.fitting === 'single' && !pairOnly ? 'single' : 'pair';
+    const planEligible = eng.planEligible(id);
+    const plan = Object.prototype.hasOwnProperty.call(eng.plans, opts.plan || '') && (opts.plan === 'none' || planEligible) ? opts.plan : 'none';
+    const discountOptions = DISCOUNT_ORDER.map((key) => {
+      if (key === 'none') return { id: key, name: 'No discount', rate: 0, eligible: true };
+      if (key === 'existing') return { id: key, name: 'Existing customer', rate: 0.10, eligible: true };
+      const d = eng.discounts[key];
+      return { id: key, name: d.name, rate: d.rate, eligible: eng.discountEligible(id, key) };
+    });
+    const chosen = discountOptions.find((d) => d.id === opts.discount && d.eligible) || discountOptions[0];
+    const customer = chosen.id === 'existing' ? '1' : '0';
+    const discount = chosen.id === 'existing' ? 'none' : chosen.id;
+    const purchaseInsurance = Boolean(opts.purchaseInsurance) && eng.optionalInsuranceEligible(id, plan);
+    const quote = eng.quote(id, customer, plan, fitting, purchaseInsurance, discount);
+    const planOptions = Object.entries(eng.plans).map(([key, p]) => ({
+      id: key, name: p.name, accessory: key === 'none' ? null : p.accessory, cost: p.cost,
+      eligible: key === 'none' || planEligible,
+      benefit: key === 'none' ? 'Hearing aids only' : (data.plans || {})[key] ? data.plans[key].benefit : '',
+      suits: concerns.filter((c) => c.plan === key).map((c) => c.label),
+    }));
+    return {
+      quote, fitting, pairOnly, plan, discount: chosen.id, purchaseInsurance,
+      insuranceOptional: eng.optionalInsuranceEligible(id, plan),
+      planEligible, planOptions, discountOptions, pricesAsOf: data.pricing.pricesAsOf,
+      planDetail: plan === 'none' ? null : planOptions.find((p) => p.id === plan),
+    };
+  }
+
   function warnings(oldM, newM, list) {
     const out = [];
     if (!newM.mapped) out.push('This model from the pricing file has no spec mapping yet. Add it to data/new-specs.js.');
@@ -255,7 +331,7 @@
     return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
   }
 
-  function narrative(oldM, newM, list, patientName) {
+  function narrative(oldM, newM, list, patientName, concerns = []) {
     const who = (patientName || '').trim();
     const opener = who ? `${who}, your` : 'Your';
     const era = oldM.launched;
@@ -263,8 +339,13 @@
     const oldName = oldM.displayName.replace(/^Phonak /, '').replace(/ \([^)]*\)$/, '');
     const newName = newM.name.replace(/^Phonak /, '');
     const s1 = `${opener} ${oldName} hearing aids were good technology for ${era}, built on Phonak's ${oldM.platformName} platform with ${lowerFirst(oldTech)}.`;
-    const stat = (newM.stats || [])[0];
-    const statTail = stat ? `, and in Phonak's own testing that means ${stat.value} ${stat.label}` : '';
+    const stat = (newM.stats || []).find((st) => /\d/.test(st.value));
+    let statTail = '';
+    if (stat) {
+      statTail = stat.status === 'verified'
+        ? `; Phonak's own study found ${stat.value} ${stat.label}${stat.vs ? ` ${stat.vs}` : ''}`
+        : `; Phonak reports ${stat.value} ${stat.label}${stat.vs ? ` ${stat.vs}` : ''}`;
+    }
     let s2;
     if (newM.familyKey === 'eonSphere') {
       s2 = `The new ${newName} has a dedicated AI chip, so instead of just turning sound up it separates speech from background noise in real time${newM.level === 50 ? ' when you switch on its speech-in-noise programme' : ''}${statTail}.`;
@@ -274,9 +355,13 @@
     // Highlight the most customer-relevant gains not already mentioned above.
     const said = new Set(['ai_chip', 'ai_auto', 'rechargeable']);
     const gainedIds = new Set(list.items.filter((i) => i.old.state === 'notyet' || i.old.state === 'no').map((i) => i.id));
-    const highlights = SAY_ORDER.filter((id) => gainedIds.has(id) && !said.has(id)).slice(0, 3).map((id) => SAY[id]);
+    const wanted = new Set(concerns.flatMap((c) => c.features));
+    const order = [...SAY_ORDER.filter((id) => wanted.has(id)), ...SAY_ORDER.filter((id) => !wanted.has(id))];
+    const picks = order.filter((id) => gainedIds.has(id) && !said.has(id)).slice(0, 3);
+    const highlights = picks.map((id) => SAY[id]);
+    const tackled = concerns.filter((c) => c.features.some((id) => picks.includes(id) || (gainedIds.has(id) && said.has(id))));
     const s3 = list.gained
-      ? `Altogether it brings ${list.gained} feature${list.gained === 1 ? '' : 's'} your current aids don't have${highlights.length ? `, including ${joinList(highlights)}` : ''}.`
+      ? `Altogether it brings ${list.gained} feature${list.gained === 1 ? '' : 's'} your current aids don't have${highlights.length ? `, including ${joinList(highlights)}` : ''}${tackled.length ? `, which go straight at the ${joinList(tackled.map((c) => c.say))} you mentioned` : ''}.`
       : '';
     let s4 = '';
     if (oldM.rechargeable === false && newM.rechargeable === true) {
@@ -318,6 +403,7 @@
     for (const r of rowsOut) for (const side of [r.old, r.new]) if (side.source) keys.add(side.source);
     for (const c of cardsOut) {
       for (const side of [c.old, c.new]) if (side.source) keys.add(side.source);
+      for (const st of newM.stats || []) if (st.source) keys.add(st.source);
       if (c.stat && c.stat.source) keys.add(c.stat.source);
     }
     for (const i of list.items) for (const s of i.sources || []) keys.add(s);
@@ -331,9 +417,10 @@
     if (!newM.mapped) {
       return { old: oldM, new: newM, cards: [], rows: [], features: null, warnings: warnings(oldM, newM, null), narrative: '', sources: [] };
     }
-    const list = checklist(data, oldM, newM);
+    const concerns = (data.concerns || []).filter((c) => (opts.concerns || []).includes(c.id));
+    const list = checklist(data, oldM, newM, new Set(concerns.flatMap((c) => c.features)));
     const rowsOut = rows(oldM, newM);
-    const cardsOut = cards(oldM, newM);
+    const cardsOut = orderCards(cards(oldM, newM), concerns);
     return {
       old: oldM,
       new: newM,
@@ -341,7 +428,9 @@
       rows: rowsOut,
       features: list,
       warnings: warnings(oldM, newM, list),
-      narrative: narrative(oldM, newM, list, opts.patientName),
+      narrative: narrative(oldM, newM, list, opts.patientName, concerns),
+      concerns,
+      price: priceInfo(data, newM, opts, concerns),
       sources: usedSources(rowsOut, cardsOut, list, newM),
     };
   }
@@ -352,5 +441,5 @@
     return `${gbp(p.pairPrice)} pair · ${gbp(p.singlePrice)} single`;
   }
 
-  return { compare, resolveOld, resolveNew, oldLevels, priceText, NOT_FOUND, NOT_SUPPLIED, CURRENT_YEAR };
+  return { compare, resolveOld, resolveNew, oldLevels, searchOld, priceText, NOT_FOUND, NOT_SUPPLIED, CURRENT_YEAR };
 });

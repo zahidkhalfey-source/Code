@@ -20,33 +20,46 @@
   <main class="wrap">
     <section class="panel no-print" aria-labelledby="setup-title">
       <h2 id="setup-title" class="sr-only">Set up the comparison</h2>
-      <form id="setup" class="setup-grid" novalidate>
-        <div class="field">
-          <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
-          <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+      <form id="setup" novalidate>
+        <div class="setup-grid">
+          <div class="field">
+            <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
+            <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+          </div>
+          <div class="field combo">
+            <label for="old-search">Customer's current hearing aid</label>
+            <input id="old-search" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+                   aria-controls="old-list" autocomplete="off" placeholder="Type e.g. Q90, Quest 70, Audéo P50-R">
+            <ul id="old-list" role="listbox" class="combo-list" hidden></ul>
+          </div>
+          <div class="field">
+            <label for="new-model">New Phonak model to show</label>
+            <select id="new-model" required>
+              <option value="">Select new model…</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn primary">Generate Comparison</button>
+            <button type="button" id="print" class="btn ghost" disabled>Print</button>
+          </div>
         </div>
-        <div class="field">
-          <label for="old-filter">Customer's current hearing aid</label>
-          <input id="old-filter" type="search" placeholder="Type to filter, e.g. Audéo Q" autocomplete="off" aria-controls="old-model">
-          <select id="old-model" required>
-            <option value="">Select current model…</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="old-level">Current technology level</label>
-          <select id="old-level" disabled>
-            <option value="">Choose a model first</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="new-model">New Phonak model to show</label>
-          <select id="new-model" required>
-            <option value="">Select new model…</option>
-          </select>
-        </div>
-        <div class="actions">
-          <button type="submit" class="btn primary">Generate Comparison</button>
-          <button type="button" id="print" class="btn ghost" disabled>Print</button>
+
+        <fieldset class="concerns">
+          <legend>What bothers them most? <span class="hint">(optional: puts these first and shapes the script)</span></legend>
+          <div id="concern-chips" class="chips"></div>
+        </fieldset>
+
+        <div class="options-grid">
+          <fieldset class="field fitting">
+            <legend>Fitting</legend>
+            <label class="seg"><input type="radio" name="fitting" value="pair" checked> Pair</label>
+            <label class="seg"><input type="radio" name="fitting" value="single"> Single</label>
+          </fieldset>
+          <div class="field">
+            <label for="discount">Discount <span class="hint">(one only; hearing aids only)</span></label>
+            <select id="discount"></select>
+          </div>
+          <p class="hint options-note">Choose a listening plan in the results; its benefits are listed there.</p>
         </div>
       </form>
       <p id="form-error" class="form-error" role="alert" hidden></p>
@@ -62,9 +75,12 @@
 
   <script src="data/sources.js"></script>
   <script src="data/pricing.js"></script>
+  <script src="data/plans.js"></script>
+  <script src="data/concerns.js"></script>
   <script src="data/new-specs.js"></script>
   <script src="data/features.js"></script>
   <script src="data/legacy-platforms.js"></script>
+  <script src="assets/pricing-engine.js"></script>
   <script src="assets/compare.js"></script>
   <script src="assets/app.js"></script>
 </body>

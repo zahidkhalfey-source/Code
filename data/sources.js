@@ -27,6 +27,11 @@ window.HC_SOURCES = {
       'https://hearingtracker.com/news/phonak-eon-debuts-smaller-sphere-auracast-and-windblock',
     ],
   },
+  eonEvidence: {
+    kind: 'web',
+    title: 'Phonak Audiology Blog “EON: Adaptive clarity that speaks for itself” (37% less listening effort vs same aids without Spheric Speech Clarity; Latzel et al. 2025)',
+    urls: ['https://audiologyblog.phonakpro.com/eon-adaptive-clarity-that-speaks-for-itself/'],
+  },
   quest: {
     kind: 'web',
     title: 'Phonak Quest launch releases (Oct 2012 Bolero Q/Virto Q; Apr 2013 Audéo Q/Naída Q) and AAA 2013 handout',

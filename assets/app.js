@@ -1,19 +1,27 @@
-// UI wiring for index.html. All comparison rules live in compare.js.
+// UI wiring for index.html. Comparison rules live in compare.js; prices,
+// plans and discounts come from pricing-engine.js (the pricing tool's engine).
 (function () {
+  const BUILD = '__BUILD__'; // replaced by scripts/build_single.py
   const DATA = {
     pricing: window.HC_PRICING,
     specs: window.HC_NEW_SPECS,
     legacy: window.HC_LEGACY,
     sources: window.HC_SOURCES,
     features: window.HC_FEATURES,
+    concerns: window.HC_CONCERNS,
+    plans: window.HC_PLANS,
+    engine: window.Pricing.create(window.HC_PRICING.engine),
   };
 
   const $ = (id) => document.getElementById(id);
   const els = {
-    form: $('setup'), patient: $('patient'), oldFilter: $('old-filter'), oldModel: $('old-model'), oldLevel: $('old-level'),
-    newModel: $('new-model'), print: $('print'),
+    form: $('setup'), patient: $('patient'), oldSearch: $('old-search'), oldList: $('old-list'),
+    newModel: $('new-model'), discount: $('discount'), chips: $('concern-chips'), print: $('print'),
     error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
   };
+
+  // Everything the comparison depends on. Plan and insurance are chosen in the results.
+  const state = { old: null, concerns: [], plan: 'none', purchaseInsurance: false, generated: false };
 
   const ICONS = {
     speech: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
@@ -23,8 +31,10 @@
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="icon">${ICONS[name] || ''}</svg>`;
-
   const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const money = (n) => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  const longDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const version = () => (BUILD.startsWith('__') ? 'development copy' : BUILD);
 
   function badge(c) {
     if (c.status === 'check') {
@@ -35,51 +45,79 @@
   }
   const cellHtml = (c) => `<span class="${c.status === 'unknown' ? 'unknown' : ''}">${esc(c.text)}</span>${badge(c)}`;
 
-  // ---------- selectors ----------
-  function fillOld(filter = '') {
-    const q = filter.trim().toLowerCase();
-    const current = els.oldModel.value;
-    const groups = {};
-    for (const m of DATA.legacy.models) {
-      const p = DATA.legacy.platforms[m.platform];
-      if (q && !`${m.name} ${p.name}`.toLowerCase().includes(q)) continue;
-      (groups[m.platform] ||= []).push(m);
-    }
-    let html = '<option value="">Select current model…</option>';
-    for (const [key, list] of Object.entries(groups)) {
-      const p = DATA.legacy.platforms[key];
-      html += `<optgroup label="${esc(p.name)} platform (from ${p.launched})">`;
-      html += list.map((m) => `<option value="${m.id}">${esc(m.name)}</option>`).join('');
-      html += '</optgroup>';
-    }
-    els.oldModel.innerHTML = html;
-    if (current && [...els.oldModel.options].some((o) => o.value === current)) els.oldModel.value = current;
-    else if (q && els.oldModel.options.length === 2) {
-      els.oldModel.selectedIndex = 1; // a single match: pick it
-      onOldModel();
-    }
+  // ---------- current-aid type-ahead ----------
+  let active = -1;
+  let matches = [];
+
+  function openList() {
+    matches = HCCompare.searchOld(DATA, els.oldSearch.value);
+    active = matches.length ? 0 : -1;
+    let html = '';
+    let group = '';
+    matches.forEach((m, i) => {
+      if (m.platform !== group) {
+        group = m.platform;
+        html += `<li class="combo-group" role="presentation">${esc(group)}</li>`;
+      }
+      html += `<li role="option" id="old-opt-${i}" data-i="${i}" class="combo-opt${i === active ? ' active' : ''}" aria-selected="${i === active}">
+        <span>${esc(m.label.replace(/^Phonak /, ''))}</span><small>${esc(m.sub)}</small></li>`;
+    });
+    if (!matches.length) html = '<li class="combo-empty" role="presentation">No match. Try a model letter and level, e.g. “M70” or “Paradise 90”.</li>';
+    els.oldList.innerHTML = html;
+    els.oldList.hidden = false;
+    els.oldSearch.setAttribute('aria-expanded', 'true');
+    syncActive();
   }
 
-  function fillLevels() {
-    const id = els.oldModel.value;
-    const m = DATA.legacy.models.find((x) => x.id === id);
-    if (!m) {
-      els.oldLevel.innerHTML = '<option value="">Choose a model first</option>';
-      els.oldLevel.disabled = true;
-      return;
+  function closeList() {
+    els.oldList.hidden = true;
+    els.oldSearch.setAttribute('aria-expanded', 'false');
+    els.oldSearch.removeAttribute('aria-activedescendant');
+  }
+
+  function syncActive() {
+    els.oldList.querySelectorAll('.combo-opt').forEach((li) => {
+      const on = Number(li.dataset.i) === active;
+      li.classList.toggle('active', on);
+      li.setAttribute('aria-selected', String(on));
+      if (on) li.scrollIntoView({ block: 'nearest' });
+    });
+    if (active >= 0) els.oldSearch.setAttribute('aria-activedescendant', `old-opt-${active}`);
+  }
+
+  function chooseOld(i) {
+    const m = matches[i];
+    if (!m) return;
+    state.old = { id: m.id, level: m.level };
+    els.oldSearch.value = m.label.replace(/^Phonak /, '');
+    closeList();
+    suggestNew(m.id);
+    if (state.generated) generate();
+  }
+
+  els.oldSearch.addEventListener('input', () => { state.old = null; openList(); });
+  els.oldSearch.addEventListener('focus', openList);
+  els.oldSearch.addEventListener('blur', () => setTimeout(closeList, 150));
+  els.oldSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (els.oldList.hidden) openList();
+      e.preventDefault();
+      if (!matches.length) return;
+      active = (active + (e.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length;
+      syncActive();
+    } else if (e.key === 'Enter' && !els.oldList.hidden && active >= 0) {
+      e.preventDefault();
+      chooseOld(active);
+    } else if (e.key === 'Escape') {
+      closeList();
     }
-    const p = DATA.legacy.platforms[m.platform];
-    const opts = HCCompare.oldLevels(DATA, id).map((l) =>
-      `<option value="${l}">${esc(m.tmpl ? m.tmpl.replace('{L}', l).replace(/^Phonak /, '') : p.prefix + l)} · ${esc(DATA.legacy.levelNames[l])}</option>`);
-    els.oldLevel.innerHTML = '<option value="">Not sure</option>' + opts.join('');
-    els.oldLevel.disabled = false;
-  }
+  });
+  els.oldList.addEventListener('mousedown', (e) => {
+    const li = e.target.closest('.combo-opt');
+    if (li) { e.preventDefault(); chooseOld(Number(li.dataset.i)); }
+  });
 
-  function onOldModel() {
-    fillLevels();
-    suggestNew();
-  }
-
+  // ---------- other controls ----------
   function fillNew() {
     const groups = {};
     for (const m of DATA.pricing.models) (groups[m.family] ||= []).push(m);
@@ -92,14 +130,36 @@
     els.newModel.innerHTML = html;
   }
 
-  // Suggest a like-for-like style when the salesperson picks the current aid.
-  function suggestNew() {
-    if (els.newModel.value) return;
-    const m = DATA.legacy.models.find((x) => x.id === els.oldModel.value);
-    if (!m) return;
-    const pick = { RIC: 'e70', BTE: 'naida70', Custom: 'virto_i70_r' }[m.style];
-    if (pick && DATA.pricing.models.some((x) => x.id === pick)) els.newModel.value = pick;
+  // Discount list: ineligible offers stay visible but disabled, as in the pricing tool.
+  function fillDiscounts() {
+    const id = els.newModel.value;
+    const current = els.discount.value || 'none';
+    const opts = [['none', 'No discount', 0], ['existing', 'Existing customer', 0.1],
+      ...Object.entries(DATA.engine.discounts).filter(([k]) => k !== 'none').map(([k, d]) => [k, d.name, d.rate])];
+    els.discount.innerHTML = opts.map(([k, name, rate]) => {
+      const ok = k === 'none' || k === 'existing' || !id || DATA.engine.discountEligible(id, k);
+      return `<option value="${k}"${ok ? '' : ' disabled'}>${esc(name)}${rate ? ` (${Math.round(rate * 100)}%)` : ''}${ok ? '' : ' – not for this model'}</option>`;
+    }).join('');
+    const still = [...els.discount.options].find((o) => o.value === current && !o.disabled);
+    els.discount.value = still ? current : 'none';
   }
+
+  function fillConcerns() {
+    els.chips.innerHTML = DATA.concerns.map((c) =>
+      `<label class="chip"><input type="checkbox" value="${c.id}"> ${esc(c.label)}</label>`).join('');
+  }
+
+  function suggestNew(oldId) {
+    if (els.newModel.value) return;
+    const m = DATA.legacy.models.find((x) => x.id === oldId);
+    const pick = m && { RIC: 'e70', BTE: 'naida70', Custom: 'virto_i70_r' }[m.style];
+    if (pick && DATA.pricing.models.some((x) => x.id === pick)) {
+      els.newModel.value = pick;
+      fillDiscounts();
+    }
+  }
+
+  const fitting = () => (els.form.querySelector('input[name="fitting"]:checked') || {}).value || 'pair';
 
   // Name of the same new family at another level, e.g. "E90 Sphere CRT".
   function levelName(n, level) {
@@ -112,11 +172,43 @@
   }
 
   // ---------- rendering ----------
+  function priceBox(pr) {
+    const q = pr.quote;
+    const unit = pr.fitting === 'single' ? 'Hearing aid (single)' : pr.pairOnly ? 'CROS system (pair)' : 'Hearing aids (pair)';
+    const lines = [`<div class="price-line"><span>${unit}</span><span>${q.discountRate ? `<s>${money(q.fullAidPrice)}</s> ` : ''}${money(q.aidPrice)}</span></div>`];
+    if (q.discountRate) lines.push(`<div class="price-line saving"><span>${esc(q.discountName)} discount (${Math.round(q.discountRate * 100)}%)</span><span>−${money(q.discountSaving)}</span></div>`);
+    if (pr.planDetail) lines.push(`<div class="price-line"><span>${esc(pr.planDetail.name)} plan · ${esc(pr.planDetail.accessory)}</span><span>${money(q.accessoryPrice)}</span></div>`);
+    if (q.insurancePrice) lines.push(`<div class="price-line"><span>Purchase insurance</span><span>${money(q.insurancePrice)}</span></div>`);
+    return `
+      <div class="price-box">
+        ${lines.join('')}
+        <div class="price-line total"><span>Total</span><span>${money(q.total)}</span></div>
+        <p class="price-meta">Insurance: ${esc(q.insurance.status.toLowerCase())}${q.insurance.status === 'Included' ? ' with plan' : ''} · ${q.warrantyYears}-year warranty · excl. VAT · Prices as of ${esc(longDate(pr.pricesAsOf))}</p>
+      </div>`;
+  }
+
+  function planSection(pr) {
+    if (!pr.planEligible) {
+      return '<p class="plan-none">Listening plans are not available for this model.</p>';
+    }
+    const cards = pr.planOptions.map((p) => `
+      <button type="button" class="plan-card${p.id === pr.plan ? ' chosen' : ''}${p.suits.length ? ' suits' : ''}" data-plan="${p.id}" aria-pressed="${p.id === pr.plan}">
+        <span class="plan-name">${esc(p.name)}</span>
+        ${p.accessory ? `<span class="plan-acc">${esc(p.accessory)}</span>` : ''}
+        <span class="plan-benefit">${esc(p.benefit)}</span>
+        <span class="plan-cost">${p.cost ? `+ ${money(p.cost)}` : 'No extra cost'}</span>
+        ${p.id !== 'none' ? '<span class="plan-ins">Insurance included</span>' : ''}
+        ${p.suits.length ? `<span class="plan-suits">Good for: ${esc(p.suits.join(', '))}</span>` : ''}
+        ${p.id === pr.plan ? '<span class="plan-tick">✓ Selected</span>' : ''}
+      </button>`).join('');
+    const ins = pr.insuranceOptional
+      ? `<label class="ins-opt no-print"><input type="checkbox" id="buy-insurance"${pr.purchaseInsurance ? ' checked' : ''}> Add purchase insurance (${pr.fitting === 'single' ? '£99 for one aid' : '£198 for two aids'}; not discounted)</label>` : '';
+    return `<div class="plans">${cards}</div>${ins}`;
+  }
+
   function render(result) {
     const o = result.old;
     const n = result.new;
-    const priceLine = `<p class="price">${esc(HCCompare.priceText(n.price))}</p>`;
-
     const warn = result.warnings.length
       ? `<div class="warnings no-print"><p class="warnings-title">For the dispenser (not printed)</p>${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
 
@@ -124,8 +216,12 @@
       els.output.innerHTML = `<section class="panel">${warn}</section>`;
       return;
     }
+    const pr = result.price;
+    const concernLine = result.concerns.length
+      ? `<p class="concern-line">You told us the hardest things are: <strong>${esc(result.concerns.map((c) => c.label).join(' · '))}</strong>. These are shown first.</p>` : '';
 
     const hero = `
+      ${concernLine}
       <section class="hero">
         <div class="hero-side then">
           <p class="hero-label">Your current hearing aids</p>
@@ -137,15 +233,21 @@
           <p class="hero-label">The new generation</p>
           <p class="hero-name">${esc(n.name)}</p>
           <p class="hero-year">${esc(n.platform)} technology · ${n.launched} · ${esc(n.price.tier)}</p>
-          ${priceLine}
+          ${pr ? priceBox(pr) : ''}
         </div>
       </section>`;
 
+    const statBlock = (st) => {
+      if (!st) return '';
+      const basis = st.vs ? `${st.note ? `${st.note}, ` : ''}${st.vs}` : (st.note || '');
+      return `<p class="stat"><span class="stat-value">${esc(st.value)}</span> <span class="stat-label">${esc(st.label)}</span></p>
+        ${basis ? `<p class="stat-note">${/\d/.test(st.value) ? 'Phonak figure: ' : ''}${esc(basis)}${st.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</p>` : ''}`;
+    };
     const cards = result.cards.map((c) => `
-      <article class="card">
+      <article class="card${c.matters ? ' matters' : ''}">
+        ${c.matters ? '<span class="matters-tag">Matters to you</span>' : ''}
         <header class="card-head">${icon(c.icon)}<h3>${esc(c.title)}</h3></header>
-        ${c.stat ? `<p class="stat"><span class="stat-value">${esc(c.stat.value)}</span> <span class="stat-label">${esc(c.stat.label)}</span></p>
-          ${c.stat.note ? `<p class="stat-note">${esc(c.stat.note)}</p>` : ''}` : ''}
+        ${statBlock(c.stat)}
         <div class="compare-line then"><span class="tag">Then</span><p>${cellHtml(c.old)}</p></div>
         <div class="compare-line now"><span class="tag">Now</span><p>${cellHtml(c.new)}</p></div>
         ${c.footnote ? `<p class="card-foot">${esc(c.footnote)}</p>` : ''}
@@ -162,8 +264,8 @@
     const mark = (st) => ({ yes: '✓', no: '✗', notyet: '✗', '?': '?' }[st]);
     const stateClass = (st) => (st === 'notyet' ? 'no' : st === '?' ? 'unk' : st);
     const featureRow = (i) => `
-      <tr class="feat-${i.kind}">
-        <th scope="row"><span class="feat-name">${esc(i.label)}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
+      <tr class="feat-${i.kind}${i.matters ? ' feat-matters' : ''}">
+        <th scope="row"><span class="feat-name">${esc(i.label)}${i.matters ? ' <span class="matters-pill">Matters to you</span>' : ''}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
         <td class="then state-${stateClass(i.old.state)}">
           <span class="mark" aria-hidden="true">${mark(i.old.state)}</span><span class="mark-text">${esc(i.old.text)}</span></td>
         <td class="now state-${i.new.state}"><span class="mark" aria-hidden="true">${mark(i.new.state)}</span><span class="mark-text">${esc(i.new.text)}${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
@@ -199,8 +301,10 @@
       return `<li><strong>${s.kind === 'supplied' ? 'Supplied file' : 'Web'}:</strong> ${esc(s.title)}${links ? ` (${links})` : ''}</li>`;
     }).join('');
 
+    const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     els.output.innerHTML = `
       ${warn}
+      <p class="print-only print-head">Prepared ${esc(today)} · Prices as of ${esc(longDate(DATA.pricing.pricesAsOf))} · Tool ${esc(version())}</p>
       ${hero}
       <section aria-labelledby="a-title">
         <h2 id="a-title" class="section-title"><span class="section-letter">A</span> What changes for you</h2>
@@ -228,8 +332,12 @@
           </table>
         </div>
       </section>
-      <section aria-labelledby="c-title">
-        <h2 id="c-title" class="section-title"><span class="section-letter">C</span> Why upgrade now</h2>
+      ${pr ? `<section aria-labelledby="c-title">
+        <h2 id="c-title" class="section-title"><span class="section-letter">C</span> Listening plans</h2>
+        ${planSection(pr)}
+      </section>` : ''}
+      <section aria-labelledby="d-title">
+        <h2 id="d-title" class="section-title"><span class="section-letter">D</span> Why upgrade now</h2>
         <blockquote class="script" id="script">${esc(result.narrative)}</blockquote>
         <button type="button" class="btn ghost no-print" id="copy-script">Copy script</button>
       </section>
@@ -247,31 +355,58 @@
         e.target.textContent = 'Select the text to copy';
       }
     });
+    els.output.querySelectorAll('.plan-card').forEach((b) => b.addEventListener('click', () => {
+      state.plan = b.dataset.plan;
+      generate();
+    }));
+    const ins = $('buy-insurance');
+    if (ins) ins.addEventListener('change', () => { state.purchaseInsurance = ins.checked; generate(); });
     els.print.disabled = false;
   }
 
   function generate(evt) {
     if (evt) evt.preventDefault();
-    const oldId = els.oldModel.value;
     const newId = els.newModel.value;
-    if (!oldId || !newId) {
-      els.error.textContent = !oldId ? 'Choose the customer’s current hearing aid.' : 'Choose the new model to show.';
+    if (!state.old || !newId) {
+      els.error.textContent = !state.old ? 'Choose the customer’s current hearing aid from the list.' : 'Choose the new model to show.';
       els.error.hidden = false;
-      (oldId ? els.newModel : els.oldModel).focus();
+      (state.old ? els.newModel : els.oldSearch).focus();
       return;
     }
     els.error.hidden = true;
-    render(HCCompare.compare(DATA, oldId, newId, { patientName: els.patient.value, oldLevel: els.oldLevel.value }));
-    els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const first = !state.generated;
+    const result = HCCompare.compare(DATA, state.old.id, newId, {
+      patientName: els.patient.value, oldLevel: state.old.level, concerns: state.concerns,
+      plan: state.plan, discount: els.discount.value, fitting: fitting(), purchaseInsurance: state.purchaseInsurance,
+    });
+    // Keep controls in step with what the engine accepted (e.g. no plan on a non-plan model).
+    if (result.price) {
+      state.plan = result.price.plan;
+      state.purchaseInsurance = result.price.purchaseInsurance;
+      if (result.price.pairOnly) els.form.querySelector('input[value="pair"]').checked = true;
+    }
+    render(result);
+    state.generated = true;
+    if (first) els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ---------- init ----------
-  fillOld();
   fillNew();
-  fillLevels();
-  els.stamp.textContent = `New-model prices: ${DATA.pricing.source}, imported ${DATA.pricing.importedOn}. Older-model research: 29 October 2026.`;
-  els.oldFilter.addEventListener('input', () => fillOld(els.oldFilter.value));
-  els.oldModel.addEventListener('change', onOldModel);
+  fillDiscounts();
+  fillConcerns();
+  els.stamp.textContent = `Prices as of ${longDate(DATA.pricing.pricesAsOf)} (from ${DATA.pricing.source}). Older-model research: 29 October 2026. Tool version: ${version()}.`;
   els.form.addEventListener('submit', generate);
+  els.newModel.addEventListener('change', () => {
+    fillDiscounts();
+    state.plan = 'none';
+    if (state.generated) generate();
+  });
+  els.discount.addEventListener('change', () => { if (state.generated) generate(); });
+  els.form.querySelectorAll('input[name="fitting"]').forEach((r) => r.addEventListener('change', () => { if (state.generated) generate(); }));
+  els.patient.addEventListener('input', () => { if (state.generated) generate(); });
+  els.chips.addEventListener('change', () => {
+    state.concerns = [...els.chips.querySelectorAll('input:checked')].map((i) => i.value);
+    if (state.generated) generate();
+  });
   els.print.addEventListener('click', () => window.print());
 })();
