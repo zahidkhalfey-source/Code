@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hearing Aid Upgrade Comparison</title>
+  <style>
+:root {
+  --navy: #0b2a5b;
+  --blue: #1756c4;
+  --blue-soft: #e8f0ff;
+  --ink: #14213d;
+  --muted: #5b6b85;
+  --line: #d7e0ee;
+  --bg: #f4f7fc;
+  --card: #ffffff;
+  --then-bg: #fdf1f1;
+  --then-ink: #8a3b3b;
+  --then-line: #f0caca;
+  --now-bg: #e9f8ef;
+  --now-ink: #0d6b3a;
+  --now-line: #a9e2c0;
+  --now-strong: #12a150;
+  --amber: #a15c00;
+  --amber-bg: #fff3dc;
+  --radius: 16px;
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); line-height: 1.45; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.muted { color: var(--muted); font-size: .85em; }
+
+/* Header */
+.topbar { background: linear-gradient(120deg, var(--navy), var(--blue)); color: #fff; padding: 22px 0; }
+.topbar-inner { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.eyebrow { margin: 0; text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; opacity: .8; }
+h1 { margin: 4px 0 0; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+.credit { margin: 0; font-size: .85rem; opacity: .85; }
+
+/* Setup panel */
+.panel { background: var(--card); border-radius: var(--radius); box-shadow: 0 6px 24px rgba(11, 42, 91, .08); padding: 20px; margin: -14px 0 24px; position: relative; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1.3fr 1.3fr auto; gap: 16px; align-items: end; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-weight: 600; font-size: .9rem; }
+.hint { font-weight: 400; color: var(--muted); }
+input[type="text"], input[type="search"], select {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; width: 100%;
+}
+input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 196, .35); outline-offset: 1px; border-color: var(--blue); }
+.actions { display: flex; flex-direction: column; gap: 8px; }
+.btn { font: inherit; font-weight: 600; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1px solid transparent; }
+.btn.primary { background: var(--blue); color: #fff; }
+.btn.primary:hover { background: var(--navy); }
+.btn.ghost { background: #fff; color: var(--blue); border-color: var(--line); }
+.btn:disabled { opacity: .5; cursor: default; }
+.form-error { color: #b42318; margin: 12px 0 0; font-weight: 600; }
+
+/* Warnings */
+.warnings { background: var(--amber-bg); border: 1px solid #f3d197; color: #5c3700; border-radius: 12px; padding: 4px 16px; margin-bottom: 20px; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: stretch; margin-bottom: 28px; }
+.hero-side { border-radius: var(--radius); padding: 20px 22px; }
+.hero-side.then { background: var(--then-bg); border: 1px solid var(--then-line); color: var(--then-ink); }
+.hero-side.now { background: linear-gradient(135deg, #0f8a45, var(--now-strong)); color: #fff; box-shadow: 0 10px 28px rgba(18, 161, 80, .25); }
+.hero-label { margin: 0; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; opacity: .85; }
+.hero-name { margin: 6px 0 2px; font-size: clamp(1.25rem, 2.4vw, 1.75rem); font-weight: 700; }
+.hero-year { margin: 0; opacity: .9; }
+.hero-arrow { align-self: center; font-size: 2.4rem; color: var(--blue); font-weight: 700; }
+.price { margin: 10px 0 0; font-weight: 700; font-size: 1.1rem; }
+.price .muted { color: rgba(255, 255, 255, .85); font-weight: 400; }
+
+/* Sections */
+.section-title { display: flex; align-items: center; gap: 10px; font-size: 1.35rem; margin: 8px 0 14px; color: var(--navy); }
+.section-letter { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 1rem; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); display: flex; flex-direction: column; gap: 10px; border-top: 5px solid var(--now-strong); }
+.card-head { display: flex; align-items: center; gap: 10px; }
+.card-head h3 { margin: 0; font-size: 1.05rem; color: var(--navy); }
+.icon { width: 30px; height: 30px; fill: none; stroke: var(--blue); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; background: var(--blue-soft); border-radius: 8px; padding: 4px; flex: none; }
+.stat { margin: 0; line-height: 1.15; }
+.stat-value { display: block; font-size: 2.6rem; font-weight: 800; color: var(--now-strong); letter-spacing: -.02em; }
+.stat-label { font-weight: 600; }
+.stat-note, .card-foot { margin: 0; font-size: .78rem; color: var(--muted); }
+.card-foot { margin-top: auto; border-top: 1px dashed var(--line); padding-top: 8px; }
+.compare-line { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; border-radius: 10px; padding: 9px 10px; }
+.compare-line p { margin: 0; font-size: .93rem; }
+.compare-line.then { background: var(--then-bg); color: var(--then-ink); }
+.compare-line.now { background: var(--now-bg); color: var(--now-ink); font-weight: 600; }
+.tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; padding: 3px 7px; border-radius: 6px; background: rgba(255, 255, 255, .7); }
+
+/* Table */
+.table-wrap { overflow-x: auto; margin-bottom: 32px; border-radius: var(--radius); box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
+.versus { width: 100%; border-collapse: collapse; background: var(--card); min-width: 640px; }
+.versus th, .versus td { padding: 13px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.versus thead th { font-size: 1rem; }
+.versus thead th.then { background: var(--then-line); color: var(--then-ink); }
+.versus thead th.now { background: var(--now-strong); color: #fff; }
+.versus tbody th { width: 20%; color: var(--navy); font-weight: 700; background: #fafcff; }
+.versus td.then { background: var(--then-bg); color: var(--then-ink); width: 40%; }
+.versus td.now { background: var(--now-bg); color: var(--now-ink); font-weight: 600; width: 40%; }
+.versus tr:last-child > * { border-bottom: 0; }
+
+.unknown { font-style: italic; color: var(--muted); font-weight: 400; }
+.pill { display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 1px 7px; border-radius: 999px; vertical-align: middle; font-style: normal; }
+.pill.check { background: var(--amber-bg); color: var(--amber); border: 1px solid #f3d197; cursor: help; }
+
+/* Script */
+.script { margin: 0 0 12px; background: var(--card); border-left: 6px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; font-size: 1.15rem; line-height: 1.6; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
+
+.sources { margin: 28px 0; background: var(--card); border-radius: 12px; padding: 12px 18px; border: 1px solid var(--line); font-size: .88rem; }
+.sources summary { cursor: pointer; font-weight: 600; color: var(--navy); }
+.sources li { margin: 6px 0; }
+
+.footer { color: var(--muted); font-size: .8rem; padding-bottom: 32px; }
+
+@media (max-width: 980px) {
+  .setup-grid { grid-template-columns: 1fr 1fr; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .setup-grid, .cards { grid-template-columns: 1fr; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-arrow { transform: rotate(90deg); justify-self: center; }
+}
+
+@media print {
+  .no-print, .topbar .credit { display: none !important; }
+  body { background: #fff; }
+  .panel { box-shadow: none; }
+  .card, .table-wrap, .script { box-shadow: none; break-inside: avoid; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .sources[open] ul, .sources ul { display: block; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div>
+        <p class="eyebrow">Hearingcare consultation tool</p>
+        <h1>Hearing Aid Upgrade Comparison</h1>
+      </div>
+      <p class="credit">Created by Zahid Khalfey</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel no-print" aria-labelledby="setup-title">
+      <h2 id="setup-title" class="sr-only">Set up the comparison</h2>
+      <form id="setup" class="setup-grid" novalidate>
+        <div class="field">
+          <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
+          <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="old-filter">Customer's current hearing aid</label>
+          <input id="old-filter" type="search" placeholder="Type to filter, e.g. Audéo Q" autocomplete="off" aria-controls="old-model">
+          <select id="old-model" required>
+            <option value="">Select current model…</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="new-model">New Phonak model to show</label>
+          <select id="new-model" required>
+            <option value="">Select new model…</option>
+          </select>        </div>
+        <div class="actions">
+          <button type="submit" class="btn primary">Generate Comparison</button>
+          <button type="button" id="print" class="btn ghost" disabled>Print</button>
+        </div>
+      </form>
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+    </section>
+
+    <div id="output" aria-live="polite"></div>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Benefits are interpretations of manufacturer-documented features and Phonak-reported study results, not guaranteed outcomes. Items marked <span class="pill check">Verify</span> come from secondary or conflicting sources. Check suitability and fitting with the audiologist.</p>
+    <p id="data-stamp"></p>
+  </footer>
+
+  <script>
+// Evidence register. Every fact in legacy-platforms.js and new-specs.js cites one
+// of these keys. "supplied" sources are the files uploaded with the brief; "web"
+// sources were found by web search on 29 October 2026.
+window.HC_SOURCES = {
+  eonSummary: {
+    kind: 'supplied',
+    title: 'Phonak EON Feature Summary (028-xxxx-02, V1.00, 2026-07)',
+  },
+  eSphereDatasheet: {
+    kind: 'supplied',
+    title: 'Phonak Audéo E-Sphere technical datasheet (V1.00, 2025-10)',
+  },
+  crosE: {
+    kind: 'supplied',
+    title: 'Phonak CROS E product information (027-0743-02)',
+  },
+  phonakMatrices: {
+    kind: 'supplied',
+    title: 'Phonak.com feature-level matrices for Audéo EON, EON R, Naída Lumity and Virto Infinio (snapshot in the supplied comparison package)',
+  },
+  eonLaunch: {
+    kind: 'web',
+    title: 'Sonova/Phonak EON launch, 24 August 2026 (Sonova release; Hearing Review; HearingTracker)',
+    urls: [
+      'https://www.sonova.com/?p=632008',
+      'https://hearingreview.com/hearing-products/hearing-aids/phonak-launches-eon-hearing-aids-with-new-hypersonic-chip-and-auracast',
+      'https://hearingtracker.com/news/phonak-eon-debuts-smaller-sphere-auracast-and-windblock',
+    ],
+  },
+  quest: {
+    kind: 'web',
+    title: 'Phonak Quest launch releases (Oct 2012 Bolero Q/Virto Q; Apr 2013 Audéo Q/Naída Q) and AAA 2013 handout',
+    urls: [
+      'https://phonakpro.com/il/en/about-phonak/press-center/2013/2013-april-03-productlaunch.html',
+      'https://hearingreview.com/hearing-products/aaa-news-phonak-expands-its-quest-platform-with-new-product-lines2',
+      'https://hearingreview.com/hearing-products/a-marketing-perspective-on-phonak-s-new-quest',
+      'https://cochlearimplanthelp.com/wp-content/uploads/2013/04/20130327_aaa_handout_final.pdf',
+    ],
+  },
+  questSpecs: {
+    kind: 'web',
+    title: 'Phonak Audéo Q product information and Quest sales reference guide (2014)',
+    urls: [
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/hearing_aid/audeo_q/documents/product_information_audeo_q_027-0109.pdf',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/documents/reference_guide_sales_quest_spice_march_2014.pdf',
+    ],
+  },
+  wind: {
+    kind: 'web',
+    title: 'Latzel & Appleton (2013) Binaural Speech in Wind, Hearing Review; Phonak WindBlock 2.0 Insight (2026)',
+    urls: [
+      'https://hearingreview.com/2013/07/evaluation-of-a-binaural-speech-in-wind-feature-part-1-verification-in-the-laboratory/',
+      'https://www.phonak.com/content/dam/phonak/en/evidence-library/white-paper/technical-paper/PH_Insight_WindBlock2.0_210x280_EN_028-2924-02_V1.00.pdf',
+    ],
+  },
+  compilot: {
+    kind: 'web',
+    title: 'Phonak knowledge base: wireless accessories compatibility (ComPilot for Spice/Quest; ComPilot II for Venture/Belong)',
+    urls: ['https://www.phonak.com/en-nz/support-options/knowledge-base-articles/phonak-wireless-accessories-and-phonak-hearing-aids'],
+  },
+  venture: {
+    kind: 'web',
+    title: 'Phonak Audéo V / Venture launch, 15 October 2014',
+    urls: [
+      'https://www.phonak.com/mx/es/press/phonak-audeo-v-next-generation-ric.html',
+      'https://hearingreview.com/2014/10/phonak-launches-phonak-audeo-v-ric-hearing-aid-line-based-new-venture-platform/',
+    ],
+  },
+  belong: {
+    kind: 'web',
+    title: 'Phonak Belong launch incl. Audéo B-R lithium-ion rechargeable (August 2016)',
+    urls: [
+      'https://www.sonova.com/en/phonak-launch-next-generation-platform-including-first-mainstream-lithium-ion-rechargeable-hearing',
+      'https://www.phonakpro.com/il/en/about-phonak/press-center/2016/2016-august-30-belong.html',
+      'https://hearingreview.com/hearing-products/hearing-aids/speech-noise/phonak-launches-bolero-b-pr-rechargeable-bte-virto-b-titanium-iic-hearing-aids',
+    ],
+  },
+  bDirect: {
+    kind: 'web',
+    title: 'Phonak Audéo B-Direct release (2017)',
+    urls: [
+      'https://www.audiology-worldnews.com/new-products/2508-phonak-releases-audeotm-b-direct',
+      'https://www.phonakpro.com/il/en/about-phonak/technologies/direct-connectivity.html',
+    ],
+  },
+  marvel: {
+    kind: 'web',
+    title: 'Phonak Marvel launch (October 2018) and Audéo Marvel leaflet (Feb 2019)',
+    urls: [
+      'https://hearingreview.com/2018/10/phonak-launches-marvel-universal-binaural-streaming-new-level-sound-quality/',
+      'https://www.hearingtracker.com/news/phonak-launches-first-real-bluetooth-hearing-aid',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_us/en/marketing/documents/marvel/028-1905-03_Leaflet_BtB_Phonak_Audeo_Marvel_Feb 2019.pdf',
+    ],
+  },
+  paradise: {
+    kind: 'web',
+    title: 'Sonova Paradise platform launch (19 August 2020)',
+    urls: [
+      'https://www.sonova.com/?p=232',
+      'https://hearingreview.com/hearing-products/phonak-launches-audeo-paradise-hearing-aid',
+    ],
+  },
+  paradiseBattery: {
+    kind: 'web',
+    title: 'HearingTracker forum reports of the advertised Audéo P-R runtime (user-reported, not an official sheet)',
+    urls: ['https://forum.hearingtracker.com/t/phonak-audeo-paradise-p90-r-vs-p90-13t/58383'],
+  },
+  lumity: {
+    kind: 'web',
+    title: 'Phonak Lumity launch (2022): StereoZoom 2.0, SpeechSensor, AutoSense OS 5.0',
+    urls: [
+      'https://hearinghealthmatters.org/hearing-news-watch/2022/phonak-audeo-lumity-hearing-aid-platform/',
+      'https://www.phonakpro.com/il/en/products/hearing-aids/audeo-lumity/smartspeech-technology.html',
+    ],
+  },
+  lumityRetail: {
+    kind: 'web',
+    title: 'Retailer listings for Audéo Lumity (chip and battery figures; secondary source)',
+    urls: ['https://injoyhearing.com/products/phonak-audeo-lumity-l90'],
+  },
+  infinio: {
+    kind: 'web',
+    title: 'Phonak Infinio / Audéo Sphere Infinio launch (2024) and ERA chip blog',
+    urls: [
+      'https://audiologyblog.phonakpro.com/connectivity-ultra-responsive-era-chip-at-the-heart-of-infinio/',
+      'https://www.hearingtracker.com/news/phonak-unveils-groundbreaking-infinio-hearing-aids-and-ai-powered-audeo-sphere-infinio',
+      'https://www.phonak.com/en-us/professionals/ai-audiology',
+    ],
+  },
+};
+</script>
+  <script>
+// GENERATED by scripts/import_pricing.py - do not edit by hand.
+// Source: CATALOGUE_AND_PAYMENT_DATA.json, imported 2026-10-29.
+window.HC_PRICING = {
+  "source": "CATALOGUE_AND_PAYMENT_DATA.json",
+  "importedOn": "2026-10-29",
+  "models": [
+    {
+      "id": "e30",
+      "family": "Phonak Audéo EON",
+      "name": "E30-R CRT",
+      "tier": "Bronze",
+      "pairPrice": 2595.0,
+      "singlePrice": 1815,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "e50",
+      "family": "Phonak Audéo EON",
+      "name": "E50 Sphere CRT",
+      "tier": "Gold",
+      "pairPrice": 3695.0,
+      "singlePrice": 2585,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "e70",
+      "family": "Phonak Audéo EON",
+      "name": "E70 Sphere CRT",
+      "tier": "Platinum",
+      "pairPrice": 3995.0,
+      "singlePrice": 2795,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "e90",
+      "family": "Phonak Audéo EON",
+      "name": "E90 Sphere CRT",
+      "tier": "Platinum Plus",
+      "pairPrice": 4195.0,
+      "singlePrice": 2935,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "naida30",
+      "family": "Phonak Naida",
+      "name": "L30-BTE",
+      "tier": "Bronze",
+      "pairPrice": 2395,
+      "singlePrice": 1675,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "naida50",
+      "family": "Phonak Naida",
+      "name": "L50-BTE",
+      "tier": "Silver",
+      "pairPrice": 2995,
+      "singlePrice": 2095,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "naida70",
+      "family": "Phonak Naida",
+      "name": "L70-BTE",
+      "tier": "Gold",
+      "pairPrice": 3295,
+      "singlePrice": 2305,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "naida90",
+      "family": "Phonak Naida",
+      "name": "L90-BTE",
+      "tier": "Platinum",
+      "pairPrice": 3595,
+      "singlePrice": 2515,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i30_10nwo",
+      "family": "Phonak Virto",
+      "name": "I30-10 NW O",
+      "tier": "Bronze",
+      "pairPrice": 2395,
+      "singlePrice": 1675,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i30_r",
+      "family": "Phonak Virto",
+      "name": "I30-R",
+      "tier": "Bronze",
+      "pairPrice": 2995,
+      "singlePrice": 2095,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i50_10nwo",
+      "family": "Phonak Virto",
+      "name": "I50-10 NW O",
+      "tier": "Silver",
+      "pairPrice": 2995,
+      "singlePrice": 2095,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i50_r",
+      "family": "Phonak Virto",
+      "name": "I50-R",
+      "tier": "Silver",
+      "pairPrice": 3395,
+      "singlePrice": 2375,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i70_10nwo",
+      "family": "Phonak Virto",
+      "name": "I70-10 NW O",
+      "tier": "Gold",
+      "pairPrice": 3395,
+      "singlePrice": 2375,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i70_r",
+      "family": "Phonak Virto",
+      "name": "I70-R",
+      "tier": "Gold",
+      "pairPrice": 3695,
+      "singlePrice": 2585,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i70_titanium",
+      "family": "Phonak Virto",
+      "name": "I70-Titanium",
+      "tier": "Gold",
+      "pairPrice": 3395,
+      "singlePrice": 2375,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i90_10nwo",
+      "family": "Phonak Virto",
+      "name": "I90-10 NW O",
+      "tier": "Platinum",
+      "pairPrice": 3695,
+      "singlePrice": 2585,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i90_r",
+      "family": "Phonak Virto",
+      "name": "I90-R",
+      "tier": "Platinum",
+      "pairPrice": 3995,
+      "singlePrice": 2795,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i90_titanium",
+      "family": "Phonak Virto",
+      "name": "I90-Titanium",
+      "tier": "Platinum",
+      "pairPrice": 3695,
+      "singlePrice": 2585,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "cros_e30",
+      "family": "Phonak CROS",
+      "name": "E30-R",
+      "tier": "Bronze",
+      "pairPrice": 2457,
+      "singlePrice": null,
+      "singleIsSupplied": false,
+      "pairOnly": true
+    },
+    {
+      "id": "cros_e90",
+      "family": "Phonak CROS",
+      "name": "E90-R",
+      "tier": "Platinum Plus",
+      "pairPrice": 3241,
+      "singlePrice": null,
+      "singleIsSupplied": false,
+      "pairOnly": true
+    }
+  ]
+};
+</script>
+  <script>
+// Specs for the NEW Phonak models being pitched, taken from the supplied spec
+// files (EON Feature Summary, Audéo E-Sphere datasheet, CROS E sheet, Phonak
+// feature matrices), plus the EON launch release where noted.
+//
+// How it fits together:
+//   data/pricing.js   (generated from the pricing file) lists models by id
+//   `models` below    maps each pricing id -> { family, level, variant }
+//   `families` below  holds the specs: base values, then per-level and
+//                     per-variant overrides, merged in that order.
+// A pricing id with no entry in `models` still appears, with a warning.
+//
+// Fact format and statuses match legacy-platforms.js. 'unknown' facts on new
+// models mean "not in the supplied spec files".
+(function () {
+  const v = (text, source) => ({ text, status: 'verified', source });
+  const c = (text, source) => ({ text, status: 'check', source });
+  const u = () => ({ text: null, status: 'unknown', source: null });
+
+  const S = 'eonSummary';
+  const M = 'phonakMatrices';
+
+  const eonCommon = {
+    platform: 'EON',
+    launched: 2026,
+    adapt: v('AutoSense OS™ AI 8.0: machine learning identifies your surroundings and adjusts automatically, and you can personalise it in the myPhonak app', S),
+    wind: v('WindBlock 2.0: reduces wind noise by up to 50 dB and improves speech-to-noise by up to 30 dB', S),
+    feedback: v('WhistleBlock feedback canceller', S),
+    app: v('myPhonak app plus Tap Control (tap the ear to answer calls or pause streaming)', S),
+    streaming: v('Universal Bluetooth® from any Bluetooth device, now with Auracast™ broadcast streaming (TVs, cinemas, venues)', S),
+    calls: v('Hands-free calls from any Bluetooth phone; the aids’ own microphones pick up your voice', S),
+    connectShort: v('Universal Bluetooth + Auracast™, hands-free calls', S),
+    rechargeable: true,
+  };
+
+  const families = {
+    eonSphere: Object.assign({}, eonCommon, {
+      label: 'Phonak Audéo EON Sphere',
+      chip: v('HYPERSONIC AI chip + ERA connectivity chip: 37% more power-efficient than the previous Sphere', 'eonLaunch'),
+      battery: v('Built-in lithium-ion rechargeable: about 22 h expected, up to 38 h maximum per charge', 'eSphereDatasheet'),
+      batteryShort: v('Rechargeable: 22 h typical, up to 38 h', 'eSphereDatasheet'),
+      size: v('25% smaller and 20% lighter than the previous Sphere generation', 'eonLaunch'),
+      sizeShort: v('25% smaller, 20% lighter', 'eonLaunch'),
+      levels: {
+        90: {
+          speech: v('Automatic Spheric Speech Clarity 3.0 at highest strength, plus Speech Enhancer, SpeechSensor, StereoZoom 2.0 and Dynamic Noise Cancellation', S),
+          speechShort: v('AI chip separates speech from noise automatically, at maximum strength', S),
+          stats: [
+            { value: '37%', label: 'less listening effort', source: 'eonLaunch', note: 'Phonak-reported study result for EON Sphere' },
+            { value: '2×', label: 'as likely to understand every word, from any direction', source: 'eonLaunch', note: 'Phonak-reported claim for EON Sphere' },
+          ],
+          channels: '20',
+        },
+        70: {
+          speech: v('Automatic Spheric Speech Clarity 3.0 at high strength, plus SpeechSensor, StereoZoom 2.0 and Dynamic Noise Cancellation', S),
+          speechShort: v('AI chip separates speech from noise automatically', S),
+          stats: [
+            { value: '37%', label: 'less listening effort', source: 'eonLaunch', note: 'Phonak-reported result for EON Sphere; strength is “high” at 70 (“highest” at 90)' },
+          ],
+          channels: '20',
+        },
+        50: {
+          speech: v('Spheric Speech Clarity 3.0 as a manual programme (moderate strength), plus Motion Sensor Hearing', S),
+          speechShort: v('AI speech-from-noise programme, switched on manually', S),
+          stats: [
+            { value: 'AI', label: 'speech-from-noise programme you switch on in noisy places', source: S, note: 'Manual activation, moderate strength at the 50 level' },
+          ],
+          channels: '16',
+        },
+      },
+    }),
+
+    eonR: Object.assign({}, eonCommon, {
+      label: 'Phonak Audéo EON R',
+      chip: c('ERA connectivity chip (EON R processor details not in the supplied files)', 'eonLaunch'),
+      battery: c('Built-in rechargeable (R model). Runtime for EON R is not in the supplied datasheet, please verify with manufacturer', 'eonSummary'),
+      batteryShort: c('Built-in rechargeable', 'eonSummary'),
+      size: u(),
+      levels: {
+        30: {
+          speech: v('Speech in Noise programme with UltraZoom directional microphones. Spheric Speech Clarity is not included at the 30 level (it starts at E50 Sphere)', S),
+          speechShort: v('Automatic Speech in Noise programme (no AI Spheric processing at this level)', S),
+          stats: [],
+          upsell: 'Spheric Speech Clarity 3.0 (the AI speech-in-noise chip) starts at EON E50 Sphere.',
+          channels: '12',
+        },
+        90: {
+          speech: v('Speech in Loud Noise, SpeechSensor, Speech Enhancer, StereoZoom 2.0 and Dynamic Noise Cancellation (AI Spheric processing is Sphere-only)', M),
+          speechShort: v('Premium directional processing with SpeechSensor (no AI Spheric chip)', M),
+          stats: [],
+          channels: '20',
+        },
+      },
+    }),
+
+    virtoI: {
+      label: 'Phonak Virto I (Infinio custom)',
+      platform: 'Infinio',
+      launched: 2024,
+      chip: v('ERA chip', 'infinio'),
+      adapt: c('AutoSense OS 6.0 (Infinio platform)', 'infinio'),
+      wind: v('WindBlock', M),
+      feedback: v('WhistleBlock', M),
+      app: c('myPhonak app (no Tap Control on Virto)', M),
+      streaming: v('Universal Bluetooth via the ERA chip; Phonak says Auracast will follow by firmware update', 'eonLaunch'),
+      calls: v('Hands-free calls (phone call + mic)', M),
+      connectShort: v('Universal Bluetooth, hands-free calls', 'infinio'),
+      size: u(),
+      rechargeable: null,
+      levels: {
+        90: { speech: v('SpeechSensor, Speech Enhancer, StereoZoom 2.0, Dynamic Noise Cancellation and Speech in Loud Noise', M),
+              speechShort: v('Premium directional processing with SpeechSensor', M),
+              stats: [{ value: '45%', label: 'less listening effort', source: 'infinio', note: 'Phonak-reported claim for Infinio SmartSpeech' }],
+              channels: '20' },
+        70: { speech: v('StereoZoom 2.0, Dynamic Noise Cancellation and Motion Sensor Hearing', M),
+              speechShort: v('Advanced directional processing and noise cancellation', M),
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', note: 'Phonak-reported StereoZoom 2.0 vs StereoZoom' }],
+              channels: '20' },
+        50: { speech: v('Motion Sensor Hearing, Speech in Noise and UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '16' },
+        30: { speech: v('Speech in Noise programme with UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '12' },
+      },
+      variants: {
+        R: { battery: c('Built-in rechargeable (runtime not in the supplied files)', 'phonakMatrices'),
+             batteryShort: c('Built-in rechargeable', 'phonakMatrices'), rechargeable: true },
+        NWO: { app: c('Controls on the aid only (non-wireless version)', 'phonakMatrices'),
+               streaming: c('Non-wireless (NW) version: no Bluetooth streaming. Confirm the exact variant', 'phonakMatrices'),
+               calls: c('No Bluetooth calls on the non-wireless version. Confirm the exact variant', 'phonakMatrices'),
+               connectShort: c('Non-wireless version: no Bluetooth', 'phonakMatrices'),
+               battery: c('Disposable size 10 battery (from the model code)', 'phonakMatrices'),
+               batteryShort: c('Disposable size 10 battery', 'phonakMatrices'), rechargeable: false },
+        Titanium: { battery: u(), batteryShort: u(),
+                    streaming: c('Bluetooth expected on Infinio; confirm for the Titanium variant', 'infinio'),
+                    connectShort: c('Bluetooth expected; confirm for Titanium', 'infinio') },
+      },
+    },
+
+    naidaL: {
+      label: 'Phonak Naída L (Lumity)',
+      platform: 'Lumity',
+      launched: 2022,
+      chip: c('PRISM chip (retailer-cited)', 'lumityRetail'),
+      adapt: c('AutoSense OS 5.0', 'lumity'),
+      wind: v('WindBlock', M),
+      feedback: v('WhistleBlock', M),
+      app: c('myPhonak app', 'lumity'),
+      streaming: c('Direct Bluetooth streaming (Lumity platform)', 'lumity'),
+      calls: c('Hands-free calls (Lumity platform)', 'lumity'),
+      connectShort: c('Bluetooth streaming and hands-free calls', 'lumity'),
+      battery: c('The catalogue does not say which Naída L power or battery version this is. Please verify with manufacturer', 'phonakMatrices'),
+      batteryShort: c('Depends on Naída L version, so check before quoting', 'phonakMatrices'),
+      size: u(),
+      rechargeable: null,
+      levels: {
+        90: { speech: v('SpeechSensor, Speech Enhancer, StereoZoom 2.0, Dynamic Noise Cancellation and EchoBlock', M),
+              speechShort: v('Premium directional processing with SpeechSensor', M),
+              stats: [{ value: '15%', label: 'better understanding of speech from the side and behind', source: 'lumity', note: 'Phonak-reported SpeechSensor result' }],
+              channels: '20' },
+        70: { speech: v('StereoZoom 2.0, Dynamic Noise Cancellation and Motion Sensor Hearing', M),
+              speechShort: v('Advanced directional processing and noise cancellation', M),
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', note: 'Phonak-reported StereoZoom 2.0 vs StereoZoom' }],
+              channels: '20' },
+        50: { speech: v('Motion Sensor Hearing, Speech in Noise and UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '16' },
+        30: { speech: v('Speech in Noise programme with UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '12' },
+      },
+    },
+  };
+
+  // CROS systems use the Audéo EON R aid at the matching level, plus the
+  // transmitter. CROS E-R is compatible with Audéo E-R only (supplied sheet).
+  families.crosE = Object.assign({}, families.eonR, {
+    label: 'Phonak CROS EON R system',
+    note: 'CROS E-R sits on the unaidable ear and sends sound to an Audéo E-R aid on the better ear. It is compatible with Audéo E-R only and does not restore two-ear hearing.',
+    noteSource: 'crosE',
+  });
+
+  const models = {
+    e30: { family: 'eonR', level: 30 },
+    e50: { family: 'eonSphere', level: 50 },
+    e70: { family: 'eonSphere', level: 70 },
+    e90: { family: 'eonSphere', level: 90 },
+    naida30: { family: 'naidaL', level: 30 },
+    naida50: { family: 'naidaL', level: 50 },
+    naida70: { family: 'naidaL', level: 70 },
+    naida90: { family: 'naidaL', level: 90 },
+    virto_i30_10nwo: { family: 'virtoI', level: 30, variant: 'NWO' },
+    virto_i30_r: { family: 'virtoI', level: 30, variant: 'R' },
+    virto_i50_10nwo: { family: 'virtoI', level: 50, variant: 'NWO' },
+    virto_i50_r: { family: 'virtoI', level: 50, variant: 'R' },
+    virto_i70_10nwo: { family: 'virtoI', level: 70, variant: 'NWO' },
+    virto_i70_r: { family: 'virtoI', level: 70, variant: 'R' },
+    virto_i70_titanium: { family: 'virtoI', level: 70, variant: 'Titanium' },
+    virto_i90_10nwo: { family: 'virtoI', level: 90, variant: 'NWO' },
+    virto_i90_r: { family: 'virtoI', level: 90, variant: 'R' },
+    virto_i90_titanium: { family: 'virtoI', level: 90, variant: 'Titanium' },
+    cros_e30: { family: 'crosE', level: 30 },
+    cros_e90: { family: 'crosE', level: 90 },
+  };
+
+  window.HC_NEW_SPECS = { families, models };
+})();
+</script>
+  <script>
+// Researched baseline for the customer's CURRENT (older) Phonak hearing aids.
+//
+// Each fact is { text, status, source }:
+//   status 'verified' - stated in a manufacturer release/document or trade-press launch report
+//   status 'check'    - secondary source, carried over from another platform, or sources conflict
+//   status 'unknown'  - nothing found; the UI shows the "not found in public archives" wording
+//
+// Platform values apply to every model on that platform unless the model
+// overrides them in `models` below. Add a model by adding one line there.
+(function () {
+  const v = (text, source) => ({ text, status: 'verified', source });
+  const c = (text, source) => ({ text, status: 'check', source });
+  const u = () => ({ text: null, status: 'unknown', source: null });
+
+  const platforms = {
+    quest: {
+      name: 'Quest',
+      launched: 2012,
+      chip: v('Quest chip, an upgraded version of the older SPICE-generation processor', 'questSpecs'),
+      adapt: c('SoundFlow: switches between a small set of fixed programmes. AutoSense OS did not exist until 2014', 'quest'),
+      speech: v('Binaural VoiceStream Technology™ directional microphones (auto StereoZoom, UltraZoom). Phonak claimed up to 45% better speech intelligibility with auto StereoZoom (premium levels)', 'quest'),
+      speechShort: v('Directional microphones that "zoom" to the front (StereoZoom/UltraZoom)', 'quest'),
+      wind: v('Speech in Wind and Enhanced WindBlock: cuts low-frequency wind rumble (Phonak claimed up to 28% better speech understanding in wind)', 'wind'),
+      feedback: v('WhistleBlock feedback canceller', 'quest'),
+      app: c('Buttons on the aid, a separate remote or the ComPilot streamer. The aids cannot connect to a smartphone directly', 'compilot'),
+      streaming: v('Only through a ComPilot streamer worn around the neck, with a TV Link base station for TV', 'compilot'),
+      calls: v('Only through the neck-worn ComPilot streamer', 'compilot'),
+      connectShort: v('No Bluetooth in the aid: needs a neck-worn ComPilot streamer', 'compilot'),
+      battery: v('Disposable zinc-air batteries. Rechargeable lithium-ion aids did not arrive until 2016', 'belong'),
+      batteryShort: v('Disposable batteries, changed every few days', 'belong'),
+      rechargeable: false,
+      size: u(),
+    },
+    venture: {
+      name: 'Venture',
+      launched: 2014,
+      chip: v('Dual-core chip: twice the processing power of Quest, up to 30% less battery drain', 'venture'),
+      adapt: v('AutoSense OS (first version): blends features automatically from 200+ settings', 'venture'),
+      speech: c('Binaural VoiceStream™ directional microphones (StereoZoom/UltraZoom) carried over from Quest', 'venture'),
+      speechShort: c('Directional microphones that "zoom" to the front', 'venture'),
+      wind: c('WindBlock / Speech in Wind (Quest-era wind features; Venture version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (carried across Phonak platforms; Venture version not confirmed)', 'quest'),
+      app: c('Buttons, a remote or the ComPilot II streamer. No direct smartphone connection', 'compilot'),
+      streaming: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      calls: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      connectShort: v('No Bluetooth in the aid: needs a neck-worn ComPilot II streamer', 'compilot'),
+      battery: v('Disposable zinc-air batteries (Audéo V: size 10, 312 or 13)', 'venture'),
+      batteryShort: v('Disposable batteries, changed every few days', 'venture'),
+      rechargeable: false,
+      size: u(),
+    },
+    belong: {
+      name: 'Belong',
+      launched: 2016,
+      chip: u(),
+      adapt: v('AutoSense OS (enhanced) with adaptive SoundRecover2', 'belong'),
+      speech: v('Automatic AutoSense OS programmes. Phonak claimed up to 60% better understanding in noise from automatic programme selection', 'belong'),
+      speechShort: v('Automatic programme switching plus directional microphones', 'belong'),
+      wind: c('WindBlock (Belong version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Belong version not confirmed)', 'quest'),
+      app: c('Buttons, a remote or the ComPilot II streamer. No direct smartphone app connection', 'compilot'),
+      streaming: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      calls: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      connectShort: v('No direct Bluetooth: needs a neck-worn ComPilot II streamer', 'compilot'),
+      battery: c('Disposable zinc-air batteries on most models', 'belong'),
+      batteryShort: c('Disposable batteries on most models', 'belong'),
+      rechargeable: false,
+      size: u(),
+    },
+    marvel: {
+      name: 'Marvel',
+      launched: 2018,
+      chip: v('SWORD chip (third generation)', 'marvel'),
+      adapt: v('AutoSense OS 3.0: the first version that also recognises streamed audio', 'marvel'),
+      speech: v('AutoSense OS 3.0 programmes with directional microphones. Phonak claimed 60% better speech understanding in noise', 'marvel'),
+      speechShort: v('Automatic programmes plus directional microphones', 'marvel'),
+      wind: c('WindBlock (Marvel version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Marvel version not confirmed)', 'quest'),
+      app: v('myPhonak app (2019) with Remote Support video adjustments', 'marvel'),
+      streaming: v('Direct stereo Bluetooth streaming from iPhone, Android and other devices', 'marvel'),
+      calls: v('Hands-free calls heard in both ears', 'marvel'),
+      connectShort: v('Bluetooth Classic streaming and hands-free calls', 'marvel'),
+      battery: c('Disposable or rechargeable, depending on model', 'marvel'),
+      batteryShort: c('Disposable or rechargeable, depending on model', 'marvel'),
+      rechargeable: null,
+      size: u(),
+    },
+    paradise: {
+      name: 'Paradise',
+      launched: 2020,
+      chip: v('PRISM chip: more processing power and twice the memory of Marvel', 'paradise'),
+      adapt: v('AutoSense OS 4.0', 'paradise'),
+      speech: v('Speech Enhancer, Dynamic Noise Cancellation and Motion Sensor Hearing (higher technology levels)', 'paradise'),
+      speechShort: v('Automatic programmes, noise cancellation on higher levels', 'paradise'),
+      wind: c('WindBlock (Paradise version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Paradise version not confirmed)', 'quest'),
+      app: v('myPhonak app plus Tap Control (double-tap the ear)', 'paradise'),
+      streaming: v('Direct Bluetooth: 2 active connections, up to 8 paired devices', 'paradise'),
+      calls: v('Hands-free calls; tap to answer', 'paradise'),
+      connectShort: v('Bluetooth Classic streaming and hands-free calls', 'paradise'),
+      battery: c('Disposable or rechargeable, depending on model', 'paradise'),
+      batteryShort: c('Disposable or rechargeable, depending on model', 'paradise'),
+      rechargeable: null,
+      size: u(),
+    },
+    lumity: {
+      name: 'Lumity',
+      launched: 2022,
+      chip: c('PRISM chip (retailer-cited)', 'lumityRetail'),
+      adapt: v('AutoSense OS 5.0: analyses surroundings 700 times per second', 'lumity'),
+      speech: v('StereoZoom 2.0 (Phonak: +16% speech understanding in loud noise vs StereoZoom) and SpeechSensor (+15% from the side and behind), on higher levels', 'lumity'),
+      speechShort: v('Directional microphones with SpeechSensor (higher levels)', 'lumity'),
+      wind: c('WindBlock (Lumity version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Lumity version not confirmed)', 'quest'),
+      app: c('myPhonak app', 'lumity'),
+      streaming: c('Direct Bluetooth streaming', 'lumity'),
+      calls: c('Hands-free calls', 'lumity'),
+      connectShort: c('Bluetooth Classic streaming and hands-free calls', 'lumity'),
+      battery: c('Disposable or rechargeable, depending on model', 'lumityRetail'),
+      batteryShort: c('Disposable or rechargeable, depending on model', 'lumityRetail'),
+      rechargeable: null,
+      size: u(),
+    },
+    infinio: {
+      name: 'Infinio',
+      launched: 2024,
+      chip: v('ERA chip (all Infinio models)', 'infinio'),
+      adapt: c('AutoSense OS 6.0 (7.0 after the 2025 "Ultra" firmware update on Sphere)', 'infinio'),
+      speech: v('SmartSpeech with StereoZoom 2.0 and SpeechSensor. Phonak claims 16% better speech understanding and 45% less listening effort', 'infinio'),
+      speechShort: v('Directional microphones with SpeechSensor (higher levels)', 'infinio'),
+      wind: v('WindBlock (first generation)', 'phonakMatrices'),
+      feedback: v('WhistleBlock', 'phonakMatrices'),
+      app: c('myPhonak app', 'infinio'),
+      streaming: v('Universal Bluetooth via the ERA chip. Auracast is promised by a future firmware update', 'infinio'),
+      calls: v('Hands-free calls from smartphones', 'infinio'),
+      connectShort: v('Universal Bluetooth, Auracast only after a future update', 'eonLaunch'),
+      battery: c('Rechargeable on most models', 'infinio'),
+      batteryShort: c('Rechargeable', 'infinio'),
+      rechargeable: true,
+      size: u(),
+    },
+  };
+
+  // style: RIC (receiver-in-canal), BTE (behind-the-ear), Custom (in-the-ear)
+  const models = [
+    { id: 'audeo_q', name: 'Phonak Audéo Q', platform: 'quest', style: 'RIC', launched: 2013,
+      battery: v('Disposable zinc-air batteries (size 10 or 312)', 'questSpecs') },
+    { id: 'bolero_q', name: 'Phonak Bolero Q', platform: 'quest', style: 'BTE', launched: 2012 },
+    { id: 'virto_q', name: 'Phonak Virto Q', platform: 'quest', style: 'Custom', launched: 2012 },
+    { id: 'naida_q', name: 'Phonak Naída Q', platform: 'quest', style: 'BTE', launched: 2013 },
+
+    { id: 'audeo_v', name: 'Phonak Audéo V', platform: 'venture', style: 'RIC', launched: 2014 },
+    { id: 'bolero_v', name: 'Phonak Bolero V', platform: 'venture', style: 'BTE' },
+    { id: 'virto_v', name: 'Phonak Virto V', platform: 'venture', style: 'Custom' },
+    { id: 'naida_v', name: 'Phonak Naída V', platform: 'venture', style: 'BTE' },
+
+    { id: 'audeo_b', name: 'Phonak Audéo B', platform: 'belong', style: 'RIC', launched: 2016 },
+    { id: 'audeo_br', name: 'Phonak Audéo B-R (rechargeable)', platform: 'belong', style: 'RIC', launched: 2016,
+      battery: v('Built-in lithium-ion rechargeable, the first of its kind (2016): 24 hours per charge', 'belong'),
+      batteryShort: v('First-generation lithium-ion rechargeable', 'belong'), rechargeable: true },
+    { id: 'audeo_bdirect', name: 'Phonak Audéo B-Direct', platform: 'belong', style: 'RIC', launched: 2017,
+      chip: v('SWORD radio chip (Bluetooth Classic)', 'bDirect'),
+      calls: v('Direct hands-free calls from almost any Bluetooth phone, but no music or media streaming from the phone', 'bDirect'),
+      streaming: v('No phone media streaming. TV only through a separate TV Connector', 'bDirect'),
+      connectShort: v('Phone calls only: no music or media streaming', 'bDirect') },
+    { id: 'bolero_b', name: 'Phonak Bolero B', platform: 'belong', style: 'BTE' },
+    { id: 'bolero_bpr', name: 'Phonak Bolero B-PR (rechargeable)', platform: 'belong', style: 'BTE',
+      battery: v('Lithium-ion rechargeable (runtime not confirmed)', 'belong'),
+      batteryShort: v('First-generation lithium-ion rechargeable', 'belong'), rechargeable: true },
+    { id: 'virto_b', name: 'Phonak Virto B', platform: 'belong', style: 'Custom' },
+    { id: 'naida_b', name: 'Phonak Naída B', platform: 'belong', style: 'BTE' },
+
+    { id: 'audeo_m', name: 'Phonak Audéo M (Marvel)', platform: 'marvel', style: 'RIC', launched: 2018 },
+    { id: 'audeo_mr', name: 'Phonak Audéo M-R (Marvel, rechargeable)', platform: 'marvel', style: 'RIC', launched: 2018,
+      battery: v('Lithium-ion rechargeable: 24 h per charge, or 16 h including 8 h of streaming', 'marvel'),
+      batteryShort: v('Rechargeable, up to 24 h', 'marvel'), rechargeable: true },
+    { id: 'bolero_m', name: 'Phonak Bolero M (Marvel)', platform: 'marvel', style: 'BTE' },
+    { id: 'virto_m', name: 'Phonak Virto M (Marvel)', platform: 'marvel', style: 'Custom' },
+    { id: 'naida_m', name: 'Phonak Naída M (Marvel)', platform: 'marvel', style: 'BTE' },
+
+    { id: 'audeo_p', name: 'Phonak Audéo P (Paradise)', platform: 'paradise', style: 'RIC', launched: 2020 },
+    { id: 'audeo_pr', name: 'Phonak Audéo P-R (Paradise, rechargeable)', platform: 'paradise', style: 'RIC', launched: 2020,
+      battery: c('Lithium-ion rechargeable. About 24 h per charge is the advertised figure users cite (official sheet not found)', 'paradiseBattery'),
+      batteryShort: c('Rechargeable, about 24 h', 'paradiseBattery'), rechargeable: true },
+    { id: 'virto_p', name: 'Phonak Virto P (Paradise)', platform: 'paradise', style: 'Custom' },
+    { id: 'naida_p', name: 'Phonak Naída P (Paradise)', platform: 'paradise', style: 'BTE' },
+
+    { id: 'audeo_l', name: 'Phonak Audéo L (Lumity)', platform: 'lumity', style: 'RIC', launched: 2022 },
+    { id: 'audeo_lr', name: 'Phonak Audéo L-R (Lumity, rechargeable)', platform: 'lumity', style: 'RIC', launched: 2022,
+      battery: c('Lithium-ion rechargeable. Retailers cite about 24 h per charge', 'lumityRetail'),
+      batteryShort: c('Rechargeable, about 24 h', 'lumityRetail'), rechargeable: true },
+    { id: 'naida_l_old', name: 'Phonak Naída L (Lumity)', platform: 'lumity', style: 'BTE' },
+
+    { id: 'audeo_i', name: 'Phonak Audéo I (Infinio)', platform: 'infinio', style: 'RIC', launched: 2024 },
+    { id: 'audeo_sphere_i', name: 'Phonak Audéo Sphere Infinio', platform: 'infinio', style: 'RIC', launched: 2024,
+      chip: v('ERA chip plus DEEPSONIC AI chip (first-generation real-time AI denoising)', 'infinio'),
+      speech: v('Spheric Speech Clarity (DEEPSONIC AI). Phonak claims a 10 dB signal-to-noise benefit in Sphere mode', 'infinio'),
+      speechShort: v('First-generation AI speech-from-noise separation', 'infinio'),
+      battery: c('Rechargeable. Independent reviews report about 10–11 h when Sphere mode is in use (sources conflict)', 'infinio'),
+      batteryShort: c('Rechargeable; shorter day when AI Sphere mode is on', 'infinio'),
+      size: v('Previous-generation Sphere housing (EON Sphere is 25% smaller and 20% lighter)', 'eonLaunch') },
+    { id: 'virto_i_old', name: 'Phonak Virto I (Infinio)', platform: 'infinio', style: 'Custom',
+      battery: c('Rechargeable or disposable, depending on version', 'infinio'),
+      batteryShort: c('Rechargeable or disposable, depending on version', 'infinio'), rechargeable: null },
+  ];
+
+  window.HC_LEGACY = { platforms, models };
+})();
+</script>
+  <script>
+// Pure comparison logic: no DOM access, so it runs in the browser and in Node tests.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.HCCompare = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  const NOT_FOUND = 'Specification not found in public archives—please verify with manufacturer';
+  const NOT_SUPPLIED = 'Not stated in the supplied spec files—please verify with manufacturer';
+  const CURRENT_YEAR = 2026;
+  const FACT_KEYS = ['chip', 'adapt', 'speech', 'speechShort', 'wind', 'feedback', 'app', 'streaming',
+    'calls', 'connectShort', 'battery', 'batteryShort', 'size', 'sizeShort'];
+
+  function pick(...layers) {
+    const out = {};
+    for (const layer of layers) {
+      if (!layer) continue;
+      for (const [k, val] of Object.entries(layer)) if (val !== undefined) out[k] = val;
+    }
+    return out;
+  }
+
+  function resolveOld(data, id) {
+    const model = data.legacy.models.find((m) => m.id === id);
+    if (!model) throw new Error(`Unknown current model: ${id}`);
+    const platform = data.legacy.platforms[model.platform];
+    const merged = pick(platform, model);
+    merged.platformName = platform.name;
+    merged.launched = model.launched || platform.launched;
+    merged.launchedIsPlatform = !model.launched;
+    return merged;
+  }
+
+  function resolveNew(data, pricingId) {
+    const price = data.pricing.models.find((m) => m.id === pricingId);
+    if (!price) throw new Error(`Unknown new model: ${pricingId}`);
+    const map = data.specs.models[pricingId];
+    if (!map) return { price, mapped: false, name: `${price.family} ${price.name}` };
+    const fam = data.specs.families[map.family];
+    const merged = pick(fam, (fam.levels || {})[map.level], map.variant && (fam.variants || {})[map.variant]);
+    delete merged.levels;
+    delete merged.variants;
+    merged.price = price;
+    merged.mapped = true;
+    merged.level = map.level;
+    merged.familyKey = map.family;
+    merged.name = `${price.family} ${price.name}`;
+    return merged;
+  }
+
+  // A cell the UI can render: text plus whether it needs checking.
+  function cell(fact, side) {
+    if (!fact || fact.status === 'unknown' || !fact.text) {
+      return { text: side === 'old' ? NOT_FOUND : NOT_SUPPLIED, status: 'unknown', source: null };
+    }
+    return { text: fact.text, status: fact.status, source: fact.source };
+  }
+
+  function rows(oldM, newM) {
+    const age = CURRENT_YEAR - oldM.launched;
+    const yearText = oldM.launchedIsPlatform
+      ? `${oldM.platformName} platform, launched ${oldM.launched}`
+      : `Launched ${oldM.launched} (${oldM.platformName} platform)`;
+    return [
+      { label: 'Technology generation',
+        old: { text: `${yearText}: about ${age} year${age === 1 ? '' : 's'} old`, status: 'verified' },
+        new: { text: `${newM.platform} platform, ${newM.launched}`, status: 'verified' } },
+      { label: 'Processor', old: cell(oldM.chip, 'old'), new: cell(newM.chip, 'new') },
+      { label: 'How it adapts to noise', old: cell(oldM.adapt, 'old'), new: cell(newM.adapt, 'new') },
+      { label: 'Speech in noisy places', old: cell(oldM.speech, 'old'), new: cell(newM.speech, 'new') },
+      { label: 'Wind handling', old: cell(oldM.wind, 'old'), new: cell(newM.wind, 'new') },
+      { label: 'Feedback (whistling)', old: cell(oldM.feedback, 'old'), new: cell(newM.feedback, 'new') },
+      { label: 'App control', old: cell(oldM.app, 'old'), new: cell(newM.app, 'new') },
+      { label: 'TV & music streaming', old: cell(oldM.streaming, 'old'), new: cell(newM.streaming, 'new') },
+      { label: 'Phone calls', old: cell(oldM.calls, 'old'), new: cell(newM.calls, 'new') },
+      { label: 'Battery', old: cell(oldM.battery, 'old'), new: cell(newM.battery, 'new') },
+    ];
+  }
+
+  function cards(oldM, newM) {
+    const stats = newM.stats || [];
+    const speech = {
+      key: 'speech', title: 'Speech in noise', icon: 'speech',
+      old: cell(oldM.speechShort, 'old'), new: cell(newM.speechShort, 'new'),
+      stat: stats[0] || null,
+      footnote: newM.upsell || null,
+    };
+    const connect = {
+      key: 'connect', title: 'Connectivity', icon: 'bluetooth',
+      old: cell(oldM.connectShort, 'old'), new: cell(newM.connectShort, 'new'),
+      stat: newM.streaming && /Auracast/.test(newM.streaming.text) && !/follow|promised/.test(newM.streaming.text)
+        ? { value: 'Auracast™', label: 'ready for TV, theatre and venue broadcasts' }
+        : null,
+    };
+    const goesRechargeable = oldM.rechargeable === false && newM.rechargeable === true;
+    const power = {
+      key: 'power', title: 'Power & convenience', icon: 'battery',
+      old: cell(oldM.batteryShort, 'old'), new: cell(newM.batteryShort, 'new'),
+      stat: goesRechargeable
+        ? { value: '0', label: 'battery changes. Charge overnight like a phone' }
+        : (/38 h/.test((newM.batteryShort || {}).text || '') ? { value: '38 h', label: 'maximum on one charge' } : null),
+    };
+    const fourth = newM.size && newM.size.status !== 'unknown'
+      ? { key: 'size', title: 'Size & discretion', icon: 'size',
+          old: cell(oldM.size, 'old'), new: cell(newM.sizeShort || newM.size, 'new'),
+          stat: { value: '25%', label: 'smaller than the previous Sphere generation', source: newM.size.source } }
+      : { key: 'age', title: 'Years of progress', icon: 'clock',
+          old: { text: `${oldM.platformName} technology, ${oldM.launched}`, status: 'verified' },
+          new: { text: `${newM.platform} technology, ${newM.launched}`, status: 'verified' },
+          stat: { value: `${Math.max(0, newM.launched - oldM.launched)} yrs`, label: 'of Phonak development between them' },
+          footnote: `Size comparison: ${NOT_FOUND}` };
+    return [speech, connect, power, fourth];
+  }
+
+  function warnings(oldM, newM) {
+    const out = [];
+    if (!newM.mapped) out.push('This model from the pricing file has no spec mapping yet. Add it to data/new-specs.js.');
+    if (newM.mapped && newM.launched <= oldM.launched) {
+      out.push(`The ${newM.name} is on the ${newM.platform} platform (${newM.launched}), which is not newer than the customer's ${oldM.platformName} aids. This is not a technology upgrade.`);
+    }
+    if (newM.note) out.push(newM.note);
+    return out;
+  }
+
+  function narrative(oldM, newM, patientName) {
+    const who = (patientName || '').trim();
+    const opener = who ? `${who}, your` : 'Your';
+    const era = oldM.launched;
+    const oldTech = (oldM.speechShort && oldM.speechShort.text) || 'the processing of its day';
+    const s1 = `${opener} ${oldM.name.replace(/^Phonak /, '')} hearing aids were excellent technology for ${era}, built on Phonak's ${oldM.platformName} platform with ${lowerFirst(oldTech)}.`;
+    let s2;
+    if (newM.familyKey === 'eonSphere') {
+      s2 = `The new ${newM.name.replace(/^Phonak /, '')} has a dedicated AI chip, so instead of just turning sound up and pointing the microphones forward, it separates speech from background noise in real time${newM.level === 50 ? ' when you switch on its speech-in-noise programme' : ''}.`;
+    } else {
+      s2 = `The new ${newM.name.replace(/^Phonak /, '')} is ${Math.max(0, newM.launched - era)} years further on, with ${lowerFirst(newM.adapt ? newM.adapt.text.split(':')[0] : 'automatic processing')} adjusting to each place you go without you touching a button.`;
+    }
+    const stat = (newM.stats || [])[0];
+    const s3 = stat
+      ? `In Phonak's own testing, that means ${stat.value} ${stat.label}.`
+      : '';
+    let s4 = '';
+    if (oldM.rechargeable === false && newM.rechargeable === true) {
+      s4 = 'And you can say goodbye to fiddly batteries: it charges overnight like a phone.';
+    } else if (/^No (Bluetooth|direct)/.test((oldM.connectShort || {}).text || '') && /Bluetooth/.test((newM.connectShort || {}).text || '')) {
+      s4 = 'And phone calls and TV stream straight into your ears, with no streamer around your neck.';
+    } else if (/Auracast/.test((newM.connectShort || {}).text || '')) {
+      s4 = 'It also streams calls and TV directly, and is ready for Auracast™ broadcasts in theatres and public venues.';
+    }
+    return [s1, s2, s3, s4].filter(Boolean).join(' ');
+  }
+
+  function lowerFirst(s) {
+    return /^[A-Z][a-z]/.test(s) && !/^(AutoSense|Phonak|Binaural|SoundFlow|Spheric|StereoZoom)/.test(s)
+      ? s[0].toLowerCase() + s.slice(1) : s;
+  }
+
+  function usedSources(rowsOut, cardsOut, newM) {
+    const keys = new Set();
+    for (const r of rowsOut) for (const side of [r.old, r.new]) if (side.source) keys.add(side.source);
+    for (const c of cardsOut) {
+      for (const side of [c.old, c.new]) if (side.source) keys.add(side.source);
+      if (c.stat && c.stat.source) keys.add(c.stat.source);
+    }
+    if (newM.noteSource) keys.add(newM.noteSource);
+    return [...keys];
+  }
+
+  function compare(data, oldId, newId, opts = {}) {
+    const oldM = resolveOld(data, oldId);
+    const newM = resolveNew(data, newId);
+    const rowsOut = newM.mapped ? rows(oldM, newM) : [];
+    const cardsOut = newM.mapped ? cards(oldM, newM) : [];
+    return {
+      old: oldM,
+      new: newM,
+      cards: cardsOut,
+      rows: rowsOut,
+      warnings: warnings(oldM, newM),
+      narrative: newM.mapped ? narrative(oldM, newM, opts.patientName) : '',
+      sources: usedSources(rowsOut, cardsOut, newM),
+    };
+  }
+
+  function priceText(p) {
+    const gbp = (n) => '£' + Number(n).toLocaleString('en-GB', { maximumFractionDigits: 0 });
+    if (p.pairOnly) return `${gbp(p.pairPrice)} per system (pair-only)`;
+    return `${gbp(p.pairPrice)} pair · ${gbp(p.singlePrice)} single`;
+  }
+
+  return { compare, resolveOld, resolveNew, priceText, NOT_FOUND, NOT_SUPPLIED, CURRENT_YEAR };
+});
+</script>
+  <script>
+// UI wiring for index.html. All comparison rules live in compare.js.
+(function () {
+  const DATA = {
+    pricing: window.HC_PRICING,
+    specs: window.HC_NEW_SPECS,
+    legacy: window.HC_LEGACY,
+    sources: window.HC_SOURCES,
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    form: $('setup'), patient: $('patient'), oldFilter: $('old-filter'), oldModel: $('old-model'),
+    newModel: $('new-model'), print: $('print'),
+    error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
+  };
+
+  const ICONS = {
+    speech: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+    bluetooth: '<path d="M7 7l10 10-5 4V3l5 4L7 17"/>',
+    battery: '<rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 10v4M7 10v4M11 10v4"/>',
+    size: '<path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  };
+  const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="icon">${ICONS[name] || ''}</svg>`;
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+
+  function badge(c) {
+    if (c.status === 'check') {
+      const src = c.source && DATA.sources[c.source] ? DATA.sources[c.source].title : 'secondary source';
+      return ` <span class="pill check" title="Source: ${esc(src)}">Verify</span>`;
+    }
+    return '';
+  }
+  const cellHtml = (c) => `<span class="${c.status === 'unknown' ? 'unknown' : ''}">${esc(c.text)}</span>${badge(c)}`;
+
+  // ---------- selectors ----------
+  function fillOld(filter = '') {
+    const q = filter.trim().toLowerCase();
+    const current = els.oldModel.value;
+    const groups = {};
+    for (const m of DATA.legacy.models) {
+      const p = DATA.legacy.platforms[m.platform];
+      if (q && !`${m.name} ${p.name}`.toLowerCase().includes(q)) continue;
+      (groups[m.platform] ||= []).push(m);
+    }
+    let html = '<option value="">Select current model…</option>';
+    for (const [key, list] of Object.entries(groups)) {
+      const p = DATA.legacy.platforms[key];
+      html += `<optgroup label="${esc(p.name)} platform (from ${p.launched})">`;
+      html += list.map((m) => `<option value="${m.id}">${esc(m.name)}</option>`).join('');
+      html += '</optgroup>';
+    }
+    els.oldModel.innerHTML = html;
+    if (current && [...els.oldModel.options].some((o) => o.value === current)) els.oldModel.value = current;
+    else if (q && els.oldModel.options.length === 2) {
+      els.oldModel.selectedIndex = 1; // a single match: pick it
+      suggestNew();
+    }
+  }
+
+  function fillNew() {
+    const groups = {};
+    for (const m of DATA.pricing.models) (groups[m.family] ||= []).push(m);
+    let html = '<option value="">Select new model…</option>';
+    for (const [fam, list] of Object.entries(groups)) {
+      html += `<optgroup label="${esc(fam)}">`;
+      html += list.map((m) => `<option value="${m.id}">${esc(m.name)} · ${esc(m.tier)}</option>`).join('');
+      html += '</optgroup>';
+    }
+    els.newModel.innerHTML = html;
+  }
+
+  // Suggest a like-for-like style when the salesperson picks the current aid.
+  function suggestNew() {
+    if (els.newModel.value) return;
+    const m = DATA.legacy.models.find((x) => x.id === els.oldModel.value);
+    if (!m) return;
+    const pick = { RIC: 'e70', BTE: 'naida70', Custom: 'virto_i70_r' }[m.style];
+    if (pick && DATA.pricing.models.some((x) => x.id === pick)) els.newModel.value = pick;
+  }
+
+  // ---------- rendering ----------
+  function render(result) {
+    const o = result.old;
+    const n = result.new;
+    const priceLine = `<p class="price">${esc(HCCompare.priceText(n.price))}</p>`;
+
+    const warn = result.warnings.length
+      ? `<div class="warnings">${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
+
+    if (!n.mapped) {
+      els.output.innerHTML = `<section class="panel">${warn}</section>`;
+      return;
+    }
+
+    const hero = `
+      <section class="hero">
+        <div class="hero-side then">
+          <p class="hero-label">Your current hearing aids</p>
+          <p class="hero-name">${esc(o.name)}</p>
+          <p class="hero-year">${esc(o.platformName)} technology · ${o.launched}</p>
+        </div>
+        <div class="hero-arrow" aria-hidden="true">→</div>
+        <div class="hero-side now">
+          <p class="hero-label">The new generation</p>
+          <p class="hero-name">${esc(n.name)}</p>
+          <p class="hero-year">${esc(n.platform)} technology · ${n.launched}</p>
+          ${priceLine}
+        </div>
+      </section>`;
+
+    const cards = result.cards.map((c) => `
+      <article class="card">
+        <header class="card-head">${icon(c.icon)}<h3>${esc(c.title)}</h3></header>
+        ${c.stat ? `<p class="stat"><span class="stat-value">${esc(c.stat.value)}</span> <span class="stat-label">${esc(c.stat.label)}</span></p>
+          ${c.stat.note ? `<p class="stat-note">${esc(c.stat.note)}</p>` : ''}` : ''}
+        <div class="compare-line then"><span class="tag">Then</span><p>${cellHtml(c.old)}</p></div>
+        <div class="compare-line now"><span class="tag">Now</span><p>${cellHtml(c.new)}</p></div>
+        ${c.footnote ? `<p class="card-foot">${esc(c.footnote)}</p>` : ''}
+      </article>`).join('');
+
+    const rows = result.rows.map((r) => `
+      <tr>
+        <th scope="row">${esc(r.label)}</th>
+        <td class="then">${cellHtml(r.old)}</td>
+        <td class="now">${cellHtml(r.new)}</td>
+      </tr>`).join('');
+
+    const sources = result.sources.map((k) => {
+      const s = DATA.sources[k];
+      if (!s) return '';
+      const links = (s.urls || []).map((u) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(new URL(u).hostname)}</a>`).join(', ');
+      return `<li><strong>${s.kind === 'supplied' ? 'Supplied file' : 'Web'}:</strong> ${esc(s.title)}${links ? ` (${links})` : ''}</li>`;
+    }).join('');
+
+    els.output.innerHTML = `
+      ${warn}
+      ${hero}
+      <section aria-labelledby="a-title">
+        <h2 id="a-title" class="section-title"><span class="section-letter">A</span> What changes for you</h2>
+        <div class="cards">${cards}</div>
+      </section>
+      <section aria-labelledby="b-title">
+        <h2 id="b-title" class="section-title"><span class="section-letter">B</span> Then vs. now</h2>
+        <div class="table-wrap">
+          <table class="versus">
+            <thead><tr><th scope="col"><span class="sr-only">Feature</span></th>
+              <th scope="col" class="then">Your current ${esc(o.name.replace(/^Phonak /, ''))}</th>
+              <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </section>
+      <section aria-labelledby="c-title">
+        <h2 id="c-title" class="section-title"><span class="section-letter">C</span> Why upgrade now</h2>
+        <blockquote class="script" id="script">${esc(result.narrative)}</blockquote>
+        <button type="button" class="btn ghost no-print" id="copy-script">Copy script</button>
+      </section>
+      <details class="sources">
+        <summary>Sources and evidence for this comparison</summary>
+        <ul>${sources}</ul>
+        <p class="muted">Where nothing could be found for an older model, the tool says: “${esc(HCCompare.NOT_FOUND)}”.</p>
+      </details>`;
+
+    $('copy-script').addEventListener('click', async (e) => {
+      try {
+        await navigator.clipboard.writeText(result.narrative);
+        e.target.textContent = 'Copied';
+      } catch {
+        e.target.textContent = 'Select the text to copy';
+      }
+    });
+    els.print.disabled = false;
+  }
+
+  function generate(evt) {
+    if (evt) evt.preventDefault();
+    const oldId = els.oldModel.value;
+    const newId = els.newModel.value;
+    if (!oldId || !newId) {
+      els.error.textContent = !oldId ? 'Choose the customer’s current hearing aid.' : 'Choose the new model to show.';
+      els.error.hidden = false;
+      (oldId ? els.newModel : els.oldModel).focus();
+      return;
+    }
+    els.error.hidden = true;
+    render(HCCompare.compare(DATA, oldId, newId, { patientName: els.patient.value }));
+    els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---------- init ----------
+  fillOld();
+  fillNew();
+  els.stamp.textContent = `New-model prices: ${DATA.pricing.source}, imported ${DATA.pricing.importedOn}. Older-model research: 29 October 2026.`;
+  els.oldFilter.addEventListener('input', () => fillOld(els.oldFilter.value));
+  els.oldModel.addEventListener('change', suggestNew);
+  els.form.addEventListener('submit', generate);
+  els.print.addEventListener('click', () => window.print());
+})();
+</script>
+</body>
+</html>

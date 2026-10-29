@@ -2,7 +2,7 @@
 
 An offline, single-page tool for a consultation. It compares a customer's older Phonak hearing aid (Quest 2012 up to Infinio 2024) with a new Phonak model from the pricing file, and translates the specs into everyday benefits.
 
-**To use it,** open `index.html` in a desktop browser. There is no install step and no internet connection is needed.
+**To use it,** double-click `dist/Hearing_Aid_Upgrade_Comparison.html`. It is one self-contained file you can copy or email, with no install and no internet needed. After editing any source or data file, rebuild it with `python3 scripts/build_single.py`. (`index.html` also runs directly from the repo for development.)
 
 ## What it shows
 - **A. Headline cards** cover speech in noise, connectivity, power and convenience, and size. When there is no size data for the new model, the size card becomes "Years of progress".
