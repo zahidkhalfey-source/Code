@@ -118,6 +118,56 @@ window.HC_SOURCES = {
     title: 'Retailer listings for Audéo Lumity (chip and battery figures; secondary source)',
     urls: ['https://injoyhearing.com/products/phonak-audeo-lumity-l90'],
   },
+  questLevels: {
+    kind: 'web',
+    title: 'Phonak Naída Q and Virto Q product information: features by level (Q90/Q70/Q50/Q30), channels 20/16/12/8',
+    urls: [
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/hearing_aid/naida_q/documents/product_information_naida_q_027-0107.pdf',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/hearing_aid/virto_q/documents/product_information_virto_q_027-0088.pdf',
+    ],
+  },
+  ventureLevels: {
+    kind: 'web',
+    title: 'AudiologyOnline “Phonak Audéo: RIC Solutions” and Audéo V product information (V90/V70/V50/V30)',
+    urls: [
+      'https://www.audiologyonline.com/articles/phonak-aud-195-169-o-13197',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_us/en/products_solutions/hearing_aid/audeo_v/documents/027-0173-03_PI_Phonak_Audeo_V.pdf',
+    ],
+  },
+  belongLevels: {
+    kind: 'web',
+    title: 'PhonakPro Audéo B features by level (B90/B70/B50/B30); channel counts from retailer tables',
+    urls: [
+      'https://www.phonakpro.com/il/en/products/hearing-aids/audeo-b/features-audeo-b.html',
+      'https://idealhearingaids.com/hearing-aids/discontinued/phonak-audeo-b-hearing-aids/',
+    ],
+  },
+  marvelLevels: {
+    kind: 'web',
+    title: 'PhonakPro Audéo Marvel features by level (M90/M70/M50/M30)',
+    urls: ['https://www.phonakpro.com/au/en/products/hearing-aids/audeo-marvel/features-audeo-marvel.html'],
+  },
+  paradiseLevels: {
+    kind: 'web',
+    title: 'Audéo Paradise level comparisons (retailer/audiologist reviews; secondary sources)',
+    urls: [
+      'https://idealhearingaids.com/hearing-aids/phonak/phonak-audeo-paradise-hearing-aids/',
+      'https://www.hearingnow.co.uk/learning/phonak-audeo-paradise-a-review-by-a-deaf-audiologist',
+    ],
+  },
+  lumityLevels: {
+    kind: 'web',
+    title: 'Phonak Audéo Lumity features page (fine-tuning channels by level)',
+    urls: ['https://www.phonak.com/en-us/hearing-devices/hearing-aids/audeo-lumity/features'],
+  },
+  infinioLevels: {
+    kind: 'web',
+    title: 'Audéo Infinio / Sphere Infinio features by level (Phonak features page; Stanford Hearing comparison table)',
+    urls: [
+      'https://www.phonak.com/en-us/hearing-devices/hearing-aids-for-veterans/audeo-infinio/features',
+      'https://stanfordhearingaids.com/phonak-infinio-hearing-aid-comparisons/',
+    ],
+  },
   infinio: {
     kind: 'web',
     title: 'Phonak Infinio / Audéo Sphere Infinio launch (2024) and ERA chip blog',

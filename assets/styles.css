@@ -36,7 +36,7 @@ h1 { margin: 4px 0 0; font-size: clamp(1.5rem, 3vw, 2.1rem); }
 
 /* Setup panel */
 .panel { background: var(--card); border-radius: var(--radius); box-shadow: 0 6px 24px rgba(11, 42, 91, .08); padding: 20px; margin: -14px 0 24px; position: relative; }
-.setup-grid { display: grid; grid-template-columns: 1fr 1.3fr 1.3fr auto; gap: 16px; align-items: end; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1.3fr .9fr 1.3fr auto; gap: 16px; align-items: end; }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-weight: 600; font-size: .9rem; }
 .hint { font-weight: 400; color: var(--muted); }
@@ -53,6 +53,7 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 .form-error { color: #b42318; margin: 12px 0 0; font-weight: 600; }
 
 /* Warnings */
+.warnings-title { font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; }
 .warnings { background: var(--amber-bg); border: 1px solid #f3d197; color: #5c3700; border-radius: 12px; padding: 4px 16px; margin-bottom: 20px; }
 
 /* Hero */
@@ -104,6 +105,36 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 .pill { display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 1px 7px; border-radius: 999px; vertical-align: middle; font-style: normal; }
 .pill.check { background: var(--amber-bg); color: var(--amber); border: 1px solid #f3d197; cursor: help; }
 
+
+/* Feature checklist */
+.sub-title { font-size: 1.05rem; color: var(--navy); margin: 0 0 10px; }
+.scoreboard { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; background: var(--card); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 16px; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
+.score-big { display: flex; flex-direction: column; align-items: flex-start; }
+.score-num { font-size: 3.4rem; font-weight: 800; line-height: 1; color: var(--now-strong); letter-spacing: -.03em; }
+.score-cap { font-weight: 600; max-width: 14em; }
+.score-bars { display: grid; gap: 12px; }
+.bar-row { display: grid; grid-template-columns: minmax(8em, 15em) 1fr auto; gap: 12px; align-items: center; font-size: .92rem; }
+.bar { height: 16px; border-radius: 999px; background: #edf1f7; overflow: hidden; }
+.bar > span { display: block; height: 100%; border-radius: 999px; min-width: 6px; }
+.bar.then > span { background: #e3a3a3; }
+.bar.now > span { background: linear-gradient(90deg, #0f8a45, var(--now-strong)); }
+.bar-val { font-weight: 700; white-space: nowrap; }
+.checklist tbody th { width: 40%; }
+.feat-name { display: block; }
+.feat-benefit { display: block; font-weight: 400; color: var(--muted); font-size: .85rem; margin-top: 2px; }
+.checklist td { width: 30%; }
+.checklist td .mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 800; margin-right: 8px; vertical-align: middle; flex: none; }
+.checklist td { vertical-align: middle; }
+.checklist td.state-no .mark { background: #f6d4d4; color: #b42318; }
+.checklist td.state-unk .mark { background: #eceff4; color: var(--muted); }
+.checklist td.then.state-yes .mark { background: #e6efe9; color: #4b7a5c; }
+.checklist td.then.state-yes { color: var(--muted); }
+.checklist td.now .mark { background: var(--now-strong); color: #fff; }
+.checklist td.state-unk { color: var(--muted); font-style: italic; }
+.checklist tr.feat-gain td.now { background: #d9f3e4; }
+.mark-text { vertical-align: middle; }
+.upsell { margin: -18px 0 28px; padding: 10px 14px; background: var(--blue-soft); border-radius: 10px; font-size: .9rem; color: var(--navy); }
+
 /* Script */
 .script { margin: 0 0 12px; background: var(--card); border-left: 6px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; font-size: 1.15rem; line-height: 1.6; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
 
@@ -119,6 +150,9 @@ input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 
 }
 @media (max-width: 640px) {
   .setup-grid, .cards { grid-template-columns: 1fr; }
+  .scoreboard { grid-template-columns: 1fr; }
+  .bar-row { grid-template-columns: 1fr auto; }
+  .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
   .hero { grid-template-columns: 1fr; }
   .hero-arrow { transform: rotate(90deg); justify-self: center; }
 }

@@ -5,11 +5,12 @@
     specs: window.HC_NEW_SPECS,
     legacy: window.HC_LEGACY,
     sources: window.HC_SOURCES,
+    features: window.HC_FEATURES,
   };
 
   const $ = (id) => document.getElementById(id);
   const els = {
-    form: $('setup'), patient: $('patient'), oldFilter: $('old-filter'), oldModel: $('old-model'),
+    form: $('setup'), patient: $('patient'), oldFilter: $('old-filter'), oldModel: $('old-model'), oldLevel: $('old-level'),
     newModel: $('new-model'), print: $('print'),
     error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
   };
@@ -55,8 +56,28 @@
     if (current && [...els.oldModel.options].some((o) => o.value === current)) els.oldModel.value = current;
     else if (q && els.oldModel.options.length === 2) {
       els.oldModel.selectedIndex = 1; // a single match: pick it
-      suggestNew();
+      onOldModel();
     }
+  }
+
+  function fillLevels() {
+    const id = els.oldModel.value;
+    const m = DATA.legacy.models.find((x) => x.id === id);
+    if (!m) {
+      els.oldLevel.innerHTML = '<option value="">Choose a model first</option>';
+      els.oldLevel.disabled = true;
+      return;
+    }
+    const p = DATA.legacy.platforms[m.platform];
+    const opts = HCCompare.oldLevels(DATA, id).map((l) =>
+      `<option value="${l}">${esc(m.tmpl ? m.tmpl.replace('{L}', l).replace(/^Phonak /, '') : p.prefix + l)} · ${esc(DATA.legacy.levelNames[l])}</option>`);
+    els.oldLevel.innerHTML = '<option value="">Not sure</option>' + opts.join('');
+    els.oldLevel.disabled = false;
+  }
+
+  function onOldModel() {
+    fillLevels();
+    suggestNew();
   }
 
   function fillNew() {
@@ -80,6 +101,16 @@
     if (pick && DATA.pricing.models.some((x) => x.id === pick)) els.newModel.value = pick;
   }
 
+  // Name of the same new family at another level, e.g. "E90 Sphere CRT".
+  function levelName(n, level) {
+    const id = Object.keys(DATA.specs.models).find((k) => {
+      const m = DATA.specs.models[k];
+      return m.family === n.familyKey && m.level === level && (m.variant || null) === n.variant;
+    });
+    const p = id && DATA.pricing.models.find((x) => x.id === id);
+    return p ? p.name : `the ${level} level`;
+  }
+
   // ---------- rendering ----------
   function render(result) {
     const o = result.old;
@@ -87,7 +118,7 @@
     const priceLine = `<p class="price">${esc(HCCompare.priceText(n.price))}</p>`;
 
     const warn = result.warnings.length
-      ? `<div class="warnings">${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
+      ? `<div class="warnings no-print"><p class="warnings-title">For the dispenser (not printed)</p>${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
 
     if (!n.mapped) {
       els.output.innerHTML = `<section class="panel">${warn}</section>`;
@@ -98,14 +129,14 @@
       <section class="hero">
         <div class="hero-side then">
           <p class="hero-label">Your current hearing aids</p>
-          <p class="hero-name">${esc(o.name)}</p>
-          <p class="hero-year">${esc(o.platformName)} technology · ${o.launched}</p>
+          <p class="hero-name">${esc(o.displayName)}</p>
+          <p class="hero-year">${esc(o.platformName)} technology · ${o.launched} · ${esc(o.levelLabel)}</p>
         </div>
         <div class="hero-arrow" aria-hidden="true">→</div>
         <div class="hero-side now">
           <p class="hero-label">The new generation</p>
           <p class="hero-name">${esc(n.name)}</p>
-          <p class="hero-year">${esc(n.platform)} technology · ${n.launched}</p>
+          <p class="hero-year">${esc(n.platform)} technology · ${n.launched} · ${esc(n.price.tier)}</p>
           ${priceLine}
         </div>
       </section>`;
@@ -127,6 +158,29 @@
         <td class="now">${cellHtml(r.new)}</td>
       </tr>`).join('');
 
+    const f = result.features;
+    const mark = (st) => ({ yes: '✓', no: '✗', notyet: '✗', '?': '?' }[st]);
+    const featureRows = f.items.map((i) => `
+      <tr class="feat-${i.old.state === 'yes' ? 'both' : 'gain'}">
+        <th scope="row"><span class="feat-name">${esc(i.label)}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
+        <td class="then state-${i.old.state === 'notyet' ? 'no' : i.old.state === '?' ? 'unk' : i.old.state}">
+          <span class="mark" aria-hidden="true">${mark(i.old.state)}</span><span class="mark-text">${esc(i.old.text)}</span></td>
+        <td class="now state-yes"><span class="mark" aria-hidden="true">✓</span><span class="mark-text">Included${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
+      </tr>`).join('');
+    const pct = (k) => (f.total ? Math.round((k / f.total) * 100) : 0);
+    const upsell = f.upsell.length
+      ? `<p class="upsell"><strong>Step up for even more:</strong> ${f.upsell.map((u) => `${esc(u.label)} (from ${esc(levelName(n, u.from))})`).join(' · ')}</p>` : '';
+    const scoreboard = `
+      <div class="scoreboard">
+        <div class="score-big"><span class="score-num">+${f.gained}</span><span class="score-cap">features your current aids don't have</span></div>
+        <div class="score-bars">
+          <div class="bar-row"><span class="bar-label">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</span>
+            <span class="bar then"><span style="width:${pct(f.oldCount)}%"></span></span><span class="bar-val">${f.oldCount} of ${f.total}</span></div>
+          <div class="bar-row"><span class="bar-label">The new ${esc(n.name.replace(/^Phonak /, ''))}</span>
+            <span class="bar now"><span style="width:100%"></span></span><span class="bar-val">${f.total} of ${f.total}</span></div>
+        </div>
+      </div>`;
+
     const sources = result.sources.map((k) => {
       const s = DATA.sources[k];
       if (!s) return '';
@@ -143,10 +197,21 @@
       </section>
       <section aria-labelledby="b-title">
         <h2 id="b-title" class="section-title"><span class="section-letter">B</span> Then vs. now</h2>
+        ${scoreboard}
+        <div class="table-wrap">
+          <table class="versus checklist">
+            <thead><tr><th scope="col">What the new hearing aid gives you</th>
+              <th scope="col" class="then">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</th>
+              <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
+            <tbody>${featureRows}</tbody>
+          </table>
+        </div>
+        ${upsell}
+        <h3 class="sub-title">In more detail</h3>
         <div class="table-wrap">
           <table class="versus">
             <thead><tr><th scope="col"><span class="sr-only">Feature</span></th>
-              <th scope="col" class="then">Your current ${esc(o.name.replace(/^Phonak /, ''))}</th>
+              <th scope="col" class="then">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</th>
               <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
@@ -185,16 +250,17 @@
       return;
     }
     els.error.hidden = true;
-    render(HCCompare.compare(DATA, oldId, newId, { patientName: els.patient.value }));
+    render(HCCompare.compare(DATA, oldId, newId, { patientName: els.patient.value, oldLevel: els.oldLevel.value }));
     els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ---------- init ----------
   fillOld();
   fillNew();
+  fillLevels();
   els.stamp.textContent = `New-model prices: ${DATA.pricing.source}, imported ${DATA.pricing.importedOn}. Older-model research: 29 October 2026.`;
   els.oldFilter.addEventListener('input', () => fillOld(els.oldFilter.value));
-  els.oldModel.addEventListener('change', suggestNew);
+  els.oldModel.addEventListener('change', onOldModel);
   els.form.addEventListener('submit', generate);
   els.print.addEventListener('click', () => window.print());
 })();

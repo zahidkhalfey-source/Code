@@ -33,10 +33,17 @@
           </select>
         </div>
         <div class="field">
+          <label for="old-level">Current technology level</label>
+          <select id="old-level" disabled>
+            <option value="">Choose a model first</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="new-model">New Phonak model to show</label>
           <select id="new-model" required>
             <option value="">Select new model…</option>
-          </select>        </div>
+          </select>
+        </div>
         <div class="actions">
           <button type="submit" class="btn primary">Generate Comparison</button>
           <button type="button" id="print" class="btn ghost" disabled>Print</button>
@@ -56,6 +63,7 @@
   <script src="data/sources.js"></script>
   <script src="data/pricing.js"></script>
   <script src="data/new-specs.js"></script>
+  <script src="data/features.js"></script>
   <script src="data/legacy-platforms.js"></script>
   <script src="assets/compare.js"></script>
   <script src="assets/app.js"></script>
