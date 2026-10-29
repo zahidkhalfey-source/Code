@@ -1,0 +1,9 @@
+{
+  "name": "hearing-aid-upgrade-comparison",
+  "private": true,
+  "description": "Offline Then-vs-Now Phonak upgrade comparison for consultations",
+  "scripts": {
+    "test": "node tests/compare.test.cjs",
+    "import-pricing": "python3 scripts/import_pricing.py"
+  }
+}

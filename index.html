@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hearing Aid Upgrade Comparison</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div>
+        <p class="eyebrow">Hearingcare consultation tool</p>
+        <h1>Hearing Aid Upgrade Comparison</h1>
+      </div>
+      <p class="credit">Created by Zahid Khalfey</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel no-print" aria-labelledby="setup-title">
+      <h2 id="setup-title" class="sr-only">Set up the comparison</h2>
+      <form id="setup" class="setup-grid" novalidate>
+        <div class="field">
+          <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
+          <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="old-filter">Customer's current hearing aid</label>
+          <input id="old-filter" type="search" placeholder="Type to filter, e.g. Audéo Q" autocomplete="off" aria-controls="old-model">
+          <select id="old-model" required>
+            <option value="">Select current model…</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="new-model">New Phonak model to show</label>
+          <select id="new-model" required>
+            <option value="">Select new model…</option>
+          </select>
+          <label class="check"><input id="show-price" type="checkbox"> Show price on screen</label>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn primary">Generate Comparison</button>
+          <button type="button" id="print" class="btn ghost" disabled>Print</button>
+        </div>
+      </form>
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+    </section>
+
+    <div id="output" aria-live="polite"></div>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Benefits are interpretations of manufacturer-documented features and Phonak-reported study results, not guaranteed outcomes. Items marked <span class="pill check">Verify</span> come from secondary or conflicting sources. Check suitability and fitting with the audiologist.</p>
+    <p id="data-stamp"></p>
+  </footer>
+
+  <script src="data/sources.js"></script>
+  <script src="data/pricing.js"></script>
+  <script src="data/new-specs.js"></script>
+  <script src="data/legacy-platforms.js"></script>
+  <script src="assets/compare.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
