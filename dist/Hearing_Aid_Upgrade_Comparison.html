@@ -1,0 +1,3449 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hearing Aid Upgrade Comparison</title>
+  <style>
+:root {
+  --navy: #0b2a5b;
+  --blue: #1756c4;
+  --blue-soft: #e8f0ff;
+  --ink: #14213d;
+  --muted: #5b6b85;
+  --line: #d7e0ee;
+  --bg: #f4f7fc;
+  --card: #ffffff;
+  --then-bg: #fdf1f1;
+  --then-ink: #8a3b3b;
+  --then-line: #f0caca;
+  --now-bg: #e9f8ef;
+  --now-ink: #0d6b3a;
+  --now-line: #a9e2c0;
+  --now-strong: #12a150;
+  --amber: #a15c00;
+  --amber-bg: #fff3dc;
+  --radius: 16px;
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); line-height: 1.45; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.muted { color: var(--muted); font-size: .85em; }
+
+/* Header */
+.topbar { background: linear-gradient(120deg, var(--navy), var(--blue)); color: #fff; padding: 22px 0; }
+.topbar-inner { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.eyebrow { margin: 0; text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; opacity: .8; }
+h1 { margin: 4px 0 0; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+.credit { margin: 0; font-size: .85rem; opacity: .85; }
+
+/* Setup panel */
+.panel { background: var(--card); border-radius: var(--radius); box-shadow: 0 6px 24px rgba(11, 42, 91, .08); padding: 20px; margin: -14px 0 24px; position: relative; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1.6fr 1.3fr auto; gap: 16px; align-items: end; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-weight: 600; font-size: .9rem; }
+.hint { font-weight: 400; color: var(--muted); }
+input[type="text"], input[type="search"], select {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; width: 100%;
+}
+input:focus, select:focus, .btn:focus-visible { outline: 3px solid rgba(23, 86, 196, .35); outline-offset: 1px; border-color: var(--blue); }
+.actions { display: flex; flex-direction: column; gap: 8px; }
+.btn { font: inherit; font-weight: 600; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1px solid transparent; }
+.btn.primary { background: var(--blue); color: #fff; }
+.btn.primary:hover { background: var(--navy); }
+.btn.ghost { background: #fff; color: var(--blue); border-color: var(--line); }
+.btn:disabled { opacity: .5; cursor: default; }
+.form-error { color: #b42318; margin: 12px 0 0; font-weight: 600; }
+
+/* Warnings */
+.warnings-title { font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; }
+.warnings { background: var(--amber-bg); border: 1px solid #f3d197; color: #5c3700; border-radius: 12px; padding: 4px 16px; margin-bottom: 20px; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: stretch; margin-bottom: 28px; }
+.hero-side { border-radius: var(--radius); padding: 20px 22px; }
+.hero-side.then { background: var(--then-bg); border: 1px solid var(--then-line); color: var(--then-ink); }
+.hero-side.now { background: linear-gradient(135deg, #0f8a45, var(--now-strong)); color: #fff; box-shadow: 0 10px 28px rgba(18, 161, 80, .25); }
+.hero-label { margin: 0; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; opacity: .85; }
+.hero-name { margin: 6px 0 2px; font-size: clamp(1.25rem, 2.4vw, 1.75rem); font-weight: 700; }
+.hero-year { margin: 0; opacity: .9; }
+.hero-arrow { align-self: center; font-size: 2.4rem; color: var(--blue); font-weight: 700; }
+.price { margin: 10px 0 0; font-weight: 700; font-size: 1.1rem; }
+.price .muted { color: rgba(255, 255, 255, .85); font-weight: 400; }
+
+/* Sections */
+.section-title { display: flex; align-items: center; gap: 10px; font-size: 1.35rem; margin: 8px 0 14px; color: var(--navy); }
+.section-letter { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 1rem; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); display: flex; flex-direction: column; gap: 10px; border-top: 5px solid var(--now-strong); }
+.card-head { display: flex; align-items: center; gap: 10px; }
+.card-head h3 { margin: 0; font-size: 1.05rem; color: var(--navy); }
+.icon { width: 30px; height: 30px; fill: none; stroke: var(--blue); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; background: var(--blue-soft); border-radius: 8px; padding: 4px; flex: none; }
+.stat { margin: 0; line-height: 1.15; }
+.stat-value { display: block; font-size: 2.6rem; font-weight: 800; color: var(--now-strong); letter-spacing: -.02em; }
+.stat-label { font-weight: 600; }
+.stat-note, .card-foot { margin: 0; font-size: .78rem; color: var(--muted); }
+.card-foot { margin-top: auto; border-top: 1px dashed var(--line); padding-top: 8px; }
+.compare-line { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; border-radius: 10px; padding: 9px 10px; }
+.compare-line p { margin: 0; font-size: .93rem; }
+.compare-line.then { background: var(--then-bg); color: var(--then-ink); }
+.compare-line.now { background: var(--now-bg); color: var(--now-ink); font-weight: 600; }
+.tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; padding: 3px 7px; border-radius: 6px; background: rgba(255, 255, 255, .7); }
+
+/* Table */
+.table-wrap { overflow-x: auto; margin-bottom: 32px; border-radius: var(--radius); box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
+.versus { width: 100%; border-collapse: collapse; background: var(--card); min-width: 640px; }
+.versus th, .versus td { padding: 13px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.versus thead th { font-size: 1rem; }
+.versus thead th.then { background: var(--then-line); color: var(--then-ink); }
+.versus thead th.now { background: var(--now-strong); color: #fff; }
+.versus tbody th { width: 20%; color: var(--navy); font-weight: 700; background: #fafcff; }
+.versus td.then { background: var(--then-bg); color: var(--then-ink); width: 40%; }
+.versus td.now { background: var(--now-bg); color: var(--now-ink); font-weight: 600; width: 40%; }
+.versus tr:last-child > * { border-bottom: 0; }
+
+.unknown { font-style: italic; color: var(--muted); font-weight: 400; }
+.pill { display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 1px 7px; border-radius: 999px; vertical-align: middle; font-style: normal; }
+.pill.check { background: var(--amber-bg); color: var(--amber); border: 1px solid #f3d197; cursor: help; }
+
+
+/* Feature checklist */
+.sub-title { font-size: 1.05rem; color: var(--navy); margin: 0 0 10px; }
+.scoreboard { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; background: var(--card); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 16px; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
+.score-big { display: flex; flex-direction: column; align-items: flex-start; }
+.score-num { font-size: 3.4rem; font-weight: 800; line-height: 1; color: var(--now-strong); letter-spacing: -.03em; }
+.score-cap { font-weight: 600; max-width: 14em; }
+.score-bars { display: grid; gap: 12px; }
+.bar-row { display: grid; grid-template-columns: minmax(8em, 15em) 1fr auto; gap: 12px; align-items: center; font-size: .92rem; }
+.bar { height: 16px; border-radius: 999px; background: #edf1f7; overflow: hidden; }
+.bar > span { display: block; height: 100%; border-radius: 999px; min-width: 6px; }
+.bar.then > span { background: #e3a3a3; }
+.bar.now > span { background: linear-gradient(90deg, #0f8a45, var(--now-strong)); }
+.bar-val { font-weight: 700; white-space: nowrap; }
+.checklist tbody th { width: 40%; }
+.feat-name { display: block; }
+.feat-benefit { display: block; font-weight: 400; color: var(--muted); font-size: .85rem; margin-top: 2px; }
+.checklist td { width: 30%; }
+.checklist td .mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 800; margin-right: 8px; vertical-align: middle; flex: none; }
+.checklist td { vertical-align: middle; }
+.checklist td.state-no .mark { background: #f6d4d4; color: #b42318; }
+.checklist td.state-unk .mark { background: #eceff4; color: var(--muted); }
+.checklist td.then.state-yes .mark { background: #e6efe9; color: #4b7a5c; }
+.checklist td.then.state-yes { color: var(--muted); }
+.checklist td.now .mark { background: var(--now-strong); color: #fff; }
+.checklist td.state-unk { color: var(--muted); font-style: italic; }
+.checklist tr.feat-gain td.now { background: #d9f3e4; }
+.mark-text { vertical-align: middle; }
+.score-zero { color: var(--muted); }
+.score-lost { margin-top: 8px; font-size: .85rem; font-weight: 600; color: var(--then-ink); }
+.score-note { margin: 0; font-size: .8rem; color: var(--muted); }
+.checklist td.now.state-no { background: var(--then-bg); color: var(--then-ink); font-weight: 400; }
+.checklist td.now.state-no .mark { background: #f6d4d4; color: #b42318; }
+.checklist tr.group-row th { background: #f4f6fa; color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; }
+.upsell { margin: -18px 0 28px; padding: 10px 14px; background: var(--blue-soft); border-radius: 10px; font-size: .9rem; color: var(--navy); }
+
+
+/* Type-ahead for the current aid */
+.combo { position: relative; }
+.combo-list { position: absolute; top: 100%; left: 0; right: 0; z-index: 20; margin: 4px 0 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 28px rgba(11, 42, 91, .18); max-height: 340px; overflow-y: auto; }
+.combo-group { padding: 8px 12px 4px; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.combo-opt { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; cursor: pointer; }
+.combo-opt small { color: var(--muted); white-space: nowrap; }
+.combo-opt.active, .combo-opt:hover { background: var(--blue-soft); }
+.combo-empty { padding: 10px 12px; color: var(--muted); }
+
+/* Concerns, fitting, discount */
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { font-weight: 600; font-size: .9rem; padding: 0; margin-bottom: 6px; }
+.concerns { margin-top: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; font-size: .9rem; background: #fff; }
+.chip:has(input:checked) { background: var(--blue); border-color: var(--blue); color: #fff; }
+.chip input { accent-color: var(--blue); }
+.options-grid { display: grid; grid-template-columns: auto minmax(220px, 320px) 1fr; gap: 16px; align-items: end; margin-top: 16px; }
+.fitting { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fitting legend { width: 100%; }
+.seg { display: inline-flex; gap: 6px; align-items: center; padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.seg:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); font-weight: 600; }
+.options-note { margin: 0 0 10px; }
+
+/* Concern emphasis */
+.concern-line { background: var(--blue-soft); color: var(--navy); border-radius: 12px; padding: 10px 16px; margin: 0 0 16px; }
+.card.matters { border-top-color: var(--blue); box-shadow: 0 0 0 2px var(--blue), 0 6px 22px rgba(11, 42, 91, .12); }
+.matters-tag { align-self: flex-start; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: var(--blue); color: #fff; border-radius: 999px; padding: 2px 9px; }
+.matters-pill { display: inline-block; font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; background: var(--blue); color: #fff; border-radius: 999px; padding: 1px 7px; vertical-align: middle; margin-left: 4px; }
+.checklist tr.feat-matters th { box-shadow: inset 4px 0 0 var(--blue); }
+
+/* Price box (inside the green hero panel) */
+.price-box { margin-top: 14px; background: rgba(255, 255, 255, .14); border-radius: 12px; padding: 12px 14px; }
+.price-line { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; font-size: .95rem; }
+.price-line s { opacity: .7; font-weight: 400; margin-right: 4px; }
+.price-line.saving { color: #d5ffe6; font-weight: 600; }
+.price-line.total { border-top: 1px solid rgba(255, 255, 255, .35); margin-top: 6px; padding-top: 8px; font-size: 1.3rem; font-weight: 800; }
+.price-meta { margin: 8px 0 0; font-size: .78rem; opacity: .9; }
+
+/* Listening plans */
+.plans { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 12px; }
+.plan-card { font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 16px; cursor: pointer; color: var(--ink); }
+.plan-card:hover { border-color: var(--blue); }
+.plan-card.chosen { border-color: var(--now-strong); background: var(--now-bg); box-shadow: 0 6px 18px rgba(18, 161, 80, .18); }
+.plan-card.suits:not(.chosen) { border-color: var(--blue); }
+.plan-name { font-weight: 800; font-size: 1.05rem; color: var(--navy); }
+.plan-acc { font-weight: 600; color: var(--blue); }
+.plan-benefit { font-size: .9rem; color: var(--ink); }
+.plan-cost { font-weight: 700; margin-top: auto; }
+.plan-ins { font-size: .8rem; color: var(--now-ink); font-weight: 600; }
+.plan-suits { font-size: .78rem; background: var(--blue-soft); color: var(--navy); border-radius: 8px; padding: 3px 8px; }
+.plan-tick { font-size: .8rem; font-weight: 700; color: var(--now-ink); }
+.plan-none { color: var(--muted); }
+.ins-opt { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 28px; }
+.print-only { display: none; }
+
+
+/* In their words: input */
+.words { margin-top: 16px; }
+.chip.preset { font: inherit; font-size: .88rem; color: var(--ink); }
+.chip.preset.used { background: var(--blue-soft); border-color: var(--blue); color: var(--navy); }
+.word-add { display: grid; grid-template-columns: 1fr minmax(180px, 260px) auto; gap: 8px; margin-top: 10px; }
+.word-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.word-list li { background: var(--then-bg); border: 1px solid var(--then-line); color: var(--then-ink); border-radius: 10px; padding: 6px 8px 6px 12px; display: inline-flex; gap: 8px; align-items: center; }
+.word-list small { color: var(--muted); }
+.word-remove { border: 0; background: none; font-size: 1.1rem; cursor: pointer; color: var(--then-ink); }
+
+/* Mode switch */
+.mode-switch { display: inline-flex; background: #e6ecf6; border-radius: 999px; padding: 4px; margin-bottom: 18px; }
+.mode-switch button { font: inherit; font-weight: 600; border: 0; background: none; padding: 8px 18px; border-radius: 999px; cursor: pointer; color: var(--navy); }
+.mode-switch button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+
+/* Conversation view */
+.convo { background: var(--card); border-radius: var(--radius); padding: 28px; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); margin-bottom: 28px; }
+.convo-intro { font-size: 1.25rem; line-height: 1.55; margin: 0 0 22px; color: var(--navy); max-width: 46em; }
+.words-board { display: grid; gap: 16px; }
+.word-row { display: grid; grid-template-columns: 1fr auto 1.2fr; gap: 16px; align-items: center; }
+.their { margin: 0; background: var(--then-bg); border: 1px solid var(--then-line); color: var(--then-ink); border-radius: 14px; padding: 16px 18px; font-size: 1.2rem; font-style: italic; }
+.their-label, .now-line span { display: block; font-style: normal; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; opacity: .8; margin-bottom: 4px; }
+.word-arrow { font-size: 1.8rem; color: var(--blue); font-weight: 700; }
+.possible { background: var(--now-bg); border: 1px solid var(--now-line); border-radius: 14px; padding: 16px 18px; }
+.what-if { margin: 0 0 8px; font-size: 1.25rem; font-weight: 700; color: var(--now-ink); }
+.now-line { margin: 0; font-size: .92rem; color: var(--ink); }
+.now-line span { display: inline; margin-right: 4px; color: var(--now-ink); }
+.convo-close { font-size: 1.2rem; font-weight: 600; color: var(--navy); margin: 26px 0 16px; }
+.convo-empty { color: var(--muted); }
+
+/* Script */
+.script { margin: 0 0 12px; background: var(--card); border-left: 6px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; font-size: 1.15rem; line-height: 1.6; box-shadow: 0 6px 22px rgba(11, 42, 91, .08); }
+
+.sources { margin: 28px 0; background: var(--card); border-radius: 12px; padding: 12px 18px; border: 1px solid var(--line); font-size: .88rem; }
+.sources summary { cursor: pointer; font-weight: 600; color: var(--navy); }
+.sources li { margin: 6px 0; }
+
+.footer { color: var(--muted); font-size: .8rem; padding-bottom: 32px; }
+
+@media (max-width: 980px) {
+  .setup-grid { grid-template-columns: 1fr 1fr; }
+  .cards, .plans { grid-template-columns: repeat(2, 1fr); }
+  .options-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .setup-grid, .cards, .plans, .options-grid, .word-add, .word-row { grid-template-columns: 1fr; }
+  .word-arrow { transform: rotate(90deg); justify-self: center; }
+  .convo { padding: 18px; }
+  .scoreboard { grid-template-columns: 1fr; }
+  .bar-row { grid-template-columns: 1fr auto; }
+  .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-arrow { transform: rotate(90deg); justify-self: center; }
+}
+
+@media print {
+  .print-only { display: block; }
+  .print-head { font-size: .8rem; color: var(--muted); margin: 0 0 8px; }
+  .no-print, .topbar .credit { display: none !important; }
+  body { background: #fff; }
+  .panel { box-shadow: none; }
+  .card, .table-wrap, .script { box-shadow: none; break-inside: avoid; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .sources[open] ul, .sources ul { display: block; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div>
+        <p class="eyebrow">Hearingcare consultation tool</p>
+        <h1>Hearing Aid Upgrade Comparison</h1>
+      </div>
+      <p class="credit">Created by Zahid Khalfey</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel no-print" aria-labelledby="setup-title">
+      <h2 id="setup-title" class="sr-only">Set up the comparison</h2>
+      <form id="setup" novalidate>
+        <div class="setup-grid">
+          <div class="field">
+            <label for="patient">Customer name <span class="hint">(optional, used in the script)</span></label>
+            <input id="patient" type="text" placeholder="e.g. Mr Jones" autocomplete="off">
+          </div>
+          <div class="field combo">
+            <label for="old-search">Customer's current hearing aid</label>
+            <input id="old-search" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+                   aria-controls="old-list" autocomplete="off" placeholder="Type e.g. Q90, Quest 70, Audéo P50-R">
+            <ul id="old-list" role="listbox" class="combo-list" hidden></ul>
+          </div>
+          <div class="field">
+            <label for="new-model">New Phonak model to show</label>
+            <select id="new-model" required>
+              <option value="">Select new model…</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn primary">Generate Comparison</button>
+            <button type="button" id="print" class="btn ghost" disabled>Print</button>
+          </div>
+        </div>
+
+        <fieldset class="concerns">
+          <legend>What bothers them most? <span class="hint">(optional: puts these first and shapes the script)</span></legend>
+          <div id="concern-chips" class="chips"></div>
+        </fieldset>
+
+        <fieldset class="words">
+          <legend>In their words <span class="hint">(tap what they said, or type it; shown in Conversation mode)</span></legend>
+          <div id="word-presets" class="chips"></div>
+          <div class="word-add">
+            <input id="word-text" type="text" placeholder="Or type their exact words, e.g. “I just nod along at the pub”" autocomplete="off" aria-label="Customer's words">
+            <select id="word-concern" aria-label="What it is about"></select>
+            <button type="button" id="word-add" class="btn ghost">Add</button>
+          </div>
+          <ul id="word-list" class="word-list"></ul>
+        </fieldset>
+
+        <div class="options-grid">
+          <fieldset class="field fitting">
+            <legend>Fitting</legend>
+            <label class="seg"><input type="radio" name="fitting" value="pair" checked> Pair</label>
+            <label class="seg"><input type="radio" name="fitting" value="single"> Single</label>
+          </fieldset>
+          <div class="field">
+            <label for="discount">Discount <span class="hint">(one only; hearing aids only)</span></label>
+            <select id="discount"></select>
+          </div>
+          <p class="hint options-note">Choose a listening plan in the results; its benefits are listed there.</p>
+        </div>
+      </form>
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+    </section>
+
+    <div id="output" aria-live="polite"></div>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Benefits are interpretations of manufacturer-documented features and Phonak-reported study results, not guaranteed outcomes. Items marked <span class="pill check">Verify</span> come from secondary or conflicting sources. Check suitability and fitting with the audiologist.</p>
+    <p id="data-stamp"></p>
+  </footer>
+
+  <script>
+// Evidence register. Every fact in legacy-platforms.js and new-specs.js cites one
+// of these keys. "supplied" sources are the files uploaded with the brief; "web"
+// sources were found by web search on 29 October 2026.
+window.HC_SOURCES = {
+  eonSummary: {
+    kind: 'supplied',
+    title: 'Phonak EON Feature Summary (028-xxxx-02, V1.00, 2026-07)',
+  },
+  eSphereDatasheet: {
+    kind: 'supplied',
+    title: 'Phonak Audéo E-Sphere technical datasheet (V1.00, 2025-10)',
+  },
+  crosE: {
+    kind: 'supplied',
+    title: 'Phonak CROS E product information (027-0743-02)',
+  },
+  phonakMatrices: {
+    kind: 'supplied',
+    title: 'Phonak.com feature-level matrices for Audéo EON, EON R, Naída Lumity and Virto Infinio (snapshot in the supplied comparison package)',
+  },
+  eonLaunch: {
+    kind: 'web',
+    title: 'Sonova/Phonak EON launch, 24 August 2026 (Sonova release; Hearing Review; HearingTracker)',
+    urls: [
+      'https://www.sonova.com/?p=632008',
+      'https://hearingreview.com/hearing-products/hearing-aids/phonak-launches-eon-hearing-aids-with-new-hypersonic-chip-and-auracast',
+      'https://hearingtracker.com/news/phonak-eon-debuts-smaller-sphere-auracast-and-windblock',
+    ],
+  },
+  eonEvidence: {
+    kind: 'web',
+    title: 'Phonak Audiology Blog “EON: Adaptive clarity that speaks for itself” (37% less listening effort vs same aids without Spheric Speech Clarity; Latzel et al. 2025)',
+    urls: ['https://audiologyblog.phonakpro.com/eon-adaptive-clarity-that-speaks-for-itself/'],
+  },
+  quest: {
+    kind: 'web',
+    title: 'Phonak Quest launch releases (Oct 2012 Bolero Q/Virto Q; Apr 2013 Audéo Q/Naída Q) and AAA 2013 handout',
+    urls: [
+      'https://phonakpro.com/il/en/about-phonak/press-center/2013/2013-april-03-productlaunch.html',
+      'https://hearingreview.com/hearing-products/aaa-news-phonak-expands-its-quest-platform-with-new-product-lines2',
+      'https://hearingreview.com/hearing-products/a-marketing-perspective-on-phonak-s-new-quest',
+      'https://cochlearimplanthelp.com/wp-content/uploads/2013/04/20130327_aaa_handout_final.pdf',
+    ],
+  },
+  questSpecs: {
+    kind: 'web',
+    title: 'Phonak Audéo Q product information and Quest sales reference guide (2014)',
+    urls: [
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/hearing_aid/audeo_q/documents/product_information_audeo_q_027-0109.pdf',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/documents/reference_guide_sales_quest_spice_march_2014.pdf',
+    ],
+  },
+  wind: {
+    kind: 'web',
+    title: 'Latzel & Appleton (2013) Binaural Speech in Wind, Hearing Review; Phonak WindBlock 2.0 Insight (2026)',
+    urls: [
+      'https://hearingreview.com/2013/07/evaluation-of-a-binaural-speech-in-wind-feature-part-1-verification-in-the-laboratory/',
+      'https://www.phonak.com/content/dam/phonak/en/evidence-library/white-paper/technical-paper/PH_Insight_WindBlock2.0_210x280_EN_028-2924-02_V1.00.pdf',
+    ],
+  },
+  compilot: {
+    kind: 'web',
+    title: 'Phonak knowledge base: wireless accessories compatibility (ComPilot for Spice/Quest; ComPilot II for Venture/Belong)',
+    urls: ['https://www.phonak.com/en-nz/support-options/knowledge-base-articles/phonak-wireless-accessories-and-phonak-hearing-aids'],
+  },
+  venture: {
+    kind: 'web',
+    title: 'Phonak Audéo V / Venture launch, 15 October 2014',
+    urls: [
+      'https://www.phonak.com/mx/es/press/phonak-audeo-v-next-generation-ric.html',
+      'https://hearingreview.com/2014/10/phonak-launches-phonak-audeo-v-ric-hearing-aid-line-based-new-venture-platform/',
+    ],
+  },
+  belong: {
+    kind: 'web',
+    title: 'Phonak Belong launch incl. Audéo B-R lithium-ion rechargeable (August 2016)',
+    urls: [
+      'https://www.sonova.com/en/phonak-launch-next-generation-platform-including-first-mainstream-lithium-ion-rechargeable-hearing',
+      'https://www.phonakpro.com/il/en/about-phonak/press-center/2016/2016-august-30-belong.html',
+      'https://hearingreview.com/hearing-products/hearing-aids/speech-noise/phonak-launches-bolero-b-pr-rechargeable-bte-virto-b-titanium-iic-hearing-aids',
+    ],
+  },
+  bDirect: {
+    kind: 'web',
+    title: 'Phonak Audéo B-Direct release (2017)',
+    urls: [
+      'https://www.audiology-worldnews.com/new-products/2508-phonak-releases-audeotm-b-direct',
+      'https://www.phonakpro.com/il/en/about-phonak/technologies/direct-connectivity.html',
+    ],
+  },
+  marvel: {
+    kind: 'web',
+    title: 'Phonak Marvel launch (October 2018) and Audéo Marvel leaflet (Feb 2019)',
+    urls: [
+      'https://hearingreview.com/2018/10/phonak-launches-marvel-universal-binaural-streaming-new-level-sound-quality/',
+      'https://www.hearingtracker.com/news/phonak-launches-first-real-bluetooth-hearing-aid',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_us/en/marketing/documents/marvel/028-1905-03_Leaflet_BtB_Phonak_Audeo_Marvel_Feb 2019.pdf',
+    ],
+  },
+  paradise: {
+    kind: 'web',
+    title: 'Sonova Paradise platform launch (19 August 2020)',
+    urls: [
+      'https://www.sonova.com/?p=232',
+      'https://hearingreview.com/hearing-products/phonak-launches-audeo-paradise-hearing-aid',
+    ],
+  },
+  paradiseBattery: {
+    kind: 'web',
+    title: 'HearingTracker forum reports of the advertised Audéo P-R runtime (user-reported, not an official sheet)',
+    urls: ['https://forum.hearingtracker.com/t/phonak-audeo-paradise-p90-r-vs-p90-13t/58383'],
+  },
+  lumity: {
+    kind: 'web',
+    title: 'Phonak Lumity launch (2022): StereoZoom 2.0, SpeechSensor, AutoSense OS 5.0',
+    urls: [
+      'https://hearinghealthmatters.org/hearing-news-watch/2022/phonak-audeo-lumity-hearing-aid-platform/',
+      'https://www.phonakpro.com/il/en/products/hearing-aids/audeo-lumity/smartspeech-technology.html',
+    ],
+  },
+  lumityRetail: {
+    kind: 'web',
+    title: 'Retailer listings for Audéo Lumity (chip and battery figures; secondary source)',
+    urls: ['https://injoyhearing.com/products/phonak-audeo-lumity-l90'],
+  },
+  questLevels: {
+    kind: 'web',
+    title: 'Phonak Naída Q and Virto Q product information: features by level (Q90/Q70/Q50/Q30), channels 20/16/12/8',
+    urls: [
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/hearing_aid/naida_q/documents/product_information_naida_q_027-0107.pdf',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_hq/en/products_solutions/hearing_aid/virto_q/documents/product_information_virto_q_027-0088.pdf',
+    ],
+  },
+  ventureLevels: {
+    kind: 'web',
+    title: 'AudiologyOnline “Phonak Audéo: RIC Solutions” and Audéo V product information (V90/V70/V50/V30)',
+    urls: [
+      'https://www.audiologyonline.com/articles/phonak-aud-195-169-o-13197',
+      'https://www.phonakpro.com/content/dam/phonakpro/gc_us/en/products_solutions/hearing_aid/audeo_v/documents/027-0173-03_PI_Phonak_Audeo_V.pdf',
+    ],
+  },
+  belongLevels: {
+    kind: 'web',
+    title: 'PhonakPro Audéo B features by level (B90/B70/B50/B30); channel counts from retailer tables',
+    urls: [
+      'https://www.phonakpro.com/il/en/products/hearing-aids/audeo-b/features-audeo-b.html',
+      'https://idealhearingaids.com/hearing-aids/discontinued/phonak-audeo-b-hearing-aids/',
+    ],
+  },
+  marvelLevels: {
+    kind: 'web',
+    title: 'PhonakPro Audéo Marvel features by level (M90/M70/M50/M30)',
+    urls: ['https://www.phonakpro.com/au/en/products/hearing-aids/audeo-marvel/features-audeo-marvel.html'],
+  },
+  paradiseLevels: {
+    kind: 'web',
+    title: 'Audéo Paradise level comparisons (retailer/audiologist reviews; secondary sources)',
+    urls: [
+      'https://idealhearingaids.com/hearing-aids/phonak/phonak-audeo-paradise-hearing-aids/',
+      'https://www.hearingnow.co.uk/learning/phonak-audeo-paradise-a-review-by-a-deaf-audiologist',
+    ],
+  },
+  lumityLevels: {
+    kind: 'web',
+    title: 'Phonak Audéo Lumity features page (fine-tuning channels by level)',
+    urls: ['https://www.phonak.com/en-us/hearing-devices/hearing-aids/audeo-lumity/features'],
+  },
+  infinioLevels: {
+    kind: 'web',
+    title: 'Audéo Infinio / Sphere Infinio features by level (Phonak features page; Stanford Hearing comparison table)',
+    urls: [
+      'https://www.phonak.com/en-us/hearing-devices/hearing-aids-for-veterans/audeo-infinio/features',
+      'https://stanfordhearingaids.com/phonak-infinio-hearing-aid-comparisons/',
+    ],
+  },
+  infinio: {
+    kind: 'web',
+    title: 'Phonak Infinio / Audéo Sphere Infinio launch (2024) and ERA chip blog',
+    urls: [
+      'https://audiologyblog.phonakpro.com/connectivity-ultra-responsive-era-chip-at-the-heart-of-infinio/',
+      'https://www.hearingtracker.com/news/phonak-unveils-groundbreaking-infinio-hearing-aids-and-ai-powered-audeo-sphere-infinio',
+      'https://www.phonak.com/en-us/professionals/ai-audiology',
+    ],
+  },
+};
+</script>
+  <script>
+// GENERATED by scripts/import_pricing.py - do not edit by hand.
+// Source: CATALOGUE_AND_PAYMENT_DATA.json, imported 2026-10-29.
+window.HC_PRICING = {
+  "source": "CATALOGUE_AND_PAYMENT_DATA.json",
+  "importedOn": "2026-10-29",
+  "pricesAsOf": "2026-10-24",
+  "models": [
+    {
+      "id": "e30",
+      "family": "Phonak Audéo EON",
+      "name": "E30-R CRT",
+      "tier": "Bronze",
+      "pairPrice": 2595.0,
+      "singlePrice": 1815,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "e50",
+      "family": "Phonak Audéo EON",
+      "name": "E50 Sphere CRT",
+      "tier": "Gold",
+      "pairPrice": 3695.0,
+      "singlePrice": 2585,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "e70",
+      "family": "Phonak Audéo EON",
+      "name": "E70 Sphere CRT",
+      "tier": "Platinum",
+      "pairPrice": 3995.0,
+      "singlePrice": 2795,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "e90",
+      "family": "Phonak Audéo EON",
+      "name": "E90 Sphere CRT",
+      "tier": "Platinum Plus",
+      "pairPrice": 4195.0,
+      "singlePrice": 2935,
+      "singleIsSupplied": false,
+      "pairOnly": false
+    },
+    {
+      "id": "naida30",
+      "family": "Phonak Naida",
+      "name": "L30-BTE",
+      "tier": "Bronze",
+      "pairPrice": 2395,
+      "singlePrice": 1675,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "naida50",
+      "family": "Phonak Naida",
+      "name": "L50-BTE",
+      "tier": "Silver",
+      "pairPrice": 2995,
+      "singlePrice": 2095,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "naida70",
+      "family": "Phonak Naida",
+      "name": "L70-BTE",
+      "tier": "Gold",
+      "pairPrice": 3295,
+      "singlePrice": 2305,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "naida90",
+      "family": "Phonak Naida",
+      "name": "L90-BTE",
+      "tier": "Platinum",
+      "pairPrice": 3595,
+      "singlePrice": 2515,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i30_10nwo",
+      "family": "Phonak Virto",
+      "name": "I30-10 NW O",
+      "tier": "Bronze",
+      "pairPrice": 2395,
+      "singlePrice": 1675,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i30_r",
+      "family": "Phonak Virto",
+      "name": "I30-R",
+      "tier": "Bronze",
+      "pairPrice": 2995,
+      "singlePrice": 2095,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i50_10nwo",
+      "family": "Phonak Virto",
+      "name": "I50-10 NW O",
+      "tier": "Silver",
+      "pairPrice": 2995,
+      "singlePrice": 2095,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i50_r",
+      "family": "Phonak Virto",
+      "name": "I50-R",
+      "tier": "Silver",
+      "pairPrice": 3395,
+      "singlePrice": 2375,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i70_10nwo",
+      "family": "Phonak Virto",
+      "name": "I70-10 NW O",
+      "tier": "Gold",
+      "pairPrice": 3395,
+      "singlePrice": 2375,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i70_r",
+      "family": "Phonak Virto",
+      "name": "I70-R",
+      "tier": "Gold",
+      "pairPrice": 3695,
+      "singlePrice": 2585,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i70_titanium",
+      "family": "Phonak Virto",
+      "name": "I70-Titanium",
+      "tier": "Gold",
+      "pairPrice": 3395,
+      "singlePrice": 2375,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i90_10nwo",
+      "family": "Phonak Virto",
+      "name": "I90-10 NW O",
+      "tier": "Platinum",
+      "pairPrice": 3695,
+      "singlePrice": 2585,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i90_r",
+      "family": "Phonak Virto",
+      "name": "I90-R",
+      "tier": "Platinum",
+      "pairPrice": 3995,
+      "singlePrice": 2795,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "virto_i90_titanium",
+      "family": "Phonak Virto",
+      "name": "I90-Titanium",
+      "tier": "Platinum",
+      "pairPrice": 3695,
+      "singlePrice": 2585,
+      "singleIsSupplied": true,
+      "pairOnly": false
+    },
+    {
+      "id": "cros_e30",
+      "family": "Phonak CROS",
+      "name": "E30-R",
+      "tier": "Bronze",
+      "pairPrice": 2457,
+      "singlePrice": null,
+      "singleIsSupplied": false,
+      "pairOnly": true
+    },
+    {
+      "id": "cros_e90",
+      "family": "Phonak CROS",
+      "name": "E90-R",
+      "tier": "Platinum Plus",
+      "pairPrice": 3241,
+      "singlePrice": null,
+      "singleIsSupplied": false,
+      "pairOnly": true
+    }
+  ],
+  "engine": {
+    "aids": [
+      {
+        "id": "e30",
+        "name": "E30-R CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Bronze",
+        "eligible": true,
+        "starkey": false,
+        "price": 2595.0
+      },
+      {
+        "id": "e50",
+        "name": "E50 Sphere CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Gold",
+        "eligible": true,
+        "starkey": false,
+        "price": 3695.0
+      },
+      {
+        "id": "e70",
+        "name": "E70 Sphere CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Platinum",
+        "eligible": true,
+        "starkey": false,
+        "price": 3995.0
+      },
+      {
+        "id": "e90",
+        "name": "E90 Sphere CRT",
+        "family": "Phonak Audéo EON",
+        "tier": "Platinum Plus",
+        "eligible": true,
+        "starkey": false,
+        "price": 4195.0
+      },
+      {
+        "id": "naida30",
+        "name": "L30-BTE",
+        "family": "Phonak Naida",
+        "tier": "Bronze",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 2395,
+        "singlePrice": 1675
+      },
+      {
+        "id": "naida50",
+        "name": "L50-BTE",
+        "family": "Phonak Naida",
+        "tier": "Silver",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 2995,
+        "singlePrice": 2095
+      },
+      {
+        "id": "naida70",
+        "name": "L70-BTE",
+        "family": "Phonak Naida",
+        "tier": "Gold",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 3295,
+        "singlePrice": 2305
+      },
+      {
+        "id": "naida90",
+        "name": "L90-BTE",
+        "family": "Phonak Naida",
+        "tier": "Platinum",
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13",
+        "price": 3595,
+        "singlePrice": 2515
+      },
+      {
+        "id": "virto_i30_10nwo",
+        "family": "Phonak Virto",
+        "name": "I30-10 NW O",
+        "singlePrice": 1675,
+        "price": 2395,
+        "tier": "Bronze",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i30_r",
+        "family": "Phonak Virto",
+        "name": "I30-R",
+        "singlePrice": 2095,
+        "price": 2995,
+        "tier": "Bronze",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i50_10nwo",
+        "family": "Phonak Virto",
+        "name": "I50-10 NW O",
+        "singlePrice": 2095,
+        "price": 2995,
+        "tier": "Silver",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i50_r",
+        "family": "Phonak Virto",
+        "name": "I50-R",
+        "singlePrice": 2375,
+        "price": 3395,
+        "tier": "Silver",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i70_10nwo",
+        "family": "Phonak Virto",
+        "name": "I70-10 NW O",
+        "singlePrice": 2375,
+        "price": 3395,
+        "tier": "Gold",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i70_r",
+        "family": "Phonak Virto",
+        "name": "I70-R",
+        "singlePrice": 2585,
+        "price": 3695,
+        "tier": "Gold",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i70_titanium",
+        "family": "Phonak Virto",
+        "name": "I70-Titanium",
+        "singlePrice": 2375,
+        "price": 3395,
+        "tier": "Gold",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i90_10nwo",
+        "family": "Phonak Virto",
+        "name": "I90-10 NW O",
+        "singlePrice": 2585,
+        "price": 3695,
+        "tier": "Platinum",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i90_r",
+        "family": "Phonak Virto",
+        "name": "I90-R",
+        "singlePrice": 2795,
+        "price": 3995,
+        "tier": "Platinum",
+        "planEligible": true,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "virto_i90_titanium",
+        "family": "Phonak Virto",
+        "name": "I90-Titanium",
+        "singlePrice": 2585,
+        "price": 3695,
+        "tier": "Platinum",
+        "planEligible": false,
+        "eligible": true,
+        "starkey": false,
+        "priceSource": "owner",
+        "suppliedOn": "2026-10-13"
+      },
+      {
+        "id": "cros_e30",
+        "family": "Phonak CROS",
+        "name": "E30-R",
+        "price": 2457,
+        "tier": "Bronze",
+        "starkey": false,
+        "eligible": true,
+        "priceSource": "owner",
+        "pairOnly": true,
+        "style": "cros",
+        "planEligible": true,
+        "priceDate": "20 October 2026"
+      },
+      {
+        "id": "cros_e90",
+        "family": "Phonak CROS",
+        "name": "E90-R",
+        "price": 3241,
+        "tier": "Platinum Plus",
+        "starkey": false,
+        "eligible": true,
+        "priceSource": "owner",
+        "pairOnly": true,
+        "style": "cros",
+        "planEligible": true,
+        "priceDate": "20 October 2026"
+      }
+    ],
+    "breakdown": {
+      "e30|0|home": {
+        "total": 2737.5,
+        "deposit": 273.75,
+        "balance": 2463.75,
+        "monthly": [
+          205.31,
+          113.1,
+          78.9,
+          61.87
+        ],
+        "totals": [
+          2737.5,
+          2988.15,
+          3114.15,
+          3243.51
+        ]
+      },
+      "e50|0|home": {
+        "total": 3837.5,
+        "deposit": 383.75,
+        "balance": 3453.75,
+        "monthly": [
+          287.81,
+          158.54,
+          110.6,
+          86.73
+        ],
+        "totals": [
+          3837.5,
+          4188.71,
+          4365.35,
+          4546.79
+        ]
+      },
+      "e70|0|home": {
+        "total": 4137.5,
+        "deposit": 413.75,
+        "balance": 3723.75,
+        "monthly": [
+          310.31,
+          170.94,
+          119.24,
+          93.51
+        ],
+        "totals": [
+          4137.5,
+          4516.31,
+          4706.39,
+          4902.23
+        ]
+      },
+      "e90|0|home": {
+        "total": 4337.5,
+        "deposit": 433.75,
+        "balance": 3903.75,
+        "monthly": [
+          325.31,
+          179.2,
+          125.01,
+          98.03
+        ],
+        "totals": [
+          4337.5,
+          4734.55,
+          4934.11,
+          5139.19
+        ]
+      },
+      "e30|0|together": {
+        "total": 2842.91,
+        "deposit": 284.29,
+        "balance": 2558.62,
+        "monthly": [
+          213.22,
+          117.45,
+          81.93,
+          64.25
+        ],
+        "totals": [
+          2842.91,
+          3103.09,
+          3233.77,
+          3368.29
+        ]
+      },
+      "e50|0|together": {
+        "total": 3942.91,
+        "deposit": 394.29,
+        "balance": 3548.62,
+        "monthly": [
+          295.72,
+          162.9,
+          113.64,
+          89.11
+        ],
+        "totals": [
+          3942.91,
+          4303.89,
+          4485.33,
+          4671.57
+        ]
+      },
+      "e70|0|together": {
+        "total": 4242.91,
+        "deposit": 424.29,
+        "balance": 3818.62,
+        "monthly": [
+          318.22,
+          175.29,
+          122.28,
+          95.89
+        ],
+        "totals": [
+          4242.91,
+          4631.25,
+          4826.37,
+          5027.01
+        ]
+      },
+      "e90|0|together": {
+        "total": 4442.91,
+        "deposit": 444.29,
+        "balance": 3998.62,
+        "monthly": [
+          333.22,
+          183.55,
+          128.05,
+          100.41
+        ],
+        "totals": [
+          4442.91,
+          4849.49,
+          5054.09,
+          5263.97
+        ]
+      },
+      "e30|0|everywhere": {
+        "total": 3595.0,
+        "deposit": 359.5,
+        "balance": 3235.5,
+        "monthly": [
+          269.63,
+          148.52,
+          103.61,
+          81.25
+        ],
+        "totals": [
+          3595.0,
+          3923.98,
+          4089.46,
+          4259.5
+        ]
+      },
+      "e50|0|everywhere": {
+        "total": 4695.0,
+        "deposit": 469.5,
+        "balance": 4225.5,
+        "monthly": [
+          352.13,
+          193.97,
+          135.31,
+          106.11
+        ],
+        "totals": [
+          4695.0,
+          5124.78,
+          5340.66,
+          5562.78
+        ]
+      },
+      "e70|0|everywhere": {
+        "total": 4995.0,
+        "deposit": 499.5,
+        "balance": 4495.5,
+        "monthly": [
+          374.63,
+          206.36,
+          143.96,
+          112.89
+        ],
+        "totals": [
+          4995.0,
+          5452.14,
+          5682.06,
+          5918.22
+        ]
+      },
+      "e90|0|everywhere": {
+        "total": 5195.0,
+        "deposit": 519.5,
+        "balance": 4675.5,
+        "monthly": [
+          389.63,
+          214.62,
+          149.72,
+          117.41
+        ],
+        "totals": [
+          5195.0,
+          5670.38,
+          5909.42,
+          6155.18
+        ]
+      },
+      "e30|1|home": {
+        "total": 2478.0,
+        "deposit": 247.8,
+        "balance": 2230.2,
+        "monthly": [
+          185.85,
+          102.38,
+          71.42,
+          56.01
+        ],
+        "totals": [
+          2478.0,
+          2704.92,
+          2818.92,
+          2936.28
+        ]
+      },
+      "e50|1|home": {
+        "total": 3468.0,
+        "deposit": 346.8,
+        "balance": 3121.2,
+        "monthly": [
+          260.1,
+          143.28,
+          99.95,
+          78.38
+        ],
+        "totals": [
+          3468.0,
+          3785.52,
+          3945.0,
+          4109.04
+        ]
+      },
+      "e70|1|home": {
+        "total": 3738.0,
+        "deposit": 373.8,
+        "balance": 3364.2,
+        "monthly": [
+          280.35,
+          154.43,
+          107.73,
+          84.48
+        ],
+        "totals": [
+          3738.0,
+          4080.12,
+          4252.08,
+          4428.84
+        ]
+      },
+      "e90|1|home": {
+        "total": 3918.0,
+        "deposit": 391.8,
+        "balance": 3526.2,
+        "monthly": [
+          293.85,
+          161.87,
+          112.92,
+          88.55
+        ],
+        "totals": [
+          3918.0,
+          4276.68,
+          4456.92,
+          4642.2
+        ]
+      },
+      "e30|1|together": {
+        "total": 2583.41,
+        "deposit": 258.34,
+        "balance": 2325.07,
+        "monthly": [
+          193.76,
+          106.73,
+          74.45,
+          58.39
+        ],
+        "totals": [
+          2583.41,
+          2819.86,
+          2938.54,
+          3061.06
+        ]
+      },
+      "e50|1|together": {
+        "total": 3573.41,
+        "deposit": 357.34,
+        "balance": 3216.07,
+        "monthly": [
+          268.01,
+          147.63,
+          102.99,
+          80.76
+        ],
+        "totals": [
+          3573.41,
+          3900.46,
+          4064.98,
+          4233.82
+        ]
+      },
+      "e70|1|together": {
+        "total": 3843.41,
+        "deposit": 384.34,
+        "balance": 3459.07,
+        "monthly": [
+          288.26,
+          158.79,
+          110.77,
+          86.87
+        ],
+        "totals": [
+          3843.41,
+          4195.3,
+          4372.06,
+          4554.1
+        ]
+      },
+      "e90|1|together": {
+        "total": 4023.41,
+        "deposit": 402.34,
+        "balance": 3621.07,
+        "monthly": [
+          301.76,
+          166.22,
+          115.96,
+          90.93
+        ],
+        "totals": [
+          4023.41,
+          4391.62,
+          4576.9,
+          4766.98
+        ]
+      },
+      "e30|1|everywhere": {
+        "total": 3335.5,
+        "deposit": 333.55,
+        "balance": 3001.95,
+        "monthly": [
+          250.16,
+          137.8,
+          96.13,
+          75.39
+        ],
+        "totals": [
+          3335.5,
+          3640.75,
+          3794.23,
+          3952.27
+        ]
+      },
+      "e50|1|everywhere": {
+        "total": 4325.5,
+        "deposit": 432.55,
+        "balance": 3892.95,
+        "monthly": [
+          324.41,
+          178.7,
+          124.66,
+          97.76
+        ],
+        "totals": [
+          4325.5,
+          4721.35,
+          4920.31,
+          5125.03
+        ]
+      },
+      "e70|1|everywhere": {
+        "total": 4595.5,
+        "deposit": 459.55,
+        "balance": 4135.95,
+        "monthly": [
+          344.66,
+          189.86,
+          132.44,
+          103.86
+        ],
+        "totals": [
+          4595.5,
+          5016.19,
+          5227.39,
+          5444.83
+        ]
+      },
+      "e90|1|everywhere": {
+        "total": 4775.5,
+        "deposit": 477.55,
+        "balance": 4297.95,
+        "monthly": [
+          358.16,
+          197.29,
+          137.63,
+          107.93
+        ],
+        "totals": [
+          4775.5,
+          5212.51,
+          5432.23,
+          5658.19
+        ]
+      }
+    }
+  }
+};
+</script>
+  <script>
+// Listening plans: names and prices come from the pricing tool's engine
+// (assets/pricing-engine.js). This file only adds the customer benefit of each
+// plan's accessory, worded as in Zahid's three-way comparison tool.
+window.HC_PLANS = {
+  home: { accessory: 'TV Connector', benefit: 'Hear TV dialogue through the aids while others keep a comfortable room volume' },
+  together: { accessory: 'PartnerMic', benefit: 'A companion wears the microphone to bring one voice closer, useful when walking or sitting apart' },
+  everywhere: { accessory: 'Roger On', benefit: 'Bring speech closer at a busy table, across a room or during a presentation' },
+};
+</script>
+  <script>
+// "What bothers you most?" Each concern lifts its matching cards, checklist
+// features and listening plan to the top, and steers the read-aloud script.
+window.HC_CONCERNS = [
+  { id: 'noise', say: 'noisy places', label: 'Noisy places & groups', card: 'speech', plan: 'everywhere',
+    features: ['ai_chip', 'ai_auto', 'dnc', 'stereozoom2', 'loud_noise', 'speechsensor', 'speech360', 'motion'] },
+  { id: 'soft', say: 'soft voices', label: 'Soft or distant voices', card: 'speech',
+    features: ['speech_enhancer', 'speechsensor', 'speech360'] },
+  { id: 'partner', say: 'hearing one person', label: 'Hearing one person, e.g. a partner', card: 'speech', plan: 'together',
+    features: ['speechsensor', 'speech360', 'stereozoom2'] },
+  { id: 'tv', say: 'TV', label: 'TV & music', card: 'connect', plan: 'home',
+    features: ['stream', 'auracast'] },
+  { id: 'phone', say: 'phone calls', label: 'Phone calls', card: 'connect',
+    features: ['handsfree', 'stream', 'tap', 'app'] },
+  { id: 'wind', say: 'wind', label: 'Wind & outdoors', card: null,
+    features: ['windblock2', 'windblock', 'motion'] },
+  { id: 'battery', say: 'battery changes', label: 'Changing batteries', card: 'power',
+    features: ['rechargeable', 'battery38'] },
+  { id: 'discreet', say: 'being noticed', label: 'Being noticed wearing them', card: 'size', features: [] },
+];
+</script>
+  <script>
+// "In their words" board (Conversation mode).
+// Each concern has quick-pick phrases the dispenser can tap, and an ordered list
+// of "What if…?" prompts. The first prompt whose `needs` the chosen new model
+// actually has is used, so a prompt never promises something the model can't do.
+//   needs: feature ids from features.js (all must be present), or
+//          'plan:together' / 'plan:home' (plan available for this model), 'size' (size data known).
+// `now` frames the change as the technology moving on, not as the customer's failure.
+window.HC_WORDS = {
+  noise: {
+    presets: ['I can’t follow conversations in restaurants', 'I avoid big family gatherings'],
+    whatIf: [
+      { needs: ['ai_chip'], q: 'What if, in a busy restaurant, the voice across the table came through instead of the clatter?',
+        now: 'Hearing aids now have AI chips that separate speech from background noise as it happens.' },
+      { needs: ['dnc'], q: 'What if the room got quieter and the person you’re facing got clearer?',
+        now: 'Hearing aids can now turn down noise around you while focusing on the talker.' },
+      { needs: ['autosense'], q: 'What if your hearing aids adjusted to a busy room by themselves?',
+        now: 'Hearing aids now recognise where you are and adjust automatically.' },
+    ],
+  },
+  soft: {
+    presets: ['People seem to mumble', 'I miss what the grandchildren say'],
+    whatIf: [
+      { needs: ['speech_enhancer'], q: 'What if a soft voice, even from the next room, was easier to catch?',
+        now: 'Speech Enhancer now lifts quiet and distant speech.' },
+      { needs: ['speechsensor'], q: 'What if you could catch the voice beside or behind you without turning round?',
+        now: 'Hearing aids can now find the talker from any direction.' },
+      { needs: ['autosense'], q: 'What if your hearing aids worked out by themselves when someone was talking to you?',
+        now: 'Hearing aids now recognise speech and adjust automatically.' },
+    ],
+  },
+  partner: {
+    presets: ['I can’t hear my partner from the other room'],
+    whatIf: [
+      { needs: ['plan:together'], q: 'What if your partner’s voice came straight to your ears, even across the room?',
+        now: 'A small clip-on microphone can now send one person’s voice directly to your hearing aids.' },
+      { needs: ['speechsensor'], q: 'What if you could follow your partner even when they’re beside or behind you?',
+        now: 'Hearing aids can now find the talker from any direction.' },
+    ],
+  },
+  tv: {
+    presets: ['I have the TV turned up and the family complain'],
+    whatIf: [
+      { needs: ['stream', 'auracast'], q: 'What if the TV came straight into your ears, at a volume that suits everyone else in the room?',
+        now: 'Hearing aids now stream TV sound directly, and can tune into broadcasts in theatres and venues.' },
+      { needs: ['stream'], q: 'What if the TV came straight into your ears, at a volume that suits everyone else in the room?',
+        now: 'Hearing aids can now stream TV sound directly with a small TV Connector.' },
+    ],
+  },
+  phone: {
+    presets: ['Phone calls are a struggle'],
+    whatIf: [
+      { needs: ['handsfree'], q: 'What if a phone call sounded clear in both ears, without holding the phone?',
+        now: 'Hearing aids now connect to any Bluetooth phone for hands-free calls.' },
+    ],
+  },
+  wind: {
+    presets: ['Wind makes walking outside unbearable'],
+    whatIf: [
+      { needs: ['windblock2'], q: 'What if a breezy walk still left room for conversation?',
+        now: 'New wind processing cuts wind noise by up to 50 dB.' },
+      { needs: ['windblock'], q: 'What if windy days didn’t drown everything out?',
+        now: 'Hearing aids now reduce wind rumble automatically.' },
+    ],
+  },
+  battery: {
+    presets: ['The batteries are fiddly and always run out'],
+    whatIf: [
+      { needs: ['rechargeable'], q: 'What if you never had to change a tiny battery again?',
+        now: 'Hearing aids now charge overnight, like a phone.' },
+    ],
+  },
+  discreet: {
+    presets: ['I don’t want people to notice them'],
+    whatIf: [
+      { needs: ['size'], q: 'What if they were smaller and lighter than before?',
+        now: 'The newest generation is noticeably smaller and lighter than the one before it.' },
+    ],
+  },
+};
+</script>
+  <script>
+// Specs for the NEW Phonak models being pitched, taken from the supplied spec
+// files (EON Feature Summary, Audéo E-Sphere datasheet, CROS E sheet, Phonak
+// feature matrices), plus the EON launch release where noted.
+//
+// How it fits together:
+//   data/pricing.js   (generated from the pricing file) lists models by id
+//   `models` below    maps each pricing id -> { family, level, variant }
+//   `families` below  holds the specs: base values, then per-level and
+//                     per-variant overrides, merged in that order.
+// A pricing id with no entry in `models` still appears, with a warning.
+//
+// Fact format and statuses match legacy-platforms.js. 'unknown' facts on new
+// models mean "not in the supplied spec files".
+(function () {
+  const v = (text, source) => ({ text, status: 'verified', source });
+  const c = (text, source) => ({ text, status: 'check', source });
+  const u = () => ({ text: null, status: 'unknown', source: null });
+
+  const S = 'eonSummary';
+  const M = 'phonakMatrices';
+
+  const eonCommon = {
+    platform: 'EON',
+    launched: 2026,
+    adapt: v('AutoSense OS™ AI 8.0: machine learning identifies your surroundings and adjusts automatically, and you can personalise it in the myPhonak app', S),
+    wind: v('WindBlock 2.0: reduces wind noise by up to 50 dB and improves speech-to-noise by up to 30 dB', S),
+    feedback: v('WhistleBlock feedback canceller', S),
+    app: v('myPhonak app plus Tap Control (tap the ear to answer calls or pause streaming)', S),
+    streaming: v('Universal Bluetooth® from any Bluetooth device, now with Auracast™ broadcast streaming (TVs, cinemas, venues)', S),
+    calls: v('Hands-free calls from any Bluetooth phone; the aids’ own microphones pick up your voice', S),
+    connectShort: v('Universal Bluetooth + Auracast™, hands-free calls', S),
+    rechargeable: true,
+  };
+
+  const families = {
+    eonSphere: Object.assign({}, eonCommon, {
+      label: 'Phonak Audéo EON Sphere',
+      chip: v('HYPERSONIC AI chip + ERA connectivity chip: 37% more power-efficient than the previous Sphere', 'eonLaunch'),
+      battery: v('Built-in lithium-ion rechargeable: about 22 h expected, up to 38 h maximum per charge', 'eSphereDatasheet'),
+      batteryShort: v('Rechargeable: 22 h typical, up to 38 h', 'eSphereDatasheet'),
+      size: v('25% smaller and 20% lighter than the previous Sphere generation', 'eonLaunch'),
+      sizeShort: v('25% smaller, 20% lighter', 'eonLaunch'),
+      levels: {
+        90: {
+          speech: v('Automatic Spheric Speech Clarity 3.0 at highest strength, plus Speech Enhancer, SpeechSensor, StereoZoom 2.0 and Dynamic Noise Cancellation', S),
+          speechShort: v('AI chip separates speech from noise automatically, at maximum strength', S),
+          stats: [
+            { value: '37%', label: 'less listening effort', source: 'eonEvidence', status: 'verified', vs: 'compared with the same hearing aids with Spheric Speech Clarity switched off', note: 'Phonak field study (Latzel et al., 2025)' },
+            { value: '2×', label: 'as likely to understand every word, from any direction', source: 'eonLaunch', status: 'check', vs: null, note: 'Phonak claim; comparison basis not stated in the sources reviewed' },
+          ],
+          channels: '20',
+        },
+        70: {
+          speech: v('Automatic Spheric Speech Clarity 3.0 at high strength, plus SpeechSensor, StereoZoom 2.0 and Dynamic Noise Cancellation', S),
+          speechShort: v('AI chip separates speech from noise automatically', S),
+          stats: [
+            { value: '37%', label: 'less listening effort', source: 'eonEvidence', status: 'verified', vs: 'compared with the same hearing aids with Spheric Speech Clarity switched off', note: 'Phonak field study (Latzel et al., 2025); strength is “high” at 70 (“highest” at 90)' },
+          ],
+          channels: '20',
+        },
+        50: {
+          speech: v('Spheric Speech Clarity 3.0 as a manual programme (moderate strength), plus Motion Sensor Hearing', S),
+          speechShort: v('AI speech-from-noise programme, switched on manually', S),
+          stats: [
+            { value: 'AI', label: 'speech-from-noise programme you switch on in noisy places', source: S, status: 'verified', note: 'Manual activation, moderate strength at the 50 level' },
+          ],
+          channels: '16',
+        },
+      },
+    }),
+
+    eonR: Object.assign({}, eonCommon, {
+      label: 'Phonak Audéo EON R',
+      chip: c('ERA connectivity chip (EON R processor details not in the supplied files)', 'eonLaunch'),
+      battery: c('Built-in rechargeable (R model). Runtime for EON R is not in the supplied datasheet, please verify with manufacturer', 'eonSummary'),
+      batteryShort: c('Built-in rechargeable', 'eonSummary'),
+      size: u(),
+      levels: {
+        30: {
+          speech: v('Speech in Noise programme with UltraZoom directional microphones. Spheric Speech Clarity is not included at the 30 level (it starts at E50 Sphere)', S),
+          speechShort: v('Automatic Speech in Noise programme (no AI Spheric processing at this level)', S),
+          stats: [],
+          upsell: 'Spheric Speech Clarity 3.0 (the AI speech-in-noise chip) starts at EON E50 Sphere.',
+          channels: '12',
+        },
+        90: {
+          speech: v('Speech in Loud Noise, SpeechSensor, Speech Enhancer, StereoZoom 2.0 and Dynamic Noise Cancellation (AI Spheric processing is Sphere-only)', M),
+          speechShort: v('Premium directional processing with SpeechSensor (no AI Spheric chip)', M),
+          stats: [],
+          channels: '20',
+        },
+      },
+    }),
+
+    virtoI: {
+      label: 'Phonak Virto I (Infinio custom)',
+      platform: 'Infinio',
+      launched: 2024,
+      chip: v('ERA chip', 'infinio'),
+      adapt: c('AutoSense OS 6.0 (Infinio platform)', 'infinio'),
+      wind: v('WindBlock', M),
+      feedback: v('WhistleBlock', M),
+      app: c('myPhonak app (no Tap Control on Virto)', M),
+      streaming: v('Universal Bluetooth via the ERA chip; Phonak says Auracast will follow by firmware update', 'eonLaunch'),
+      calls: v('Hands-free calls (phone call + mic)', M),
+      connectShort: v('Universal Bluetooth, hands-free calls', 'infinio'),
+      size: u(),
+      rechargeable: null,
+      levels: {
+        90: { speech: v('SpeechSensor, Speech Enhancer, StereoZoom 2.0, Dynamic Noise Cancellation and Speech in Loud Noise', M),
+              speechShort: v('Premium directional processing with SpeechSensor', M),
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier StereoZoom', note: 'Phonak figure for StereoZoom 2.0 (2022); sources describe the comparison differently' }],
+              channels: '20' },
+        70: { speech: v('StereoZoom 2.0, Dynamic Noise Cancellation and Motion Sensor Hearing', M),
+              speechShort: v('Advanced directional processing and noise cancellation', M),
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier StereoZoom', note: 'Phonak figure for StereoZoom 2.0 (2022); sources describe the comparison differently' }],
+              channels: '20' },
+        50: { speech: v('Motion Sensor Hearing, Speech in Noise and UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '16' },
+        30: { speech: v('Speech in Noise programme with UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '12' },
+      },
+      variants: {
+        R: { battery: c('Built-in rechargeable (runtime not in the supplied files)', 'phonakMatrices'),
+             batteryShort: c('Built-in rechargeable', 'phonakMatrices'), rechargeable: true },
+        NWO: { app: c('Controls on the aid only (non-wireless version)', 'phonakMatrices'),
+               streaming: c('Non-wireless (NW) version: no Bluetooth streaming. Confirm the exact variant', 'phonakMatrices'),
+               calls: c('No Bluetooth calls on the non-wireless version. Confirm the exact variant', 'phonakMatrices'),
+               connectShort: c('Non-wireless version: no Bluetooth', 'phonakMatrices'),
+               battery: c('Disposable size 10 battery (from the model code)', 'phonakMatrices'),
+               batteryShort: c('Disposable size 10 battery', 'phonakMatrices'), rechargeable: false },
+        Titanium: { battery: u(), batteryShort: u(),
+                    streaming: c('Bluetooth expected on Infinio; confirm for the Titanium variant', 'infinio'),
+                    connectShort: c('Bluetooth expected; confirm for Titanium', 'infinio') },
+      },
+    },
+
+    naidaL: {
+      label: 'Phonak Naída L (Lumity)',
+      platform: 'Lumity',
+      launched: 2022,
+      chip: c('PRISM chip (retailer-cited)', 'lumityRetail'),
+      adapt: c('AutoSense OS 5.0', 'lumity'),
+      wind: v('WindBlock', M),
+      feedback: v('WhistleBlock', M),
+      app: c('myPhonak app', 'lumity'),
+      streaming: c('Direct Bluetooth streaming (Lumity platform)', 'lumity'),
+      calls: c('Hands-free calls (Lumity platform)', 'lumity'),
+      connectShort: c('Bluetooth streaming and hands-free calls', 'lumity'),
+      battery: c('The catalogue does not say which Naída L power or battery version this is. Please verify with manufacturer', 'phonakMatrices'),
+      batteryShort: c('Depends on Naída L version, so check before quoting', 'phonakMatrices'),
+      size: u(),
+      rechargeable: null,
+      levels: {
+        90: { speech: v('SpeechSensor, Speech Enhancer, StereoZoom 2.0, Dynamic Noise Cancellation and EchoBlock', M),
+              speechShort: v('Premium directional processing with SpeechSensor', M),
+              stats: [{ value: '15%', label: 'better understanding of speech from the side and behind', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier directional settings', note: 'Phonak figure for SpeechSensor (2022); sources describe the comparison differently' }],
+              channels: '20' },
+        70: { speech: v('StereoZoom 2.0, Dynamic Noise Cancellation and Motion Sensor Hearing', M),
+              speechShort: v('Advanced directional processing and noise cancellation', M),
+              stats: [{ value: '16%', label: 'better speech understanding in loud noise', source: 'lumity', status: 'check', vs: 'compared with Phonak’s earlier StereoZoom', note: 'Phonak figure for StereoZoom 2.0 (2022); sources describe the comparison differently' }],
+              channels: '20' },
+        50: { speech: v('Motion Sensor Hearing, Speech in Noise and UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '16' },
+        30: { speech: v('Speech in Noise programme with UltraZoom', M),
+              speechShort: v('Automatic Speech in Noise programme', M), stats: [], channels: '12' },
+      },
+    },
+  };
+
+  // CROS systems use the Audéo EON R aid at the matching level, plus the
+  // transmitter. CROS E-R is compatible with Audéo E-R only (supplied sheet).
+  families.crosE = Object.assign({}, families.eonR, {
+    label: 'Phonak CROS EON R system',
+    note: 'CROS E-R sits on the unaidable ear and sends sound to an Audéo E-R aid on the better ear. It is compatible with Audéo E-R only and does not restore two-ear hearing.',
+    noteSource: 'crosE',
+  });
+
+  const models = {
+    e30: { family: 'eonR', level: 30 },
+    e50: { family: 'eonSphere', level: 50 },
+    e70: { family: 'eonSphere', level: 70 },
+    e90: { family: 'eonSphere', level: 90 },
+    naida30: { family: 'naidaL', level: 30 },
+    naida50: { family: 'naidaL', level: 50 },
+    naida70: { family: 'naidaL', level: 70 },
+    naida90: { family: 'naidaL', level: 90 },
+    virto_i30_10nwo: { family: 'virtoI', level: 30, variant: 'NWO' },
+    virto_i30_r: { family: 'virtoI', level: 30, variant: 'R' },
+    virto_i50_10nwo: { family: 'virtoI', level: 50, variant: 'NWO' },
+    virto_i50_r: { family: 'virtoI', level: 50, variant: 'R' },
+    virto_i70_10nwo: { family: 'virtoI', level: 70, variant: 'NWO' },
+    virto_i70_r: { family: 'virtoI', level: 70, variant: 'R' },
+    virto_i70_titanium: { family: 'virtoI', level: 70, variant: 'Titanium' },
+    virto_i90_10nwo: { family: 'virtoI', level: 90, variant: 'NWO' },
+    virto_i90_r: { family: 'virtoI', level: 90, variant: 'R' },
+    virto_i90_titanium: { family: 'virtoI', level: 90, variant: 'Titanium' },
+    cros_e30: { family: 'crosE', level: 30 },
+    cros_e90: { family: 'crosE', level: 90 },
+  };
+
+  window.HC_NEW_SPECS = { families, models };
+})();
+</script>
+  <script>
+// Feature-by-feature checklist ("Then vs. now").
+//
+// For each feature:
+//   introduced  first platform that had it. Older platforms are marked
+//               "not available yet", which is the strongest, fully honest ✗.
+//   old         per platform: 1 (yes), 0 (not on this model/level), '?' (not
+//               confirmed), or { 90:…, 70:…, 50:…, 30:… } by technology level.
+//               Platforms missing from `old` (but not older than `introduced`)
+//               show as '?'.
+//   oldModels   per-model overrides (e.g. only the B-Direct had calls on Belong).
+//   oldFromModel 'rechargeable' reads the model's own rechargeable flag.
+//   introducedAs optional { name, year } when the first model came later than its platform.
+//   new         per new family: 1 / 0 / 'c' (yes, but verify) by level, plus
+//               optional `variants` for Virto (R / NWO / Titanium).
+// Only features the chosen NEW model has are listed in the checklist.
+(function () {
+  const L = (l90, l70, l50, l30) => ({ 90: l90, 70: l70, 50: l50, 30: l30 });
+  const ALL = L(1, 1, 1, 1);
+
+  const features = [
+    {
+      id: 'ai_chip', group: 'Hearing in noise',
+      label: 'AI chip that separates speech from noise',
+      benefit: 'Pulls voices out of background noise in real time',
+      introduced: 'infinio', sources: ['eonSummary', 'infinio'],
+      old: { infinio: 0 }, oldModels: { audeo_sphere_i: 1 },
+      new: { eonSphere: L(1, 1, 1, 0), eonR: L(0, 0, 0, 0), crosE: L(0, 0, 0, 0), virtoI: L(0, 0, 0, 0), naidaL: L(0, 0, 0, 0) },
+    },
+    {
+      id: 'ai_auto', group: 'Hearing in noise',
+      label: 'AI speech clarity switches on by itself',
+      benefit: 'No buttons to press when a room gets loud',
+      introduced: 'infinio', sources: ['eonSummary'],
+      old: { infinio: 0 }, oldModels: { audeo_sphere_i: '?' },
+      new: { eonSphere: L(1, 1, 0, 0) },
+    },
+    {
+      id: 'speech_enhancer', group: 'Hearing in noise',
+      label: 'Speech Enhancer',
+      benefit: 'Soft or distant voices are easier to follow, even from another room',
+      introduced: 'paradise', sources: ['eonSummary', 'phonakMatrices', 'paradiseLevels', 'infinioLevels'],
+      old: { paradise: L(1, 0, 0, 0), lumity: '?', infinio: L(1, 0, 0, 0) },
+      new: { eonSphere: L(1, 0, 0, 0), eonR: L(1, 0, 0, 0), crosE: L(1, 0, 0, 0), virtoI: L(1, 0, 0, 0), naidaL: L(1, 0, 0, 0) },
+    },
+    {
+      id: 'dnc', group: 'Hearing in noise',
+      label: 'Dynamic Noise Cancellation',
+      benefit: 'Turns down noise coming from around you so speech stands out',
+      introduced: 'paradise', sources: ['eonSummary', 'phonakMatrices', 'paradiseLevels', 'infinioLevels'],
+      old: { paradise: L(1, 0, 0, 0), lumity: '?', infinio: L(1, 1, 0, 0) },
+      new: { eonSphere: L(1, 1, 0, 0), eonR: L(1, 1, 0, 0), crosE: L(1, 1, 0, 0), virtoI: L(1, 1, 0, 0), naidaL: L(1, 1, 0, 0) },
+    },
+    {
+      id: 'speechsensor', group: 'Hearing in noise',
+      label: 'SpeechSensor',
+      benefit: 'Finds the talker even when they are beside or behind you',
+      introduced: 'lumity', sources: ['eonSummary', 'phonakMatrices', 'lumity'],
+      old: { lumity: '?', infinio: '?' },
+      new: { eonSphere: L(1, 1, 0, 0), eonR: L(1, 0, 0, 0), crosE: L(1, 0, 0, 0), virtoI: L(1, 0, 0, 0), naidaL: L(1, 0, 0, 0) },
+    },
+    {
+      id: 'stereozoom2', group: 'Hearing in noise',
+      label: 'StereoZoom 2.0',
+      benefit: 'A smooth, gradual focus on the person you are facing',
+      introduced: 'lumity', sources: ['eonSummary', 'phonakMatrices', 'lumity', 'infinioLevels'],
+      old: { lumity: '?', infinio: L(1, 1, 0, 0) },
+      new: { eonSphere: L(1, 1, 0, 0), eonR: L(1, 1, 0, 0), crosE: L(1, 1, 0, 0), virtoI: L(1, 1, 0, 0), naidaL: L(1, 1, 0, 0) },
+    },
+    {
+      id: 'loud_noise', group: 'Hearing in noise',
+      label: 'Both aids team up to focus in loud noise',
+      benefit: 'The two hearing aids share sound to zoom in on one voice',
+      introduced: 'quest', sources: ['phonakMatrices', 'questLevels', 'ventureLevels', 'belongLevels', 'marvelLevels', 'infinioLevels'],
+      old: {
+        quest: L(1, 1, 0, 0), venture: L(1, 1, '?', 0), belong: L(1, 1, '?', '?'),
+        marvel: L(1, '?', '?', '?'), paradise: L(1, '?', '?', '?'), lumity: L(1, '?', '?', '?'), infinio: L(1, 1, 0, 0),
+      },
+      new: { eonSphere: L(1, 1, 0, 0), eonR: L(1, 1, 0, 0), crosE: L(1, 1, 0, 0), virtoI: L(1, 1, 0, 0), naidaL: L(1, 1, 0, 0) },
+    },
+    {
+      id: 'speech360', group: 'Hearing in noise',
+      label: 'Speech in 360°',
+      benefit: 'Hear people behind you, for example in the car',
+      introduced: 'belong', sources: ['phonakMatrices', 'belongLevels', 'marvelLevels', 'paradiseLevels'],
+      old: { belong: L(1, 1, 0, 0), marvel: L(1, 1, 0, 0), paradise: L('?', '?', 0, 0), lumity: '?', infinio: '?' },
+      new: { eonSphere: L(1, 1, 0, 0), eonR: L(1, 1, 0, 0), crosE: L(1, 1, 0, 0), virtoI: L(1, 1, 0, 0), naidaL: L(1, 1, 0, 0) },
+    },
+    {
+      id: 'motion', group: 'Hearing in noise',
+      label: 'Motion Sensor Hearing',
+      benefit: 'Adjusts automatically while you walk and talk',
+      introduced: 'paradise', sources: ['eonSummary', 'phonakMatrices', 'paradise'],
+      old: { paradise: '?', lumity: '?', infinio: '?' },
+      new: { eonSphere: L(1, 1, 1, 0), eonR: L(1, 1, 1, 0), crosE: L(1, 1, 1, 0), virtoI: L(1, 1, 1, 0), naidaL: L(1, 1, 1, 0) },
+    },
+    {
+      id: 'autosense', group: 'Automatic sound',
+      label: 'Fully automatic adjustment to every place (AutoSense OS)',
+      benefit: 'Blends settings automatically as you move from place to place',
+      introduced: 'venture', sources: ['venture', 'ventureLevels', 'eonSummary'],
+      old: { venture: 1, belong: 1, marvel: 1, paradise: 1, lumity: 1, infinio: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, virtoI: ALL, naidaL: ALL },
+    },
+    {
+      id: 'ml', group: 'Automatic sound',
+      label: 'Machine-learning sound recognition',
+      benefit: 'Trained on thousands of real sound scenes to recognise where you are',
+      introduced: 'marvel', sources: ['marvel', 'lumity', 'eonSummary'],
+      old: { marvel: 1, paradise: 1, lumity: 1, infinio: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, virtoI: ALL, naidaL: ALL },
+    },
+    {
+      id: 'windblock2', group: 'Comfort',
+      label: 'WindBlock 2.0',
+      benefit: 'Cuts wind noise by up to 50 dB so speech still comes through outdoors',
+      introduced: 'eon', sources: ['eonSummary'],
+      old: {},
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL },
+    },
+    {
+      id: 'windblock', group: 'Comfort',
+      label: 'Automatic wind-noise reduction',
+      benefit: 'Takes the rumble out of windy days',
+      introduced: 'quest', sources: ['questLevels', 'marvelLevels', 'phonakMatrices', 'eonSummary'],
+      old: { quest: L(1, 1, 0, 0), venture: '?', belong: '?', marvel: L(1, 1, 0, 0), paradise: L(1, 1, '?', '?'), lumity: '?', infinio: ALL },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, virtoI: ALL, naidaL: ALL },
+    },
+    {
+      id: 'sr2', group: 'Comfort',
+      label: 'SoundRecover2',
+      benefit: 'Brings back high-pitched sounds like birdsong and “s” and “f”',
+      introduced: 'belong', sources: ['belong', 'eonSummary', 'phonakMatrices'],
+      old: { belong: 1, marvel: 1, paradise: 1, lumity: 1, infinio: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, virtoI: ALL, naidaL: ALL },
+    },
+    {
+      id: 'stream', group: 'Connectivity',
+      label: 'Music, TV and calls stream straight to both ears',
+      benefit: 'No streamer around your neck; works with any Bluetooth phone',
+      introduced: 'marvel', sources: ['marvel', 'eonSummary', 'phonakMatrices'],
+      old: { marvel: 1, paradise: 1, lumity: 1, infinio: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, naidaL: L('c', 'c', 'c', 'c'),
+             virtoI: { variants: { R: ALL, NWO: L(0, 0, 0, 0), Titanium: L('?', '?', '?', '?') } } },
+    },
+    {
+      id: 'handsfree', group: 'Connectivity',
+      label: 'Hands-free phone calls',
+      benefit: 'Talk on the phone with it still in your pocket',
+      introduced: 'belong', introducedAs: { name: 'Audéo B-Direct', year: 2017 },
+      sources: ['bDirect', 'marvel', 'eonSummary', 'phonakMatrices'],
+      old: { belong: 0, marvel: 1, paradise: 1, lumity: 1, infinio: 1 }, oldModels: { audeo_bdirect: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, naidaL: L('c', 'c', 'c', 'c'),
+             virtoI: { variants: { R: ALL, NWO: L(0, 0, 0, 0), Titanium: L('?', '?', '?', '?') } } },
+    },
+    {
+      id: 'auracast', group: 'Connectivity',
+      label: 'Auracast™ broadcast audio',
+      benefit: 'Tune into TVs, theatres, airports and venues that broadcast sound',
+      introduced: 'eon', sources: ['eonSummary', 'eonLaunch'],
+      old: {},
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL },
+    },
+    {
+      id: 'app', group: 'Connectivity',
+      label: 'Smartphone app control (myPhonak)',
+      benefit: 'Change volume and settings discreetly from your phone',
+      introduced: 'marvel', sources: ['marvel', 'eonSummary'],
+      old: { marvel: 1, paradise: 1, lumity: 1, infinio: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, naidaL: L('c', 'c', 'c', 'c'),
+             virtoI: { variants: { R: L('c', 'c', 'c', 'c'), NWO: L(0, 0, 0, 0), Titanium: L('?', '?', '?', '?') } } },
+    },
+    {
+      id: 'tap', group: 'Connectivity',
+      label: 'Tap Control',
+      benefit: 'Double-tap your ear to answer a call or pause music',
+      introduced: 'paradise', sources: ['eonSummary', 'phonakMatrices', 'paradiseLevels', 'infinioLevels'],
+      old: { paradise: L(1, 1, 0, 0), lumity: '?', infinio: L(1, 1, 0, 0) },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, naidaL: L(1, 1, 0, 0), virtoI: L(0, 0, 0, 0) },
+    },
+    {
+      id: 'rogerdirect', group: 'Connectivity',
+      label: 'RogerDirect™',
+      benefit: 'Connects straight to Roger microphones for meetings and lectures',
+      introduced: 'marvel', sources: ['marvel', 'eonSummary', 'phonakMatrices'],
+      old: { marvel: 1, paradise: 1, lumity: 1, infinio: 1 },
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL, naidaL: ALL,
+             virtoI: { variants: { R: ALL, NWO: L('?', '?', '?', '?'), Titanium: L('?', '?', '?', '?') } } },
+    },
+    {
+      id: 'rechargeable', group: 'Power',
+      label: 'Built-in lithium-ion rechargeable battery',
+      benefit: 'No more tiny batteries: charge overnight like a phone',
+      introduced: 'belong', sources: ['belong', 'eSphereDatasheet', 'eonSummary'],
+      oldFromModel: 'rechargeable',
+      new: { eonSphere: ALL, eonR: ALL, crosE: ALL,
+             virtoI: { variants: { R: ALL, NWO: L(0, 0, 0, 0), Titanium: L('?', '?', '?', '?') } } },
+    },
+    {
+      id: 'battery38', group: 'Power',
+      label: 'Up to 38 hours from one charge',
+      benefit: 'About 22 hours on a typical day, so it easily lasts from morning to bedtime',
+      introduced: 'eon', sources: ['eSphereDatasheet'],
+      old: {},
+      new: { eonSphere: ALL },
+    },
+  ];
+
+  window.HC_FEATURES = { features, platformOrder: ['quest', 'venture', 'belong', 'marvel', 'paradise', 'lumity', 'infinio', 'eon'] };
+})();
+</script>
+  <script>
+// Researched baseline for the customer's CURRENT (older) Phonak hearing aids.
+//
+// Each fact is { text, status, source }:
+//   status 'verified' - stated in a manufacturer release/document or trade-press launch report
+//   status 'check'    - secondary source, carried over from another platform, or sources conflict
+//   status 'unknown'  - nothing found; the UI shows the "not found in public archives" wording
+//
+// Merge order for a chosen aid: platform -> platform.levelFacts[level] -> model.
+// Technology levels: 90 Premium, 70 Advanced, 50 Standard, 30 Essential. The
+// model's `tmpl` builds its level name, e.g. 'Phonak Audéo Q{L}' -> 'Phonak Audéo Q90'.
+(function () {
+  const v = (text, source) => ({ text, status: 'verified', source });
+  const c = (text, source) => ({ text, status: 'check', source });
+  const u = () => ({ text: null, status: 'unknown', source: null });
+  const ch = (n, source, status = 'verified') => ({ text: `${n} channels`, status, source });
+
+  const LEVEL_NAMES = { 90: 'Premium', 70: 'Advanced', 50: 'Standard', 30: 'Essential' };
+
+  const platforms = {
+    quest: {
+      name: 'Quest',
+      prefix: 'Q',
+      launched: 2012,
+      chip: v('Quest chip, an upgraded version of the older SPICE-generation processor', 'questSpecs'),
+      adapt: c('SoundFlow: switches between a small set of fixed programmes. AutoSense OS did not exist until 2014', 'quest'),
+      speech: v('Binaural VoiceStream Technology™ directional microphones (auto StereoZoom, UltraZoom). Phonak claimed up to 45% better speech intelligibility with auto StereoZoom (premium levels)', 'quest'),
+      speechShort: v('Directional microphones that "zoom" to the front (StereoZoom/UltraZoom)', 'quest'),
+      wind: v('Speech in Wind and Enhanced WindBlock: cuts low-frequency wind rumble (Phonak claimed up to 28% better speech understanding in wind)', 'wind'),
+      feedback: v('WhistleBlock feedback canceller', 'quest'),
+      app: c('Buttons on the aid, a separate remote or the ComPilot streamer. The aids cannot connect to a smartphone directly', 'compilot'),
+      streaming: v('Only through a ComPilot streamer worn around the neck, with a TV Link base station for TV', 'compilot'),
+      calls: v('Only through the neck-worn ComPilot streamer', 'compilot'),
+      connectShort: v('No Bluetooth in the aid: needs a neck-worn ComPilot streamer', 'compilot'),
+      battery: v('Disposable zinc-air batteries. Rechargeable lithium-ion aids did not arrive until 2016', 'belong'),
+      batteryShort: v('Disposable batteries, changed every few days', 'belong'),
+      rechargeable: false,
+      size: u(),
+      levelFacts: {
+        90: {
+          adapt: v('SoundFlow: automatic switching between 5 programmes. AutoSense OS did not exist until 2014', 'questLevels'),
+          speech: v('auto StereoZoom (switches on in loud noise) and auto ZoomControl, using Binaural VoiceStream Technology™. Phonak claimed up to 45% better speech intelligibility', 'questLevels'),
+          speechShort: v('auto StereoZoom: microphones "zoom" to the front in loud noise', 'questLevels'),
+          wind: v('Speech in Wind and WindBlock (Phonak claimed up to 28% better understanding in wind)', 'questLevels'),
+          channels: ch(20, 'questLevels'),
+        },
+        70: {
+          adapt: v('SoundFlow: automatic switching between 3 programmes', 'questLevels'),
+          speech: v('StereoZoom and ZoomControl, but not the automatic versions (no auto StereoZoom)', 'questLevels'),
+          speechShort: v('StereoZoom directional microphones, without the automatic version', 'questLevels'),
+          wind: v('WindBlock only (no Speech in Wind)', 'questLevels'),
+          channels: ch(16, 'questLevels'),
+        },
+        50: {
+          adapt: v('SoundFlow: automatic switching between just 2 programmes', 'questLevels'),
+          speech: v('Basic directional microphones only. No StereoZoom, ZoomControl or SNR-Boost at this level', 'questLevels'),
+          speechShort: v('Basic directional microphones (no StereoZoom at Q50)', 'questLevels'),
+          wind: v('No automatic wind-noise reduction at this level (WindBlock was Q70/Q90 only)', 'questLevels'),
+          channels: ch(12, 'questLevels'),
+        },
+        30: {
+          adapt: v('Everyday automatic settings only: no SoundFlow programme switching', 'questLevels'),
+          speech: v('Basic directional microphones only. No StereoZoom or ZoomControl', 'questLevels'),
+          speechShort: v('Basic directional microphones (no StereoZoom at Q30)', 'questLevels'),
+          wind: v('No automatic wind-noise reduction at this level', 'questLevels'),
+          channels: ch(8, 'questLevels'),
+        },
+      },
+    },
+    venture: {
+      name: 'Venture',
+      prefix: 'V',
+      launched: 2014,
+      chip: v('Dual-core chip: twice the processing power of Quest, up to 30% less battery drain', 'venture'),
+      adapt: v('AutoSense OS (first version): blends features automatically from 200+ settings', 'venture'),
+      speech: c('Binaural VoiceStream™ directional microphones (StereoZoom/UltraZoom) carried over from Quest', 'venture'),
+      speechShort: c('Directional microphones that "zoom" to the front', 'venture'),
+      wind: c('WindBlock / Speech in Wind (Quest-era wind features; Venture version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (carried across Phonak platforms; Venture version not confirmed)', 'quest'),
+      app: c('Buttons, a remote or the ComPilot II streamer. No direct smartphone connection', 'compilot'),
+      streaming: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      calls: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      connectShort: v('No Bluetooth in the aid: needs a neck-worn ComPilot II streamer', 'compilot'),
+      battery: v('Disposable zinc-air batteries (Audéo V: size 10, 312 or 13)', 'venture'),
+      batteryShort: v('Disposable batteries, changed every few days', 'venture'),
+      rechargeable: false,
+      size: u(),
+      levelFacts: {
+        90: {
+          speech: v('Speech in Loud Noise (formerly StereoZoom) switches on automatically, using Binaural VoiceStream™. Music programme is V90-only', 'ventureLevels'),
+          speechShort: v('Automatic Speech in Loud Noise (the "zoom" microphones)', 'ventureLevels'),
+          channels: ch(20, 'ventureLevels', 'check'),
+        },
+        70: {
+          speech: v('Speech in Loud Noise switches on automatically, using Binaural VoiceStream™', 'ventureLevels'),
+          speechShort: v('Automatic Speech in Loud Noise (the "zoom" microphones)', 'ventureLevels'),
+          channels: ch(16, 'ventureLevels', 'check'),
+        },
+        50: {
+          speech: c('Binaural VoiceStream™ present, but Speech in Loud Noise is not automatic at V50 (manual programme at most)', 'ventureLevels'),
+          speechShort: c('Directional microphones; no automatic loud-noise focus', 'ventureLevels'),
+          channels: ch(12, 'ventureLevels', 'check'),
+        },
+        30: {
+          speech: v('No Binaural VoiceStream™ at V30: the two aids cannot share sound to focus on speech', 'ventureLevels'),
+          speechShort: v('Basic directional microphones; the two aids work independently', 'ventureLevels'),
+          channels: ch(8, 'ventureLevels', 'check'),
+        },
+      },
+    },
+    belong: {
+      name: 'Belong',
+      prefix: 'B',
+      launched: 2016,
+      chip: u(),
+      adapt: v('AutoSense OS (enhanced) with adaptive SoundRecover2', 'belong'),
+      speech: v('Automatic AutoSense OS programmes. Phonak claimed up to 60% better understanding in noise from automatic programme selection', 'belong'),
+      speechShort: v('Automatic programme switching plus directional microphones', 'belong'),
+      wind: c('WindBlock (Belong version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Belong version not confirmed)', 'quest'),
+      app: c('Buttons, a remote or the ComPilot II streamer. No direct smartphone app connection', 'compilot'),
+      streaming: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      calls: v('Only through the neck-worn ComPilot II streamer', 'compilot'),
+      connectShort: v('No direct Bluetooth: needs a neck-worn ComPilot II streamer', 'compilot'),
+      battery: c('Disposable zinc-air batteries on most models', 'belong'),
+      batteryShort: c('Disposable batteries on most models', 'belong'),
+      rechargeable: false,
+      size: u(),
+      levelFacts: {
+        90: {
+          speech: v('Speech in Loud Noise, Speech in 360° and Speech in Wind (the full Belong premium set)', 'belongLevels'),
+          speechShort: v('Speech in Loud Noise and Speech in 360° programmes', 'belongLevels'),
+          channels: ch(20, 'belongLevels', 'check'),
+        },
+        70: {
+          speech: v('Speech in Loud Noise and Speech in 360°. No Speech in Wind', 'belongLevels'),
+          speechShort: v('Speech in Loud Noise and Speech in 360° programmes', 'belongLevels'),
+          channels: ch(16, 'belongLevels', 'check'),
+        },
+        50: {
+          speech: v('Automatic programmes without Speech in 360° or Speech in Wind', 'belongLevels'),
+          speechShort: v('Automatic programmes; no Speech in 360°', 'belongLevels'),
+          channels: ch(12, 'belongLevels', 'check'),
+        },
+        30: {
+          speech: v('Essential automatic programmes only. No Speech in 360° or Speech in Wind', 'belongLevels'),
+          speechShort: v('Essential automatic programmes only', 'belongLevels'),
+          channels: ch(8, 'belongLevels', 'check'),
+        },
+      },
+    },
+    marvel: {
+      name: 'Marvel',
+      prefix: 'M',
+      launched: 2018,
+      chip: v('SWORD chip (third generation)', 'marvel'),
+      adapt: v('AutoSense OS 3.0: the first version that also recognises streamed audio', 'marvel'),
+      speech: v('AutoSense OS 3.0 programmes with directional microphones. Phonak claimed 60% better speech understanding in noise', 'marvel'),
+      speechShort: v('Automatic programmes plus directional microphones', 'marvel'),
+      wind: c('WindBlock (Marvel version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Marvel version not confirmed)', 'quest'),
+      app: v('myPhonak app (2019) with Remote Support video adjustments', 'marvel'),
+      streaming: v('Direct stereo Bluetooth streaming from iPhone, Android and other devices', 'marvel'),
+      calls: v('Hands-free calls heard in both ears', 'marvel'),
+      connectShort: v('Bluetooth Classic streaming and hands-free calls', 'marvel'),
+      battery: c('Disposable or rechargeable, depending on model', 'marvel'),
+      batteryShort: c('Disposable or rechargeable, depending on model', 'marvel'),
+      rechargeable: null,
+      size: u(),
+      levelFacts: {
+        90: {
+          speech: v('Automatic Speech in Loud Noise, Speech in 360°, Speech in Car and EchoBlock', 'marvelLevels'),
+          speechShort: v('Automatic Speech in Loud Noise and Speech in 360°', 'marvelLevels'),
+          wind: v('WindBlock', 'marvelLevels'),
+          channels: ch(20, 'marvelLevels'),
+        },
+        70: {
+          speech: v('Speech in 360° and Comfort in Noise. Speech in Loud Noise is not automatic at M70 (manual programme only)', 'marvelLevels'),
+          speechShort: v('Speech in 360°; loud-noise focus only as a manual programme', 'marvelLevels'),
+          wind: v('WindBlock', 'marvelLevels'),
+          channels: ch(16, 'marvelLevels'),
+        },
+        50: {
+          speech: v('Comfort in Noise only. No Speech in 360° or automatic Speech in Loud Noise', 'marvelLevels'),
+          speechShort: v('Basic automatic programmes; no Speech in 360°', 'marvelLevels'),
+          wind: v('No WindBlock at this level (M70/M90 only)', 'marvelLevels'),
+          channels: ch(12, 'marvelLevels'),
+        },
+        30: {
+          speech: v('Essential automatic programmes only. No Speech in 360° or Speech in Loud Noise', 'marvelLevels'),
+          speechShort: v('Essential automatic programmes only', 'marvelLevels'),
+          wind: v('No WindBlock at this level (M70/M90 only)', 'marvelLevels'),
+          channels: ch(8, 'marvelLevels'),
+        },
+      },
+    },
+    paradise: {
+      name: 'Paradise',
+      prefix: 'P',
+      launched: 2020,
+      chip: v('PRISM chip: more processing power and twice the memory of Marvel', 'paradise'),
+      adapt: v('AutoSense OS 4.0', 'paradise'),
+      speech: v('Speech Enhancer, Dynamic Noise Cancellation and Motion Sensor Hearing (higher technology levels)', 'paradise'),
+      speechShort: v('Automatic programmes, noise cancellation on higher levels', 'paradise'),
+      wind: c('WindBlock (Paradise version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Paradise version not confirmed)', 'quest'),
+      app: v('myPhonak app plus Tap Control (double-tap the ear)', 'paradise'),
+      streaming: v('Direct Bluetooth: 2 active connections, up to 8 paired devices', 'paradise'),
+      calls: v('Hands-free calls; tap to answer', 'paradise'),
+      connectShort: v('Bluetooth Classic streaming and hands-free calls', 'paradise'),
+      battery: c('Disposable or rechargeable, depending on model', 'paradise'),
+      batteryShort: c('Disposable or rechargeable, depending on model', 'paradise'),
+      rechargeable: null,
+      size: u(),
+      levelFacts: {
+        90: {
+          speech: c('Speech Enhancer and Dynamic Noise Cancellation (P90 only), plus Speech in Loud Noise', 'paradiseLevels'),
+          speechShort: c('Noise cancellation and Speech Enhancer (P90 only)', 'paradiseLevels'),
+          channels: ch(20, 'paradiseLevels', 'check'),
+        },
+        70: {
+          speech: c('Tap Control and Motion Sensor, but no Speech Enhancer or Dynamic Noise Cancellation', 'paradiseLevels'),
+          speechShort: c('Automatic programmes; no Dynamic Noise Cancellation at P70', 'paradiseLevels'),
+          app: c('myPhonak app plus Tap Control', 'paradiseLevels'),
+          channels: c('16 or 20 channels (sources conflict)', 'paradiseLevels'),
+        },
+        50: {
+          speech: c('Standard automatic programmes. No Speech Enhancer, Dynamic Noise Cancellation or Speech in 360°', 'paradiseLevels'),
+          speechShort: c('Standard automatic programmes only', 'paradiseLevels'),
+          app: c('myPhonak app (no Tap Control at P50)', 'paradiseLevels'),
+          channels: ch(16, 'paradiseLevels', 'check'),
+        },
+        30: {
+          speech: c('Essential automatic programmes only', 'paradiseLevels'),
+          speechShort: c('Essential automatic programmes only', 'paradiseLevels'),
+          app: c('myPhonak app (no Tap Control at P30)', 'paradiseLevels'),
+          channels: ch(12, 'paradiseLevels', 'check'),
+        },
+      },
+    },
+    lumity: {
+      name: 'Lumity',
+      prefix: 'L',
+      launched: 2022,
+      chip: c('PRISM chip (retailer-cited)', 'lumityRetail'),
+      adapt: v('AutoSense OS 5.0: analyses surroundings 700 times per second', 'lumity'),
+      speech: v('StereoZoom 2.0 (Phonak: +16% speech understanding in loud noise vs StereoZoom) and SpeechSensor (+15% from the side and behind), on higher levels', 'lumity'),
+      speechShort: v('Directional microphones with SpeechSensor (higher levels)', 'lumity'),
+      wind: c('WindBlock (Lumity version not confirmed)', 'wind'),
+      feedback: c('WhistleBlock (Lumity version not confirmed)', 'quest'),
+      app: c('myPhonak app', 'lumity'),
+      streaming: c('Direct Bluetooth streaming', 'lumity'),
+      calls: c('Hands-free calls', 'lumity'),
+      connectShort: c('Bluetooth Classic streaming and hands-free calls', 'lumity'),
+      battery: c('Disposable or rechargeable, depending on model', 'lumityRetail'),
+      batteryShort: c('Disposable or rechargeable, depending on model', 'lumityRetail'),
+      rechargeable: null,
+      size: u(),
+      levelFacts: {
+        90: { speechShort: c('StereoZoom 2.0 and SpeechSensor (premium level)', 'lumity'), channels: ch(20, 'lumityLevels') },
+        70: { speechShort: c('Advanced directional processing (exact L70 feature set not confirmed)', 'lumity'), channels: ch(20, 'lumityLevels') },
+        50: { speech: c('Standard automatic programmes for quieter lifestyles (exact L50 feature set not confirmed)', 'lumity'),
+              speechShort: c('Standard automatic programmes', 'lumity'), channels: ch(16, 'lumityLevels') },
+        30: { speech: c('Essential automatic programmes for quieter lifestyles (exact L30 feature set not confirmed)', 'lumity'),
+              speechShort: c('Essential automatic programmes', 'lumity'), channels: ch(12, 'lumityLevels') },
+      },
+    },
+    infinio: {
+      name: 'Infinio',
+      prefix: 'I',
+      launched: 2024,
+      chip: v('ERA chip (all Infinio models)', 'infinio'),
+      adapt: c('AutoSense OS 6.0 (7.0 after the 2025 "Ultra" firmware update on Sphere)', 'infinio'),
+      speech: v('SmartSpeech with StereoZoom 2.0 and SpeechSensor. Phonak claims 16% better speech understanding and 45% less listening effort', 'infinio'),
+      speechShort: v('Directional microphones with SpeechSensor (higher levels)', 'infinio'),
+      wind: v('WindBlock (first generation)', 'phonakMatrices'),
+      feedback: v('WhistleBlock', 'phonakMatrices'),
+      app: c('myPhonak app', 'infinio'),
+      streaming: v('Universal Bluetooth via the ERA chip. Auracast is promised by a future firmware update', 'infinio'),
+      calls: v('Hands-free calls from smartphones', 'infinio'),
+      connectShort: v('Universal Bluetooth, Auracast only after a future update', 'eonLaunch'),
+      battery: c('Rechargeable on most models', 'infinio'),
+      batteryShort: c('Rechargeable', 'infinio'),
+      rechargeable: true,
+      size: u(),
+      levelFacts: {
+        90: { speech: c('Speech Enhancer, Dynamic Noise Cancellation and StereoZoom 2.0', 'infinioLevels'),
+              speechShort: c('Noise cancellation, StereoZoom 2.0 and Speech Enhancer', 'infinioLevels'), channels: ch(20, 'infinioLevels') },
+        70: { speech: c('Dynamic Noise Cancellation and StereoZoom 2.0 (no Speech Enhancer)', 'infinioLevels'),
+              speechShort: c('Noise cancellation and StereoZoom 2.0', 'infinioLevels'), channels: ch(20, 'infinioLevels') },
+        50: { speech: c('Standard automatic programmes. No Dynamic Noise Cancellation or StereoZoom 2.0', 'infinioLevels'),
+              speechShort: c('Standard automatic programmes only', 'infinioLevels'), channels: ch(16, 'infinioLevels') },
+        30: { speech: c('Essential automatic programmes. No Dynamic Noise Cancellation or StereoZoom 2.0', 'infinioLevels'),
+              speechShort: c('Essential automatic programmes only', 'infinioLevels'), channels: ch(12, 'infinioLevels') },
+      },
+    },
+  };
+
+  // style: RIC (receiver-in-canal), BTE (behind-the-ear), Custom (in-the-ear)
+  // levels: defaults to [90, 70, 50, 30]; tmpl: name with the level filled in.
+  const models = [
+    { id: 'audeo_q', name: 'Phonak Audéo Q', tmpl: 'Phonak Audéo Q{L}', platform: 'quest', style: 'RIC', launched: 2013,
+      battery: v('Disposable zinc-air batteries (size 10 or 312)', 'questSpecs') },
+    { id: 'bolero_q', name: 'Phonak Bolero Q', tmpl: 'Phonak Bolero Q{L}', platform: 'quest', style: 'BTE', launched: 2012 },
+    { id: 'virto_q', name: 'Phonak Virto Q', tmpl: 'Phonak Virto Q{L}', platform: 'quest', style: 'Custom', launched: 2012 },
+    { id: 'naida_q', name: 'Phonak Naída Q', tmpl: 'Phonak Naída Q{L}', platform: 'quest', style: 'BTE', launched: 2013 },
+
+    { id: 'audeo_v', name: 'Phonak Audéo V', tmpl: 'Phonak Audéo V{L}', platform: 'venture', style: 'RIC', launched: 2014 },
+    { id: 'bolero_v', name: 'Phonak Bolero V', tmpl: 'Phonak Bolero V{L}', platform: 'venture', style: 'BTE' },
+    { id: 'virto_v', name: 'Phonak Virto V', tmpl: 'Phonak Virto V{L}', platform: 'venture', style: 'Custom' },
+    { id: 'naida_v', name: 'Phonak Naída V', tmpl: 'Phonak Naída V{L}', platform: 'venture', style: 'BTE' },
+
+    { id: 'audeo_b', name: 'Phonak Audéo B', tmpl: 'Phonak Audéo B{L}', platform: 'belong', style: 'RIC', launched: 2016 },
+    { id: 'audeo_br', name: 'Phonak Audéo B-R (rechargeable)', tmpl: 'Phonak Audéo B{L}-R', platform: 'belong', style: 'RIC', launched: 2016,
+      battery: v('Built-in lithium-ion rechargeable, the first of its kind (2016): 24 hours per charge', 'belong'),
+      batteryShort: v('First-generation lithium-ion rechargeable', 'belong'), rechargeable: true },
+    { id: 'audeo_bdirect', name: 'Phonak Audéo B-Direct', tmpl: 'Phonak Audéo B{L}-Direct', platform: 'belong', style: 'RIC', launched: 2017,
+      chip: v('SWORD radio chip (Bluetooth Classic)', 'bDirect'),
+      calls: v('Direct hands-free calls from almost any Bluetooth phone, but no music or media streaming from the phone', 'bDirect'),
+      streaming: v('No phone media streaming. TV only through a separate TV Connector', 'bDirect'),
+      connectShort: v('Phone calls only: no music or media streaming', 'bDirect') },
+    { id: 'bolero_b', name: 'Phonak Bolero B', tmpl: 'Phonak Bolero B{L}', platform: 'belong', style: 'BTE' },
+    { id: 'bolero_bpr', name: 'Phonak Bolero B-PR (rechargeable)', tmpl: 'Phonak Bolero B{L}-PR', platform: 'belong', style: 'BTE',
+      battery: v('Lithium-ion rechargeable (runtime not confirmed)', 'belong'),
+      batteryShort: v('First-generation lithium-ion rechargeable', 'belong'), rechargeable: true },
+    { id: 'virto_b', name: 'Phonak Virto B', tmpl: 'Phonak Virto B{L}', platform: 'belong', style: 'Custom' },
+    { id: 'naida_b', name: 'Phonak Naída B', tmpl: 'Phonak Naída B{L}', platform: 'belong', style: 'BTE' },
+
+    { id: 'audeo_m', name: 'Phonak Audéo M (Marvel)', tmpl: 'Phonak Audéo M{L} (Marvel)', platform: 'marvel', style: 'RIC', launched: 2018 },
+    { id: 'audeo_mr', name: 'Phonak Audéo M-R (Marvel, rechargeable)', tmpl: 'Phonak Audéo M{L}-R (Marvel)', platform: 'marvel', style: 'RIC', launched: 2018,
+      battery: v('Lithium-ion rechargeable: 24 h per charge, or 16 h including 8 h of streaming', 'marvel'),
+      batteryShort: v('Rechargeable, up to 24 h', 'marvel'), rechargeable: true },
+    { id: 'bolero_m', name: 'Phonak Bolero M (Marvel)', tmpl: 'Phonak Bolero M{L} (Marvel)', platform: 'marvel', style: 'BTE' },
+    { id: 'virto_m', name: 'Phonak Virto M (Marvel)', tmpl: 'Phonak Virto M{L} (Marvel)', platform: 'marvel', style: 'Custom' },
+    { id: 'naida_m', name: 'Phonak Naída M (Marvel)', tmpl: 'Phonak Naída M{L} (Marvel)', platform: 'marvel', style: 'BTE' },
+
+    { id: 'audeo_p', name: 'Phonak Audéo P (Paradise)', tmpl: 'Phonak Audéo P{L} (Paradise)', platform: 'paradise', style: 'RIC', launched: 2020 },
+    { id: 'audeo_pr', name: 'Phonak Audéo P-R (Paradise, rechargeable)', tmpl: 'Phonak Audéo P{L}-R (Paradise)', platform: 'paradise', style: 'RIC', launched: 2020,
+      battery: c('Lithium-ion rechargeable. About 24 h per charge is the advertised figure users cite (official sheet not found)', 'paradiseBattery'),
+      batteryShort: c('Rechargeable, about 24 h', 'paradiseBattery'), rechargeable: true },
+    { id: 'virto_p', name: 'Phonak Virto P (Paradise)', tmpl: 'Phonak Virto P{L} (Paradise)', platform: 'paradise', style: 'Custom' },
+    { id: 'naida_p', name: 'Phonak Naída P (Paradise)', tmpl: 'Phonak Naída P{L} (Paradise)', platform: 'paradise', style: 'BTE' },
+
+    { id: 'audeo_l', name: 'Phonak Audéo L (Lumity)', tmpl: 'Phonak Audéo L{L} (Lumity)', platform: 'lumity', style: 'RIC', launched: 2022 },
+    { id: 'audeo_lr', name: 'Phonak Audéo L-R (Lumity, rechargeable)', tmpl: 'Phonak Audéo L{L}-R (Lumity)', platform: 'lumity', style: 'RIC', launched: 2022,
+      battery: c('Lithium-ion rechargeable. Retailers cite about 24 h per charge', 'lumityRetail'),
+      batteryShort: c('Rechargeable, about 24 h', 'lumityRetail'), rechargeable: true },
+    { id: 'naida_l_old', name: 'Phonak Naída L (Lumity)', tmpl: 'Phonak Naída L{L} (Lumity)', platform: 'lumity', style: 'BTE' },
+
+    { id: 'audeo_i', name: 'Phonak Audéo I (Infinio)', tmpl: 'Phonak Audéo I{L} (Infinio)', platform: 'infinio', style: 'RIC', launched: 2024 },
+    { id: 'audeo_sphere_i', name: 'Phonak Audéo Sphere Infinio', tmpl: 'Phonak Audéo Sphere I{L} (Infinio)', platform: 'infinio', style: 'RIC', launched: 2024,
+      levels: [90, 70],
+      chip: v('ERA chip plus DEEPSONIC AI chip (first-generation real-time AI denoising)', 'infinio'),
+      speech: v('Spheric Speech Clarity (DEEPSONIC AI). Phonak claims a 10 dB signal-to-noise benefit in Sphere mode', 'infinio'),
+      speechShort: v('First-generation AI speech-from-noise separation', 'infinio'),
+      battery: c('Rechargeable. Independent reviews report about 10–11 h when Sphere mode is in use (sources conflict)', 'infinio'),
+      batteryShort: c('Rechargeable; shorter day when AI Sphere mode is on', 'infinio'),
+      size: v('Previous-generation Sphere housing (EON Sphere is 25% smaller and 20% lighter)', 'eonLaunch'),
+      levelFacts: {
+        90: { speechShort: c('First-generation AI speech separation at full strength', 'infinioLevels') },
+        70: { speechShort: c('First-generation AI speech separation at medium strength', 'infinioLevels') },
+      } },
+    { id: 'virto_i_old', name: 'Phonak Virto I (Infinio)', tmpl: 'Phonak Virto I{L} (Infinio)', platform: 'infinio', style: 'Custom',
+      battery: c('Rechargeable or disposable, depending on version', 'infinio'),
+      batteryShort: c('Rechargeable or disposable, depending on version', 'infinio'), rechargeable: null },
+  ];
+
+  window.HC_LEGACY = { platforms, models, levelNames: LEVEL_NAMES };
+})();
+</script>
+  <script>
+/* Copied unchanged from the Hearingcare Price & Plan tool (source/dist/pricing.js, offline release v23).
+   Do not edit here: update it in the pricing tool and copy it across, so both tools quote identically. */
+/* Pure pricing rules. No DOM, storage, network or patient information. */
+(function (root) {
+  'use strict';
+  const TERMS = Object.freeze([12, 24, 36, 48]);
+  const SINGLE_FACTOR = 0.699450507240;
+  const PLANS = Object.freeze({
+    none: { name: 'No plan', accessory: 'No accessory', cost: 0 },
+    home: { name: 'Hear at Home', accessory: 'TV Connector', cost: 142.50 },
+    together: { name: 'Hear Together', accessory: 'Partner Mic', cost: 247.91 },
+    everywhere: { name: 'Hear Everywhere', accessory: 'Roger On', cost: 1000 }
+  });
+  Object.values(PLANS).forEach(Object.freeze);
+  const DISCOUNTS = Object.freeze({
+    none: { name: 'No additional discount', rate: 0, rule: 'all' },
+    blue: { name: 'Blue Light Card', rate: 0.15, rule: 'premium' },
+    dds: { name: 'DDS', rate: 0.15, rule: 'premium' },
+    staff: { name: 'Boots staff', rate: 0.25, rule: 'all' },
+    friends: { name: 'Boots staff friends and family', rate: 0.20, rule: 'all' },
+    opticians: { name: 'Opticians customer', rate: 0.10, rule: 'gold' }
+  });
+  Object.values(DISCOUNTS).forEach(Object.freeze);
+  const round = value => Math.round((value + Number.EPSILON) * 100) / 100;
+  // Round down so a penny-rounded deposit never exceeds the configured cap.
+  const maxDeposit = total => Math.floor(total * 0.495798319328 * 100) / 100;
+  const normal = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  function requireValue(condition, message) { if (!condition) throw new Error(message); }
+  function isMoney(value) { return Number.isFinite(value) && value >= 0 && value < 1000000; }
+  function create(input) {
+    requireValue(input && Array.isArray(input.aids) && input.aids.length && input.breakdown, 'Price catalogue is unavailable.');
+    const data = JSON.parse(JSON.stringify(input));
+    const byId = new Map();
+    for (const aid of data.aids) {
+      requireValue(aid && typeof aid.id === 'string' && !byId.has(aid.id), 'Invalid or duplicate aid ID.');
+      requireValue(['name', 'family', 'tier'].every(key => typeof aid[key] === 'string' && aid[key].length), 'Missing aid description.');
+      requireValue(isMoney(aid.price) && typeof aid.eligible === 'boolean' && typeof aid.starkey === 'boolean', 'Invalid aid pricing rules.');
+      requireValue(aid.priceSource === undefined || aid.priceSource === 'owner', 'Invalid price source.');
+      requireValue(aid.planEligible === undefined || typeof aid.planEligible === 'boolean', 'Invalid plan eligibility.');
+      requireValue(aid.pairOnly === undefined || typeof aid.pairOnly === 'boolean', 'Invalid pair-only rule.');
+      if (aid.pairOnly) requireValue(aid.priceSource === 'owner' && aid.price > 0 && aid.singlePrice === undefined, 'Pair-only systems require a supplied pair price and no single price.');
+      if (aid.priceSource === 'owner' && !aid.pairOnly) requireValue(isMoney(aid.singlePrice) && aid.singlePrice > 0 && aid.price > 0, 'Missing or invalid supplied single-aid price.');
+      byId.set(aid.id, Object.freeze(aid));
+    }
+    for (const aid of data.aids.filter(item => item.priceSource !== 'owner')) for (const customer of ['0', '1']) for (const plan of ['home', 'together', 'everywhere']) {
+      const row = data.breakdown[`${aid.id}|${customer}|${plan}`];
+      requireValue(row && ['total', 'deposit', 'balance'].every(key => isMoney(row[key])), 'Missing or invalid PDF price row.');
+      const expectedTotal = round(aid.price * (customer === '1' ? 0.9 : 1) + (aid.starkey ? 0 : PLANS[plan].cost));
+      requireValue(row.total === expectedTotal && row.deposit === round(row.total * 0.1), 'PDF cash price or deposit conflicts with catalogue rules.');
+      requireValue(round(row.deposit + row.balance) === row.total, 'PDF deposit and balance do not reconcile.');
+      requireValue(Array.isArray(row.monthly) && Array.isArray(row.totals) && row.monthly.length === 4 && row.totals.length === 4, 'Invalid payment terms.');
+      TERMS.forEach((months, index) => {
+        if (!aid.eligible && index === 0) {
+          requireValue(row.monthly[index] === null && row.totals[index] === null, 'Unexpected Essentials finance eligibility.');
+        } else {
+          requireValue(isMoney(row.monthly[index]) && isMoney(row.totals[index]) && row.totals[index] >= row.total, 'Invalid monthly payment.');
+          if (index > 0) {
+            const rate = Math.pow(1.099, 1 / 12) - 1;
+            const expectedPayment = row.balance * rate / (1 - Math.pow(1 + rate, -months));
+            requireValue(Math.abs(row.monthly[index] - expectedPayment) <= 0.005001, 'PDF repayment conflicts with the stated APR method.');
+          }
+          if (index === 0) requireValue(Math.abs(row.monthly[index] - row.balance / months) <= 0.005001, 'Invalid interest-free monthly instalment.');
+          requireValue(index === 0 ? row.totals[index] === row.total : round(row.deposit + row.monthly[index] * months) === row.totals[index], 'PDF repayments do not reconcile.');
+        }
+      });
+    }
+    function validate(aidId, customer, plan, fitting) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      requireValue(['0', '1'].includes(customer), 'Choose a valid customer price.');
+      requireValue(Object.prototype.hasOwnProperty.call(PLANS, plan), 'Choose a valid listening plan.');
+      requireValue(['pair', 'single'].includes(fitting), 'Choose pair or single fitting.');
+      const aid = byId.get(aidId);
+      requireValue(!aid.pairOnly || fitting === 'pair', 'CROS systems are available as a pair only in this catalogue.');
+      requireValue(plan === 'none' || planEligible(aidId), 'Listening plans are not available for this hearing aid.');
+      return aid;
+    }
+    function planEligible(aidId) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      const aid = byId.get(aidId);
+      return !aid.starkey && aid.planEligible !== false;
+    }
+    function warrantyYears(aidId) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      return /^Essentials/i.test(byId.get(aidId).tier) ? 2 : 4;
+    }
+    function discountEligible(aidId, discount) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      requireValue(Object.prototype.hasOwnProperty.call(DISCOUNTS, discount), 'Choose one valid discount.');
+      const aid = byId.get(aidId);
+      const rule = DISCOUNTS[discount].rule;
+      return rule === 'all' || (rule === 'premium' ? ['Bronze', 'Silver', 'Gold', 'Platinum', 'Platinum +', 'Platinum Plus'].includes(aid.tier) : ['Gold', 'Platinum', 'Platinum +', 'Platinum Plus'].includes(aid.tier));
+    }
+    function discountDetails(aidId, customer, discount) {
+      requireValue(discountEligible(aidId, discount), 'This discount is not available for the selected hearing aid.');
+      requireValue(customer !== '1' || discount === 'none', 'Existing customer discount cannot be combined with another discount.');
+      return customer === '1' ? { name: 'Existing customer', rate: 0.10 } : DISCOUNTS[discount];
+    }
+    function aidPrice(aidId, customer, fitting = 'pair', discount = 'none') {
+      const aid = validate(aidId, customer, 'none', fitting);
+      const benefit = discountDetails(aidId, customer, discount);
+      // Explicit business convention: round full single price, then apply discount.
+      const base = fitting === 'single' ? (aid.priceSource === 'owner' ? aid.singlePrice : Math.round(aid.price * SINGLE_FACTOR / 5) * 5) : aid.price;
+      return round(base * (1 - benefit.rate));
+    }
+    function optionalInsuranceEligible(aidId, plan) {
+      requireValue(byId.has(aidId), 'Choose a listed hearing aid.');
+      if (plan === 'none') return true;
+      return planEligible(aidId) && ['home', 'together', 'everywhere'].includes(plan)
+        && ['b1312', 'b1r', 'b3r', 's3r', 'custom_b1_312', 'custom_b3_312'].includes(aidId);
+    }
+    function insurance(aidId, plan, fitting = 'pair', purchaseInsurance = false) {
+      const aid = validate(aidId, '0', plan, fitting);
+      requireValue(typeof purchaseInsurance === 'boolean' && (!purchaseInsurance || optionalInsuranceEligible(aidId, plan)), 'Optional purchase insurance is not available for this selection.');
+      if (purchaseInsurance) return { status: 'Added', reason: `Optional purchase insurance added for ${fitting === 'single' ? 'one hearing aid at £99' : 'two hearing aids at £198'}. Confirm policy duration, excess and exclusions. This premium is not discounted.` };
+      if (plan === 'none') return { status: 'Not included', reason: 'No listening plan selected. Monthly finance alone does not include insurance.' };
+      if (['s5r', 's7r', 's9r'].includes(aid.id)) return { status: 'Included', reason: 'Included with this plan under your AudioNova S5-and-upwards rule, for pair or single fittings.' };
+      if (aid.family.startsWith('Phonak ')) return { status: 'Included', reason: 'Insurance is included with every Phonak model when a listening plan is selected, for pair or single fittings.' };
+      if (['custom_b5_312', 'custom_b7_312'].includes(aid.id)) return { status: 'Included', reason: 'Insurance is included with AudioNova Custom B5/B7 when purchased with an eligible listening plan, for pair or single fittings.' };
+      return { status: 'Not included', reason: 'Insurance is not included with this plan. You can add optional purchase insurance at the displayed price.' };
+    }
+    function quote(aidId, customer, plan, fitting = 'pair', purchaseInsurance = false, discount = 'none', depositOverride = null) {
+      const aid = validate(aidId, customer, plan, fitting);
+      const benefit = discountDetails(aidId, customer, discount);
+      const netAidPrice = aidPrice(aidId, customer, fitting, discount);
+      const fullAidPrice = aidPrice(aidId, '0', fitting);
+      const cover = insurance(aidId, plan, fitting, purchaseInsurance);
+      const insurancePrice = purchaseInsurance ? (fitting === 'single' ? 99 : 198) : 0;
+      const cashTotal = round(netAidPrice + PLANS[plan].cost + insurancePrice);
+      const defaultDeposit = round(cashTotal * 0.1);
+      requireValue(depositOverride === null || (isMoney(depositOverride) && round(depositOverride) === depositOverride && depositOverride >= defaultDeposit && depositOverride <= maxDeposit(cashTotal)), 'Enter a deposit between 10% and the maximum allowed deposit, to the nearest penny.');
+      const customDeposit = depositOverride !== null && depositOverride !== defaultDeposit;
+      const exact = !customDeposit && aid.priceSource !== 'owner' && fitting === 'pair' && !purchaseInsurance && discount === 'none' ? data.breakdown[`${aidId}|${customer}|${aid.starkey ? 'home' : plan}`] : null;
+      let result;
+      if (exact) result = { ...exact, monthly: [...exact.monthly], totals: [...exact.totals], kind: 'listed' };
+      else {
+        const total = round(netAidPrice + PLANS[plan].cost + insurancePrice);
+        const deposit = depositOverride === null ? defaultDeposit : depositOverride;
+        const balance = round(total - deposit);
+        const monthlyRate = Math.pow(1.099, 1 / 12) - 1;
+        const monthly = TERMS.map((months, i) => i === 0 ? (aid.eligible ? round(balance / months) : null) : round(balance * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months))));
+        result = { total, deposit, balance, monthly, totals: monthly.map((payment, i) => payment === null ? null : i === 0 ? total : round(deposit + payment * TERMS[i])), kind: 'calculated' };
+      }
+      return { ...result, customDeposit, warrantyYears: warrantyYears(aidId), aidId, customer, plan, fitting, purchaseInsurance, insurancePrice, discount, discountName: benefit.name, discountRate: benefit.rate, discountSaving: round(fullAidPrice - netAidPrice), fullAidPrice, aidPrice: netAidPrice, accessoryPrice: PLANS[plan].cost, insurance: cover };
+    }
+    return Object.freeze({ aids: Object.freeze([...byId.values()]), plans: PLANS, planEligible, optionalInsuranceEligible, discounts: DISCOUNTS, discountEligible, aidPrice, quote, insurance, warrantyYears, normal, round, maxDeposit });
+  }
+  const api = { create, round, normal, TERMS, SINGLE_FACTOR };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.Pricing = api;
+})(typeof globalThis !== 'undefined' ? globalThis : window);
+</script>
+  <script>
+// Pure comparison logic: no DOM access, so it runs in the browser and in Node tests.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.HCCompare = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  const NOT_FOUND = 'Specification not found in public archives—please verify with manufacturer';
+  const NOT_SUPPLIED = 'Not stated in the supplied spec files—please verify with manufacturer';
+  const CURRENT_YEAR = 2026;
+  const DEFAULT_LEVELS = [90, 70, 50, 30];
+
+  function pick(...layers) {
+    const out = {};
+    for (const layer of layers) {
+      if (!layer) continue;
+      for (const [k, val] of Object.entries(layer)) if (val !== undefined) out[k] = val;
+    }
+    return out;
+  }
+
+  function oldLevels(data, id) {
+    const model = data.legacy.models.find((m) => m.id === id);
+    return model ? model.levels || DEFAULT_LEVELS : [];
+  }
+
+  function resolveOld(data, id, level) {
+    const model = data.legacy.models.find((m) => m.id === id);
+    if (!model) throw new Error(`Unknown current model: ${id}`);
+    const platform = data.legacy.platforms[model.platform];
+    const levels = model.levels || DEFAULT_LEVELS;
+    const lvl = level ? Number(level) : null;
+    if (lvl && !levels.includes(lvl)) throw new Error(`${model.name} has no level ${lvl}`);
+    const merged = pick(
+      platform,
+      lvl && (platform.levelFacts || {})[lvl],
+      model,
+      lvl && (model.levelFacts || {})[lvl],
+    );
+    delete merged.levelFacts;
+    merged.platformKey = model.platform;
+    merged.platformName = platform.name;
+    merged.prefix = platform.prefix;
+    merged.levels = levels;
+    merged.level = lvl;
+    merged.levelLabel = lvl ? `${platform.prefix}${lvl} (${data.legacy.levelNames[lvl]})` : 'Level not known';
+    merged.displayName = lvl && model.tmpl ? model.tmpl.replace('{L}', lvl) : model.name;
+    merged.launched = model.launched || platform.launched;
+    merged.launchedIsPlatform = !model.launched;
+    if (!lvl) merged.channels = channelRange(platform, levels);
+    return merged;
+  }
+
+  // "20 (Q90) down to 8 (Q30)" when the level is not known.
+  function channelRange(platform, levels) {
+    const facts = levels.map((l) => [l, ((platform.levelFacts || {})[l] || {}).channels]).filter(([, f]) => f && f.text);
+    if (!facts.length) return undefined;
+    const [hiL, hi] = facts[0];
+    const [loL, lo] = facts[facts.length - 1];
+    return { text: `${hi.text} (${platform.prefix}${hiL}) down to ${lo.text} (${platform.prefix}${loL}), depending on level`,
+      status: 'check', source: hi.source };
+  }
+
+  // ---------- type-ahead search for the current aid ----------
+  // One entry per model and level (plus "level not sure"). Every typed word must
+  // start a word of the entry, so "q90", "quest 70" or "audeo p50 r" all work.
+  const normal = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const words = (t) => normal(t).split(/[^a-z0-9]+/).filter(Boolean);
+  const searchCache = new WeakMap();
+
+  function oldEntries(data) {
+    if (searchCache.has(data.legacy)) return searchCache.get(data.legacy);
+    const out = [];
+    for (const m of data.legacy.models) {
+      const p = data.legacy.platforms[m.platform];
+      const common = [m.name, p.name, m.style, m.style === 'RIC' ? 'receiver canal' : m.style === 'BTE' ? 'behind ear' : 'in ear ite'];
+      for (const l of m.levels || DEFAULT_LEVELS) {
+        const label = m.tmpl ? m.tmpl.replace('{L}', l) : `${m.name} ${p.prefix}${l}`;
+        out.push({ id: m.id, level: l, label, sub: `${p.name} · ${data.legacy.levelNames[l]} · ${m.launched || p.launched}`, platform: p.name,
+          words: new Set(words([label, ...common, `${p.prefix}${l}`, l, data.legacy.levelNames[l]].join(' '))) });
+      }
+      out.push({ id: m.id, level: null, label: `${m.name} (level not sure)`, sub: `${p.name} · ${m.launched || p.launched}`, platform: p.name,
+        words: new Set(words([...common, 'level not sure unknown'].join(' '))) });
+    }
+    searchCache.set(data.legacy, out);
+    return out;
+  }
+
+  function searchOld(data, query, limit = 60) {
+    const q = words(query);
+    const all = oldEntries(data);
+    if (!q.length) return all.slice(0, limit);
+    return all.filter((e) => q.every((t) => [...e.words].some((w) => w.startsWith(t)))).slice(0, limit);
+  }
+
+  function resolveNew(data, pricingId) {
+    const price = data.pricing.models.find((m) => m.id === pricingId);
+    if (!price) throw new Error(`Unknown new model: ${pricingId}`);
+    const map = data.specs.models[pricingId];
+    if (!map) return { price, mapped: false, name: `${price.family} ${price.name}` };
+    const fam = data.specs.families[map.family];
+    const merged = pick(fam, (fam.levels || {})[map.level], map.variant && (fam.variants || {})[map.variant]);
+    delete merged.levels;
+    delete merged.variants;
+    if (typeof merged.channels === 'string') {
+      merged.channels = { text: `${merged.channels} channels`, status: 'verified',
+        source: /^eon|^cros/.test(map.family) ? 'eonSummary' : 'phonakMatrices' };
+    }
+    merged.price = price;
+    merged.mapped = true;
+    merged.level = map.level;
+    merged.variant = map.variant || null;
+    merged.familyKey = map.family;
+    merged.familyLevels = Object.keys(fam.levels || {}).map(Number);
+    merged.name = `${price.family} ${price.name}`;
+    return merged;
+  }
+
+  // A cell the UI can render: text plus whether it needs checking.
+  function cell(fact, side) {
+    if (!fact || fact.status === 'unknown' || !fact.text) {
+      return { text: side === 'old' ? NOT_FOUND : NOT_SUPPLIED, status: 'unknown', source: null };
+    }
+    return { text: fact.text, status: fact.status, source: fact.source };
+  }
+
+  // ---------- feature checklist ----------
+  function levelValue(spec, level) {
+    if (spec === undefined) return undefined;
+    if (typeof spec !== 'object') return spec;
+    if (level) return spec[level];
+    const vals = [...new Set(Object.values(spec))];
+    return vals.length === 1 ? vals[0] : 'depends';
+  }
+
+  function introInfo(data, key) {
+    if (key === 'eon') return { name: 'EON', year: 2026 };
+    const p = data.legacy.platforms[key];
+    return { name: p.name, year: p.launched };
+  }
+
+  function oldFeature(data, f, oldM) {
+    const order = data.features.platformOrder;
+    if (f.oldModels && f.oldModels[oldM.id] !== undefined) return state(f.oldModels[oldM.id], 'model');
+    if (order.indexOf(oldM.platformKey) < order.indexOf(f.introduced)) {
+      const intro = f.introducedAs || introInfo(data, f.introduced);
+      return { state: 'notyet', text: `Didn't exist yet: arrived ${intro.year} (${intro.name})` };
+    }
+    if (f.oldFromModel) {
+      const val = oldM[f.oldFromModel];
+      return state(val === true ? 1 : val === false ? 0 : '?', 'model');
+    }
+    const spec = (f.old || {})[oldM.platformKey];
+    const val = levelValue(spec, oldM.level);
+    if (val === 'depends') return { state: '?', text: 'Depends on technology level' };
+    return state(val === undefined ? '?' : val, typeof spec === 'object' ? 'level' : 'model', oldM);
+  }
+
+  function state(val, kind, oldM) {
+    if (val === 1) return { state: 'yes', text: 'Yes' };
+    if (val === '?') return { state: '?', text: 'Not confirmed' };
+    if (kind === 'level' && oldM && oldM.level) return { state: 'no', text: `Not at the ${oldM.prefix}${oldM.level} level` };
+    return { state: 'no', text: 'Not on this model' };
+  }
+
+  function newFeatureValue(f, familyKey, level, variant) {
+    let spec = (f.new || {})[familyKey];
+    if (spec && spec.variants) spec = variant ? spec.variants[variant] : undefined;
+    const val = levelValue(spec, level);
+    return val === undefined ? 0 : val;
+  }
+
+  // Both-way checklist. Each item has a kind:
+  //   gain        new has it, old doesn't (didn't exist yet / not at that level)
+  //   lost        old has it, new doesn't: shown to the patient, not hidden
+  //   both        both have it
+  //   unconfirmed new has it, old not confirmed: listed, but left out of the score
+  // The score only counts confirmed rows, so research gaps never count against the old aid.
+  function checklist(data, oldM, newM, concernFeatures = new Set()) {
+    const items = [];
+    const upsell = [];
+    for (const f of data.features.features) {
+      const nv = newFeatureValue(f, newM.familyKey, newM.level, newM.variant);
+      const old = oldFeature(data, f, oldM);
+      const base = { id: f.id, group: f.group, label: f.label, benefit: f.benefit, sources: f.sources, old, matters: concernFeatures.has(f.id) };
+      if (nv === 1 || nv === 'c') {
+        const kind = old.state === 'yes' ? 'both' : old.state === '?' ? 'unconfirmed' : 'gain';
+        items.push({ ...base, kind, new: { state: 'yes', text: 'Included', status: nv === 'c' ? 'check' : 'verified' } });
+      } else if (nv === 0) {
+        if (old.state === 'yes') items.push({ ...base, kind: 'lost', new: { state: 'no', text: 'Not on this model', status: 'verified' } });
+        const higher = newM.familyLevels.filter((l) => l > newM.level && newFeatureValue(f, newM.familyKey, l, newM.variant) === 1);
+        if (higher.length) upsell.push({ label: f.label, from: Math.min(...higher) });
+      }
+    }
+    const rank = { gain: 0, lost: 1, both: 2, unconfirmed: 3 };
+    items.sort((a, b) => rank[a.kind] - rank[b.kind] || Number(b.matters) - Number(a.matters));
+    const count = (kind) => items.filter((i) => i.kind === kind).length;
+    const confirmed = items.length - count('unconfirmed');
+    return {
+      items,
+      confirmed,
+      oldCount: count('both') + count('lost'),
+      newCount: count('both') + count('gain'),
+      gained: count('gain'),
+      lostCount: count('lost'),
+      unconfirmed: count('unconfirmed'),
+      lost: items.filter((i) => i.kind === 'lost').map((i) => i.label),
+      upsell,
+    };
+  }
+
+  // ---------- sections ----------
+  function rows(oldM, newM) {
+    const age = CURRENT_YEAR - oldM.launched;
+    const yearText = oldM.launchedIsPlatform
+      ? `${oldM.platformName} platform, launched ${oldM.launched}`
+      : `Launched ${oldM.launched} (${oldM.platformName} platform)`;
+    return [
+      { label: 'Technology generation',
+        old: { text: `${yearText}: about ${age} year${age === 1 ? '' : 's'} old`, status: 'verified' },
+        new: { text: `${newM.platform} platform, ${newM.launched}`, status: 'verified' } },
+      { label: 'Technology level',
+        old: { text: oldM.levelLabel, status: oldM.level ? 'verified' : 'check' },
+        new: { text: newM.price.tier, status: 'verified' } },
+      { label: 'Processor', old: cell(oldM.chip, 'old'), new: cell(newM.chip, 'new') },
+      { label: 'Fine-tuning channels', old: cell(oldM.channels, 'old'), new: cell(newM.channels, 'new') },
+      { label: 'How it adapts to noise', old: cell(oldM.adapt, 'old'), new: cell(newM.adapt, 'new') },
+      { label: 'Speech in noisy places', old: cell(oldM.speech, 'old'), new: cell(newM.speech, 'new') },
+      { label: 'Wind handling', old: cell(oldM.wind, 'old'), new: cell(newM.wind, 'new') },
+      { label: 'Feedback (whistling)', old: cell(oldM.feedback, 'old'), new: cell(newM.feedback, 'new') },
+      { label: 'App control', old: cell(oldM.app, 'old'), new: cell(newM.app, 'new') },
+      { label: 'TV & music streaming', old: cell(oldM.streaming, 'old'), new: cell(newM.streaming, 'new') },
+      { label: 'Phone calls', old: cell(oldM.calls, 'old'), new: cell(newM.calls, 'new') },
+      { label: 'Battery', old: cell(oldM.battery, 'old'), new: cell(newM.battery, 'new') },
+    ];
+  }
+
+  function cards(oldM, newM) {
+    const stats = newM.stats || [];
+    const speech = {
+      key: 'speech', title: 'Speech in noise', icon: 'speech',
+      old: cell(oldM.speechShort, 'old'), new: cell(newM.speechShort, 'new'),
+      stat: stats[0] || null,
+      footnote: newM.upsell || null,
+    };
+    const connect = {
+      key: 'connect', title: 'Connectivity', icon: 'bluetooth',
+      old: cell(oldM.connectShort, 'old'), new: cell(newM.connectShort, 'new'),
+      stat: newM.streaming && /Auracast/.test(newM.streaming.text) && !/follow|promised/.test(newM.streaming.text)
+        ? { value: 'Auracast™', label: 'ready for TV, theatre and venue broadcasts' }
+        : null,
+    };
+    const goesRechargeable = oldM.rechargeable === false && newM.rechargeable === true;
+    const power = {
+      key: 'power', title: 'Power & convenience', icon: 'battery',
+      old: cell(oldM.batteryShort, 'old'), new: cell(newM.batteryShort, 'new'),
+      stat: goesRechargeable
+        ? { value: '0', label: 'battery changes. Charge overnight like a phone' }
+        : (/38 h/.test((newM.batteryShort || {}).text || '') ? { value: '38 h', label: 'maximum on one charge' } : null),
+    };
+    const fourth = newM.size && newM.size.status !== 'unknown'
+      ? { key: 'size', title: 'Size & discretion', icon: 'size',
+          old: cell(oldM.size, 'old'), new: cell(newM.sizeShort || newM.size, 'new'),
+          stat: { value: '25%', label: 'smaller than the previous Sphere generation', source: newM.size.source } }
+      : { key: 'age', title: 'Years of progress', icon: 'clock',
+          old: { text: `${oldM.platformName} technology, ${oldM.launched}`, status: 'verified' },
+          new: { text: `${newM.platform} technology, ${newM.launched}`, status: 'verified' },
+          stat: { value: `${Math.max(0, newM.launched - oldM.launched)} yrs`, label: 'of Phonak development between them' },
+          footnote: `Size comparison: ${NOT_FOUND}` };
+    return [speech, connect, power, fourth];
+  }
+
+  function orderCards(list, concerns) {
+    const wanted = concerns.map((c) => c.card).filter(Boolean);
+    for (const c of list) c.matters = wanted.includes(c.key) || (c.key === 'age' && wanted.includes('size'));
+    return list.sort((a, b) => Number(b.matters) - Number(a.matters));
+  }
+
+  // Plans, discounts, insurance and warranty come from the pricing tool's own
+  // engine, so this tool can never quote differently from it. Invalid choices
+  // (e.g. a plan on a model without plans) fall back to safe defaults.
+  const DISCOUNT_ORDER = ['none', 'existing', 'staff', 'friends', 'blue', 'dds', 'opticians'];
+
+  function priceInfo(data, newM, opts, concerns) {
+    const eng = data.engine;
+    if (!eng) return null;
+    const id = newM.price.id;
+    const pairOnly = newM.price.pairOnly;
+    const fitting = opts.fitting === 'single' && !pairOnly ? 'single' : 'pair';
+    const planEligible = eng.planEligible(id);
+    const plan = Object.prototype.hasOwnProperty.call(eng.plans, opts.plan || '') && (opts.plan === 'none' || planEligible) ? opts.plan : 'none';
+    const discountOptions = DISCOUNT_ORDER.map((key) => {
+      if (key === 'none') return { id: key, name: 'No discount', rate: 0, eligible: true };
+      if (key === 'existing') return { id: key, name: 'Existing customer', rate: 0.10, eligible: true };
+      const d = eng.discounts[key];
+      return { id: key, name: d.name, rate: d.rate, eligible: eng.discountEligible(id, key) };
+    });
+    const chosen = discountOptions.find((d) => d.id === opts.discount && d.eligible) || discountOptions[0];
+    const customer = chosen.id === 'existing' ? '1' : '0';
+    const discount = chosen.id === 'existing' ? 'none' : chosen.id;
+    const purchaseInsurance = Boolean(opts.purchaseInsurance) && eng.optionalInsuranceEligible(id, plan);
+    const quote = eng.quote(id, customer, plan, fitting, purchaseInsurance, discount);
+    const planOptions = Object.entries(eng.plans).map(([key, p]) => ({
+      id: key, name: p.name, accessory: key === 'none' ? null : p.accessory, cost: p.cost,
+      eligible: key === 'none' || planEligible,
+      benefit: key === 'none' ? 'Hearing aids only' : (data.plans || {})[key] ? data.plans[key].benefit : '',
+      suits: concerns.filter((c) => c.plan === key).map((c) => c.label),
+    }));
+    return {
+      quote, fitting, pairOnly, plan, discount: chosen.id, purchaseInsurance,
+      insuranceOptional: eng.optionalInsuranceEligible(id, plan),
+      planEligible, planOptions, discountOptions, pricesAsOf: data.pricing.pricesAsOf,
+      planDetail: plan === 'none' ? null : planOptions.find((p) => p.id === plan),
+    };
+  }
+
+  function warnings(oldM, newM, list) {
+    const out = [];
+    if (!newM.mapped) out.push('This model from the pricing file has no spec mapping yet. Add it to data/new-specs.js.');
+    if (newM.mapped && newM.launched <= oldM.launched) {
+      out.push(`The ${newM.name} is on the ${newM.platform} platform (${newM.launched}), which is not newer than the customer's ${oldM.platformName} aids. This is not a technology upgrade.`);
+    }
+    if (!oldM.level) out.push('Choose the current technology level (e.g. Q50) for a sharper comparison. Some features show as "Depends on technology level" until you do.');
+    if (list && list.lost.length) {
+      out.push(`The customer's current aid has ${joinList(list.lost)}, which the ${newM.name} does not. This is shown to the customer in the checklist; consider a higher level.`);
+    }
+    if (newM.note) out.push(newM.note);
+    return out;
+  }
+
+  function joinList(items) {
+    if (items.length <= 1) return items.join('');
+    return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+  }
+
+  function narrative(oldM, newM, list, patientName, concerns = []) {
+    const who = (patientName || '').trim();
+    const opener = who ? `${who}, your` : 'Your';
+    const era = oldM.launched;
+    const oldTech = (oldM.speechShort && oldM.speechShort.text) || 'the processing of its day';
+    const oldName = oldM.displayName.replace(/^Phonak /, '').replace(/ \([^)]*\)$/, '');
+    const newName = newM.name.replace(/^Phonak /, '');
+    const s1 = `${opener} ${oldName} hearing aids were good technology for ${era}, built on Phonak's ${oldM.platformName} platform with ${lowerFirst(oldTech)}.`;
+    const stat = (newM.stats || []).find((st) => /\d/.test(st.value));
+    let statTail = '';
+    if (stat) {
+      statTail = stat.status === 'verified'
+        ? `; Phonak's own study found ${stat.value} ${stat.label}${stat.vs ? ` ${stat.vs}` : ''}`
+        : `; Phonak reports ${stat.value} ${stat.label}${stat.vs ? ` ${stat.vs}` : ''}`;
+    }
+    let s2;
+    if (newM.familyKey === 'eonSphere') {
+      s2 = `The new ${newName} has a dedicated AI chip, so instead of just turning sound up it separates speech from background noise in real time${newM.level === 50 ? ' when you switch on its speech-in-noise programme' : ''}${statTail}.`;
+    } else {
+      s2 = `The new ${newName} is ${Math.max(0, newM.launched - era)} years further on, with ${lowerFirst(newM.adapt ? newM.adapt.text.split(':')[0] : 'automatic processing')} adjusting to each place you go${statTail}.`;
+    }
+    // Highlight the most customer-relevant gains not already mentioned above.
+    const said = new Set(['ai_chip', 'ai_auto', 'rechargeable']);
+    const gainedIds = new Set(list.items.filter((i) => i.old.state === 'notyet' || i.old.state === 'no').map((i) => i.id));
+    const wanted = new Set(concerns.flatMap((c) => c.features));
+    const order = [...SAY_ORDER.filter((id) => wanted.has(id)), ...SAY_ORDER.filter((id) => !wanted.has(id))];
+    const picks = order.filter((id) => gainedIds.has(id) && !said.has(id)).slice(0, 3);
+    const highlights = picks.map((id) => SAY[id]);
+    const tackled = concerns.filter((c) => c.features.some((id) => picks.includes(id) || (gainedIds.has(id) && said.has(id))));
+    const s3 = list.gained
+      ? `Altogether it brings ${list.gained} feature${list.gained === 1 ? '' : 's'} your current aids don't have${highlights.length ? `, including ${joinList(highlights)}` : ''}${tackled.length ? `, which go straight at the ${joinList(tackled.map((c) => c.say))} you mentioned` : ''}.`
+      : '';
+    let s4 = '';
+    if (oldM.rechargeable === false && newM.rechargeable === true) {
+      s4 = 'And you can say goodbye to fiddly batteries: it charges overnight like a phone.';
+    } else if (/^No (Bluetooth|direct)/.test((oldM.connectShort || {}).text || '') && /Bluetooth/.test((newM.connectShort || {}).text || '')) {
+      s4 = 'And phone calls and TV stream straight into your ears, with no streamer around your neck.';
+    } else if (/Auracast/.test((newM.connectShort || {}).text || '')) {
+      s4 = 'It also streams calls and TV directly, and is ready for Auracast™ broadcasts in theatres and public venues.';
+    }
+    return [s1, s2, s3, s4].filter(Boolean).join(' ');
+  }
+
+  const SAY = {
+    auracast: 'Auracast™ broadcast streaming',
+    stream: 'streaming calls, music and TV straight to both ears',
+    handsfree: 'hands-free phone calls',
+    speech_enhancer: 'Speech Enhancer for soft and distant voices',
+    dnc: 'Dynamic Noise Cancellation',
+    speechsensor: 'SpeechSensor to catch voices beside and behind you',
+    windblock2: 'WindBlock 2.0 for windy days',
+    app: 'control from your phone',
+    stereozoom2: 'StereoZoom 2.0',
+    speech360: 'Speech in 360°',
+    motion: 'Motion Sensor Hearing',
+    tap: 'Tap Control',
+    autosense: 'fully automatic AutoSense OS',
+    sr2: 'SoundRecover2',
+  };
+  const SAY_ORDER = ['auracast', 'stream', 'handsfree', 'speech_enhancer', 'dnc', 'speechsensor', 'windblock2',
+    'app', 'stereozoom2', 'speech360', 'motion', 'tap', 'autosense', 'sr2'];
+
+  function lowerFirst(s) {
+    return /^[A-Z][a-z]/.test(s) && !/^(AutoSense|Phonak|Binaural|SoundFlow|Spheric|StereoZoom|SpeechSensor|Speech |SoundRecover|WindBlock|Dynamic|Motion|Tap|RogerDirect|Auracast|Music, TV)/.test(s)
+      ? s[0].toLowerCase() + s.slice(1) : s;
+  }
+
+  function usedSources(rowsOut, cardsOut, list, newM) {
+    const keys = new Set();
+    for (const r of rowsOut) for (const side of [r.old, r.new]) if (side.source) keys.add(side.source);
+    for (const c of cardsOut) {
+      for (const side of [c.old, c.new]) if (side.source) keys.add(side.source);
+      for (const st of newM.stats || []) if (st.source) keys.add(st.source);
+      if (c.stat && c.stat.source) keys.add(c.stat.source);
+    }
+    for (const i of list.items) for (const s of i.sources || []) keys.add(s);
+    if (newM.noteSource) keys.add(newM.noteSource);
+    return [...keys];
+  }
+
+  // "In their words" board: each customer quote is paired with the first
+  // "What if…?" prompt the chosen new model can genuinely deliver.
+  function wordsBoard(data, newM, price, quotes) {
+    if (!data.words || !quotes || !quotes.length) return [];
+    const has = (need) => {
+      if (need.startsWith('plan:')) {
+        const plan = need.slice(5);
+        return Boolean(price && price.planEligible && price.planOptions.some((p) => p.id === plan));
+      }
+      if (need === 'size') return Boolean(newM.size && newM.size.status !== 'unknown');
+      const f = data.features.features.find((x) => x.id === need);
+      const v = f ? newFeatureValue(f, newM.familyKey, newM.level, newM.variant) : 0;
+      return v === 1 || v === 'c';
+    };
+    const seen = {};
+    return quotes.map((qt) => {
+      const conf = data.words[qt.concern] || { whatIf: [] };
+      // A second quote on the same concern gets the next deliverable prompt, not a repeat.
+      const options = conf.whatIf.filter((w) => w.needs.every(has));
+      const nth = (seen[qt.concern] = (seen[qt.concern] ?? -1) + 1);
+      const hit = options[nth % (options.length || 1)];
+      return hit
+        ? { quote: qt.text, concern: qt.concern, question: hit.q, now: hit.now, matched: true }
+        : { quote: qt.text, concern: qt.concern, question: 'What would make the biggest difference here?',
+            now: 'Ask about the options that would help with this.', matched: false };
+    });
+  }
+
+  function compare(data, oldId, newId, opts = {}) {
+    const oldM = resolveOld(data, oldId, opts.oldLevel);
+    const newM = resolveNew(data, newId);
+    if (!newM.mapped) {
+      return { old: oldM, new: newM, cards: [], rows: [], features: null, warnings: warnings(oldM, newM, null), narrative: '', sources: [] };
+    }
+    const concerns = (data.concerns || []).filter((c) => (opts.concerns || []).includes(c.id));
+    const list = checklist(data, oldM, newM, new Set(concerns.flatMap((c) => c.features)));
+    const rowsOut = rows(oldM, newM);
+    const cardsOut = orderCards(cards(oldM, newM), concerns);
+    const price = priceInfo(data, newM, opts, concerns);
+    return {
+      old: oldM,
+      new: newM,
+      cards: cardsOut,
+      rows: rowsOut,
+      features: list,
+      warnings: warnings(oldM, newM, list),
+      narrative: narrative(oldM, newM, list, opts.patientName, concerns),
+      concerns,
+      price,
+      words: wordsBoard(data, newM, price, opts.quotes),
+      sources: usedSources(rowsOut, cardsOut, list, newM),
+    };
+  }
+
+  function priceText(p) {
+    const gbp = (n) => '£' + Number(n).toLocaleString('en-GB', { maximumFractionDigits: 0 });
+    if (p.pairOnly) return `${gbp(p.pairPrice)} per system (pair-only)`;
+    return `${gbp(p.pairPrice)} pair · ${gbp(p.singlePrice)} single`;
+  }
+
+  return { compare, resolveOld, resolveNew, oldLevels, searchOld, priceText, NOT_FOUND, NOT_SUPPLIED, CURRENT_YEAR };
+});
+</script>
+  <script>
+// UI wiring for index.html. Comparison rules live in compare.js; prices,
+// plans and discounts come from pricing-engine.js (the pricing tool's engine).
+(function () {
+  const BUILD = '29 Oct 2026 (f0e790b)'; // replaced by scripts/build_single.py
+  const DATA = {
+    pricing: window.HC_PRICING,
+    specs: window.HC_NEW_SPECS,
+    legacy: window.HC_LEGACY,
+    sources: window.HC_SOURCES,
+    features: window.HC_FEATURES,
+    concerns: window.HC_CONCERNS,
+    plans: window.HC_PLANS,
+    words: window.HC_WORDS,
+    engine: window.Pricing.create(window.HC_PRICING.engine),
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    form: $('setup'), patient: $('patient'), oldSearch: $('old-search'), oldList: $('old-list'),
+    newModel: $('new-model'), discount: $('discount'), chips: $('concern-chips'), print: $('print'),
+    error: $('form-error'), output: $('output'), stamp: $('data-stamp'),
+    wordPresets: $('word-presets'), wordText: $('word-text'), wordConcern: $('word-concern'),
+    wordAdd: $('word-add'), wordList: $('word-list'),
+  };
+
+  // Everything the comparison depends on. Plan and insurance are chosen in the results.
+  const state = { old: null, concerns: [], quotes: [], plan: 'none', purchaseInsurance: false, generated: false, mode: null };
+
+  const ICONS = {
+    speech: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+    bluetooth: '<path d="M7 7l10 10-5 4V3l5 4L7 17"/>',
+    battery: '<rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 10v4M7 10v4M11 10v4"/>',
+    size: '<path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  };
+  const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="icon">${ICONS[name] || ''}</svg>`;
+  const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const money = (n) => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  const longDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const version = () => (BUILD.startsWith('__') ? 'development copy' : BUILD);
+
+  function badge(c) {
+    if (c.status === 'check') {
+      const src = c.source && DATA.sources[c.source] ? DATA.sources[c.source].title : 'secondary source';
+      return ` <span class="pill check" title="Source: ${esc(src)}">Verify</span>`;
+    }
+    return '';
+  }
+  const cellHtml = (c) => `<span class="${c.status === 'unknown' ? 'unknown' : ''}">${esc(c.text)}</span>${badge(c)}`;
+
+  // ---------- current-aid type-ahead ----------
+  let active = -1;
+  let matches = [];
+
+  function openList() {
+    matches = HCCompare.searchOld(DATA, els.oldSearch.value);
+    active = matches.length ? 0 : -1;
+    let html = '';
+    let group = '';
+    matches.forEach((m, i) => {
+      if (m.platform !== group) {
+        group = m.platform;
+        html += `<li class="combo-group" role="presentation">${esc(group)}</li>`;
+      }
+      html += `<li role="option" id="old-opt-${i}" data-i="${i}" class="combo-opt${i === active ? ' active' : ''}" aria-selected="${i === active}">
+        <span>${esc(m.label.replace(/^Phonak /, ''))}</span><small>${esc(m.sub)}</small></li>`;
+    });
+    if (!matches.length) html = '<li class="combo-empty" role="presentation">No match. Try a model letter and level, e.g. “M70” or “Paradise 90”.</li>';
+    els.oldList.innerHTML = html;
+    els.oldList.hidden = false;
+    els.oldSearch.setAttribute('aria-expanded', 'true');
+    syncActive();
+  }
+
+  function closeList() {
+    els.oldList.hidden = true;
+    els.oldSearch.setAttribute('aria-expanded', 'false');
+    els.oldSearch.removeAttribute('aria-activedescendant');
+  }
+
+  function syncActive() {
+    els.oldList.querySelectorAll('.combo-opt').forEach((li) => {
+      const on = Number(li.dataset.i) === active;
+      li.classList.toggle('active', on);
+      li.setAttribute('aria-selected', String(on));
+      if (on) li.scrollIntoView({ block: 'nearest' });
+    });
+    if (active >= 0) els.oldSearch.setAttribute('aria-activedescendant', `old-opt-${active}`);
+  }
+
+  function chooseOld(i) {
+    const m = matches[i];
+    if (!m) return;
+    state.old = { id: m.id, level: m.level };
+    els.oldSearch.value = m.label.replace(/^Phonak /, '');
+    closeList();
+    suggestNew(m.id);
+    if (state.generated) generate();
+  }
+
+  els.oldSearch.addEventListener('input', () => { state.old = null; openList(); });
+  els.oldSearch.addEventListener('focus', openList);
+  els.oldSearch.addEventListener('blur', () => setTimeout(closeList, 150));
+  els.oldSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (els.oldList.hidden) openList();
+      e.preventDefault();
+      if (!matches.length) return;
+      active = (active + (e.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length;
+      syncActive();
+    } else if (e.key === 'Enter' && !els.oldList.hidden && active >= 0) {
+      e.preventDefault();
+      chooseOld(active);
+    } else if (e.key === 'Escape') {
+      closeList();
+    }
+  });
+  els.oldList.addEventListener('mousedown', (e) => {
+    const li = e.target.closest('.combo-opt');
+    if (li) { e.preventDefault(); chooseOld(Number(li.dataset.i)); }
+  });
+
+  // ---------- other controls ----------
+  function fillNew() {
+    const groups = {};
+    for (const m of DATA.pricing.models) (groups[m.family] ||= []).push(m);
+    let html = '<option value="">Select new model…</option>';
+    for (const [fam, list] of Object.entries(groups)) {
+      html += `<optgroup label="${esc(fam)}">`;
+      html += list.map((m) => `<option value="${m.id}">${esc(m.name)} · ${esc(m.tier)}</option>`).join('');
+      html += '</optgroup>';
+    }
+    els.newModel.innerHTML = html;
+  }
+
+  // Discount list: ineligible offers stay visible but disabled, as in the pricing tool.
+  function fillDiscounts() {
+    const id = els.newModel.value;
+    const current = els.discount.value || 'none';
+    const opts = [['none', 'No discount', 0], ['existing', 'Existing customer', 0.1],
+      ...Object.entries(DATA.engine.discounts).filter(([k]) => k !== 'none').map(([k, d]) => [k, d.name, d.rate])];
+    els.discount.innerHTML = opts.map(([k, name, rate]) => {
+      const ok = k === 'none' || k === 'existing' || !id || DATA.engine.discountEligible(id, k);
+      return `<option value="${k}"${ok ? '' : ' disabled'}>${esc(name)}${rate ? ` (${Math.round(rate * 100)}%)` : ''}${ok ? '' : ' – not for this model'}</option>`;
+    }).join('');
+    const still = [...els.discount.options].find((o) => o.value === current && !o.disabled);
+    els.discount.value = still ? current : 'none';
+  }
+
+  function fillConcerns() {
+    els.chips.innerHTML = DATA.concerns.map((c) =>
+      `<label class="chip"><input type="checkbox" value="${c.id}"> ${esc(c.label)}</label>`).join('');
+  }
+
+  // ---------- "in their words" ----------
+  function fillWords() {
+    els.wordPresets.innerHTML = DATA.concerns.flatMap((c) => (DATA.words[c.id] || { presets: [] }).presets.map((t) =>
+      `<button type="button" class="chip preset" data-concern="${c.id}" data-text="${esc(t)}">“${esc(t)}”</button>`)).join('');
+    els.wordConcern.innerHTML = DATA.concerns.map((c) => `<option value="${c.id}">About: ${esc(c.label)}</option>`).join('');
+  }
+
+  function renderQuotes() {
+    els.wordList.innerHTML = state.quotes.map((q, i) =>
+      `<li><span>“${esc(q.text)}”</span> <small>${esc(DATA.concerns.find((c) => c.id === q.concern).label)}</small>
+        <button type="button" class="word-remove" data-i="${i}" aria-label="Remove">×</button></li>`).join('');
+    els.wordPresets.querySelectorAll('.preset').forEach((b) =>
+      b.classList.toggle('used', state.quotes.some((q) => q.text === b.dataset.text)));
+  }
+
+  // A quote also ticks its concern, so the Comparison view puts it first too.
+  function addQuote(text, concern) {
+    text = text.trim().replace(/^[“"']|[”"']$/g, '');
+    if (!text || state.quotes.some((q) => q.text === text)) return;
+    state.quotes.push({ text, concern });
+    const chip = els.chips.querySelector(`input[value="${concern}"]`);
+    if (chip && !chip.checked) {
+      chip.checked = true;
+      state.concerns = [...els.chips.querySelectorAll('input:checked')].map((i) => i.value);
+    }
+    renderQuotes();
+    if (state.generated) generate();
+  }
+
+  els.wordPresets.addEventListener('click', (e) => {
+    const b = e.target.closest('.preset');
+    if (b) addQuote(b.dataset.text, b.dataset.concern);
+  });
+  els.wordAdd.addEventListener('click', () => { addQuote(els.wordText.value, els.wordConcern.value); els.wordText.value = ''; els.wordText.focus(); });
+  els.wordText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); els.wordAdd.click(); }
+  });
+  els.wordList.addEventListener('click', (e) => {
+    const b = e.target.closest('.word-remove');
+    if (!b) return;
+    state.quotes.splice(Number(b.dataset.i), 1);
+    renderQuotes();
+    if (state.generated) generate();
+  });
+
+  function suggestNew(oldId) {
+    if (els.newModel.value) return;
+    const m = DATA.legacy.models.find((x) => x.id === oldId);
+    const pick = m && { RIC: 'e70', BTE: 'naida70', Custom: 'virto_i70_r' }[m.style];
+    if (pick && DATA.pricing.models.some((x) => x.id === pick)) {
+      els.newModel.value = pick;
+      fillDiscounts();
+    }
+  }
+
+  const fitting = () => (els.form.querySelector('input[name="fitting"]:checked') || {}).value || 'pair';
+
+  // Name of the same new family at another level, e.g. "E90 Sphere CRT".
+  function levelName(n, level) {
+    const id = Object.keys(DATA.specs.models).find((k) => {
+      const m = DATA.specs.models[k];
+      return m.family === n.familyKey && m.level === level && (m.variant || null) === n.variant;
+    });
+    const p = id && DATA.pricing.models.find((x) => x.id === id);
+    return p ? p.name : `the ${level} level`;
+  }
+
+  // ---------- rendering ----------
+  function priceBox(pr) {
+    const q = pr.quote;
+    const unit = pr.fitting === 'single' ? 'Hearing aid (single)' : pr.pairOnly ? 'CROS system (pair)' : 'Hearing aids (pair)';
+    const lines = [`<div class="price-line"><span>${unit}</span><span>${q.discountRate ? `<s>${money(q.fullAidPrice)}</s> ` : ''}${money(q.aidPrice)}</span></div>`];
+    if (q.discountRate) lines.push(`<div class="price-line saving"><span>${esc(q.discountName)} discount (${Math.round(q.discountRate * 100)}%)</span><span>−${money(q.discountSaving)}</span></div>`);
+    if (pr.planDetail) lines.push(`<div class="price-line"><span>${esc(pr.planDetail.name)} plan · ${esc(pr.planDetail.accessory)}</span><span>${money(q.accessoryPrice)}</span></div>`);
+    if (q.insurancePrice) lines.push(`<div class="price-line"><span>Purchase insurance</span><span>${money(q.insurancePrice)}</span></div>`);
+    return `
+      <div class="price-box">
+        ${lines.join('')}
+        <div class="price-line total"><span>Total</span><span>${money(q.total)}</span></div>
+        <p class="price-meta">Insurance: ${esc(q.insurance.status.toLowerCase())}${q.insurance.status === 'Included' ? ' with plan' : ''} · ${q.warrantyYears}-year warranty · excl. VAT · Prices as of ${esc(longDate(pr.pricesAsOf))}</p>
+      </div>`;
+  }
+
+  function planSection(pr) {
+    if (!pr.planEligible) {
+      return '<p class="plan-none">Listening plans are not available for this model.</p>';
+    }
+    const cards = pr.planOptions.map((p) => `
+      <button type="button" class="plan-card${p.id === pr.plan ? ' chosen' : ''}${p.suits.length ? ' suits' : ''}" data-plan="${p.id}" aria-pressed="${p.id === pr.plan}">
+        <span class="plan-name">${esc(p.name)}</span>
+        ${p.accessory ? `<span class="plan-acc">${esc(p.accessory)}</span>` : ''}
+        <span class="plan-benefit">${esc(p.benefit)}</span>
+        <span class="plan-cost">${p.cost ? `+ ${money(p.cost)}` : 'No extra cost'}</span>
+        ${p.id !== 'none' ? '<span class="plan-ins">Insurance included</span>' : ''}
+        ${p.suits.length ? `<span class="plan-suits">Good for: ${esc(p.suits.join(', '))}</span>` : ''}
+        ${p.id === pr.plan ? '<span class="plan-tick">✓ Selected</span>' : ''}
+      </button>`).join('');
+    const ins = pr.insuranceOptional
+      ? `<label class="ins-opt no-print"><input type="checkbox" id="buy-insurance"${pr.purchaseInsurance ? ' checked' : ''}> Add purchase insurance (${pr.fitting === 'single' ? '£99 for one aid' : '£198 for two aids'}; not discounted)</label>` : '';
+    return `<div class="plans">${cards}</div>${ins}`;
+  }
+
+  function render(result) {
+    const o = result.old;
+    const n = result.new;
+    const warn = result.warnings.length
+      ? `<div class="warnings no-print"><p class="warnings-title">For the dispenser (not printed)</p>${result.warnings.map((w) => `<p>${esc(w)}</p>`).join('')}</div>` : '';
+
+    if (!n.mapped) {
+      els.output.innerHTML = `<section class="panel">${warn}</section>`;
+      return;
+    }
+    const pr = result.price;
+    const concernLine = result.concerns.length
+      ? `<p class="concern-line">You told us the hardest things are: <strong>${esc(result.concerns.map((c) => c.label).join(' · '))}</strong>. These are shown first.</p>` : '';
+
+    const hero = `
+      ${concernLine}
+      <section class="hero">
+        <div class="hero-side then">
+          <p class="hero-label">Your current hearing aids</p>
+          <p class="hero-name">${esc(o.displayName)}</p>
+          <p class="hero-year">${esc(o.platformName)} technology · ${o.launched} · ${esc(o.levelLabel)}</p>
+        </div>
+        <div class="hero-arrow" aria-hidden="true">→</div>
+        <div class="hero-side now">
+          <p class="hero-label">The new generation</p>
+          <p class="hero-name">${esc(n.name)}</p>
+          <p class="hero-year">${esc(n.platform)} technology · ${n.launched} · ${esc(n.price.tier)}</p>
+          ${pr ? priceBox(pr) : ''}
+        </div>
+      </section>`;
+
+    const statBlock = (st) => {
+      if (!st) return '';
+      const basis = st.vs ? `${st.note ? `${st.note}, ` : ''}${st.vs}` : (st.note || '');
+      return `<p class="stat"><span class="stat-value">${esc(st.value)}</span> <span class="stat-label">${esc(st.label)}</span></p>
+        ${basis ? `<p class="stat-note">${/\d/.test(st.value) ? 'Phonak figure: ' : ''}${esc(basis)}${st.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</p>` : ''}`;
+    };
+    const cards = result.cards.map((c) => `
+      <article class="card${c.matters ? ' matters' : ''}">
+        ${c.matters ? '<span class="matters-tag">Matters to you</span>' : ''}
+        <header class="card-head">${icon(c.icon)}<h3>${esc(c.title)}</h3></header>
+        ${statBlock(c.stat)}
+        <div class="compare-line then"><span class="tag">Then</span><p>${cellHtml(c.old)}</p></div>
+        <div class="compare-line now"><span class="tag">Now</span><p>${cellHtml(c.new)}</p></div>
+        ${c.footnote ? `<p class="card-foot">${esc(c.footnote)}</p>` : ''}
+      </article>`).join('');
+
+    const rows = result.rows.map((r) => `
+      <tr>
+        <th scope="row">${esc(r.label)}</th>
+        <td class="then">${cellHtml(r.old)}</td>
+        <td class="now">${cellHtml(r.new)}</td>
+      </tr>`).join('');
+
+    const f = result.features;
+    const mark = (st) => ({ yes: '✓', no: '✗', notyet: '✗', '?': '?' }[st]);
+    const stateClass = (st) => (st === 'notyet' ? 'no' : st === '?' ? 'unk' : st);
+    const featureRow = (i) => `
+      <tr class="feat-${i.kind}${i.matters ? ' feat-matters' : ''}">
+        <th scope="row"><span class="feat-name">${esc(i.label)}${i.matters ? ' <span class="matters-pill">Matters to you</span>' : ''}</span><span class="feat-benefit">${esc(i.benefit)}</span></th>
+        <td class="then state-${stateClass(i.old.state)}">
+          <span class="mark" aria-hidden="true">${mark(i.old.state)}</span><span class="mark-text">${esc(i.old.text)}</span></td>
+        <td class="now state-${i.new.state}"><span class="mark" aria-hidden="true">${mark(i.new.state)}</span><span class="mark-text">${esc(i.new.text)}${i.new.status === 'check' ? ' <span class="pill check">Verify</span>' : ''}</span></td>
+      </tr>`;
+    const counted = f.items.filter((i) => i.kind !== 'unconfirmed');
+    const unconfirmed = f.items.filter((i) => i.kind === 'unconfirmed');
+    const featureRows = counted.map(featureRow).join('') + (unconfirmed.length ? `
+      <tr class="group-row"><th colspan="3">Not confirmed for your current aid, so not counted in the score above</th></tr>
+      ${unconfirmed.map(featureRow).join('')}` : '');
+    const pct = (k) => (f.confirmed ? Math.round((k / f.confirmed) * 100) : 0);
+    const upsell = f.upsell.length
+      ? `<p class="upsell"><strong>Step up for even more:</strong> ${f.upsell.map((u) => `${esc(u.label)} (from ${esc(levelName(n, u.from))})`).join(' · ')}</p>` : '';
+    const headline = f.gained
+      ? `<span class="score-num">+${f.gained}</span><span class="score-cap">feature${f.gained === 1 ? '' : 's'} your current aids don't have</span>`
+      : '<span class="score-num score-zero">0</span><span class="score-cap">new features at this level</span>';
+    const scoreboard = `
+      <div class="scoreboard">
+        <div class="score-big">${headline}
+          ${f.lostCount ? `<span class="score-lost">${f.lostCount} feature${f.lostCount === 1 ? '' : 's'} you would give up (shown below)</span>` : ''}</div>
+        <div class="score-bars">
+          <div class="bar-row"><span class="bar-label">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</span>
+            <span class="bar then"><span style="width:${pct(f.oldCount)}%"></span></span><span class="bar-val">${f.oldCount} of ${f.confirmed}</span></div>
+          <div class="bar-row"><span class="bar-label">The new ${esc(n.name.replace(/^Phonak /, ''))}</span>
+            <span class="bar now"><span style="width:${pct(f.newCount)}%"></span></span><span class="bar-val">${f.newCount} of ${f.confirmed}</span></div>
+          <p class="score-note">Compared on ${f.confirmed} feature${f.confirmed === 1 ? '' : 's'} we could confirm for both hearing aids${f.unconfirmed ? `. ${f.unconfirmed} more could not be confirmed for your current aid and are not counted` : ''}.</p>
+        </div>
+      </div>`;
+
+    const sources = result.sources.map((k) => {
+      const s = DATA.sources[k];
+      if (!s) return '';
+      const links = (s.urls || []).map((u) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(new URL(u).hostname)}</a>`).join(', ');
+      return `<li><strong>${s.kind === 'supplied' ? 'Supplied file' : 'Web'}:</strong> ${esc(s.title)}${links ? ` (${links})` : ''}</li>`;
+    }).join('');
+
+    const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const modeSwitch = `
+      <div class="mode-switch no-print" role="group" aria-label="View">
+        <button type="button" data-mode="conversation" aria-pressed="${state.mode === 'conversation'}">Conversation</button>
+        <button type="button" data-mode="comparison" aria-pressed="${state.mode === 'comparison'}">Comparison</button>
+      </div>`;
+
+    if (state.mode === 'conversation') {
+      els.output.innerHTML = `${modeSwitch}${conversationHtml(result)}`;
+      wireOutput(result);
+      return;
+    }
+
+    els.output.innerHTML = `
+      ${modeSwitch}
+      ${warn}
+      <p class="print-only print-head">Prepared ${esc(today)} · Prices as of ${esc(longDate(DATA.pricing.pricesAsOf))} · Tool ${esc(version())}</p>
+      ${hero}
+      <section aria-labelledby="a-title">
+        <h2 id="a-title" class="section-title"><span class="section-letter">A</span> What changes for you</h2>
+        <div class="cards">${cards}</div>
+      </section>
+      <section aria-labelledby="b-title">
+        <h2 id="b-title" class="section-title"><span class="section-letter">B</span> Then vs. now</h2>
+        ${scoreboard}
+        <div class="table-wrap">
+          <table class="versus checklist">
+            <thead><tr><th scope="col">Feature</th>
+              <th scope="col" class="then">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</th>
+              <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
+            <tbody>${featureRows}</tbody>
+          </table>
+        </div>
+        ${upsell}
+        <h3 class="sub-title">In more detail</h3>
+        <div class="table-wrap">
+          <table class="versus">
+            <thead><tr><th scope="col"><span class="sr-only">Feature</span></th>
+              <th scope="col" class="then">Your current ${esc(o.displayName.replace(/^Phonak /, ''))}</th>
+              <th scope="col" class="now">The new ${esc(n.name.replace(/^Phonak /, ''))}</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </section>
+      ${pr ? `<section aria-labelledby="c-title">
+        <h2 id="c-title" class="section-title"><span class="section-letter">C</span> Listening plans</h2>
+        ${planSection(pr)}
+      </section>` : ''}
+      <section aria-labelledby="d-title">
+        <h2 id="d-title" class="section-title"><span class="section-letter">D</span> Why upgrade now</h2>
+        <blockquote class="script" id="script">${esc(result.narrative)}</blockquote>
+        <button type="button" class="btn ghost no-print" id="copy-script">Copy script</button>
+      </section>
+      <details class="sources">
+        <summary>Sources and evidence for this comparison</summary>
+        <ul>${sources}</ul>
+        <p class="muted">Where nothing could be found for an older model, the tool says: “${esc(HCCompare.NOT_FOUND)}”.</p>
+      </details>`;
+
+    wireOutput(result);
+  }
+
+  // Conversation mode: validate, mirror their words, then "what if". No product names or prices.
+  function conversationHtml(result) {
+    const o = result.old;
+    const oldName = o.displayName.replace(/^Phonak /, '').replace(/ \([^)]*\)$/, '');
+    const who = els.patient.value.trim();
+    const rows = result.words.map((w) => `
+      <div class="word-row">
+        <blockquote class="their"><span class="their-label">You said</span>“${esc(w.quote)}”</blockquote>
+        <div class="word-arrow" aria-hidden="true">→</div>
+        <div class="possible">
+          <p class="what-if">${esc(w.question)}</p>
+          <p class="now-line"><span>Now:</span> ${esc(w.now)}</p>
+        </div>
+      </div>`).join('');
+    return `
+      <section class="convo" aria-label="In your words">
+        <p class="convo-intro">${who ? `${esc(who)}, your` : 'Your'} ${esc(oldName)} hearing aids were a sensible choice in ${o.launched}.
+          Since then, hearing technology has moved on. Here’s what you told us, and what’s possible now.</p>
+        ${rows ? `<div class="words-board">${rows}</div>
+          <p class="convo-close">Which of these would make the biggest difference to your week?</p>`
+          : '<p class="convo-empty no-print">Add what the customer told you under “In their words” above, and it will appear here.</p>'}
+        <button type="button" class="btn ghost no-print" data-mode="comparison">See the full comparison</button>
+      </section>`;
+  }
+
+  function wireOutput(result) {
+    els.output.querySelectorAll('[data-mode]').forEach((b) => b.addEventListener('click', () => {
+      state.mode = b.dataset.mode;
+      generate();
+    }));
+    const copy = $('copy-script');
+    if (copy) copy.addEventListener('click', async (e) => {
+      try {
+        await navigator.clipboard.writeText(result.narrative);
+        e.target.textContent = 'Copied';
+      } catch {
+        e.target.textContent = 'Select the text to copy';
+      }
+    });
+    els.output.querySelectorAll('.plan-card').forEach((b) => b.addEventListener('click', () => {
+      state.plan = b.dataset.plan;
+      generate();
+    }));
+    const ins = $('buy-insurance');
+    if (ins) ins.addEventListener('change', () => { state.purchaseInsurance = ins.checked; generate(); });
+    els.print.disabled = false;
+  }
+
+  function generate(evt) {
+    if (evt) evt.preventDefault();
+    const newId = els.newModel.value;
+    if (!state.old || !newId) {
+      els.error.textContent = !state.old ? 'Choose the customer’s current hearing aid from the list.' : 'Choose the new model to show.';
+      els.error.hidden = false;
+      (state.old ? els.newModel : els.oldSearch).focus();
+      return;
+    }
+    els.error.hidden = true;
+    const first = !state.generated;
+    if (!state.mode) state.mode = state.quotes.length ? 'conversation' : 'comparison';
+    const result = HCCompare.compare(DATA, state.old.id, newId, {
+      patientName: els.patient.value, oldLevel: state.old.level, concerns: state.concerns,
+      plan: state.plan, discount: els.discount.value, fitting: fitting(), purchaseInsurance: state.purchaseInsurance,
+      quotes: state.quotes,
+    });
+    // Keep controls in step with what the engine accepted (e.g. no plan on a non-plan model).
+    if (result.price) {
+      state.plan = result.price.plan;
+      state.purchaseInsurance = result.price.purchaseInsurance;
+      if (result.price.pairOnly) els.form.querySelector('input[value="pair"]').checked = true;
+    }
+    render(result);
+    state.generated = true;
+    if (first) els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---------- init ----------
+  fillNew();
+  fillDiscounts();
+  fillConcerns();
+  fillWords();
+  els.stamp.textContent = `Prices as of ${longDate(DATA.pricing.pricesAsOf)} (from ${DATA.pricing.source}). Older-model research: 29 October 2026. Tool version: ${version()}.`;
+  els.form.addEventListener('submit', generate);
+  els.newModel.addEventListener('change', () => {
+    fillDiscounts();
+    state.plan = 'none';
+    if (state.generated) generate();
+  });
+  els.discount.addEventListener('change', () => { if (state.generated) generate(); });
+  els.form.querySelectorAll('input[name="fitting"]').forEach((r) => r.addEventListener('change', () => { if (state.generated) generate(); }));
+  els.patient.addEventListener('input', () => { if (state.generated) generate(); });
+  els.chips.addEventListener('change', () => {
+    state.concerns = [...els.chips.querySelectorAll('input:checked')].map((i) => i.value);
+    if (state.generated) generate();
+  });
+  els.print.addEventListener('click', () => window.print());
+})();
+</script>
+</body>
+</html>
