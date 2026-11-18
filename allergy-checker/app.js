@@ -229,6 +229,7 @@ function route() {
   if (parts[0] === 'meal' && MEALS.some(m => m.id === parts[1])) return renderMeal(parts[1]);
   if (parts[0] === 'report') return renderReport(parts[1] || todayKey());
   if (parts[0] === 'settings') return renderSettings();
+  if (parts[0] === 'setup') return applySetupLink(parts.slice(1).join('/'));
   renderHome();
 }
 window.addEventListener('hashchange', route);
@@ -620,6 +621,20 @@ function renderReport(key) {
       else { await navigator.clipboard.writeText(text); toast('Report copied'); }
     } catch (e) { /* user cancelled */ }
   };
+}
+
+/* A one-time link like #/setup/Milk,Egg,Peanuts loads an allergen list onto the phone,
+   so the list never has to live in the app's code. */
+function applySetupLink(raw) {
+  const list = decodeURIComponent(raw || '').split(',').map(a => a.trim()).filter(Boolean)
+    .map(a => { const g = groupFor(a); return g ? g.key : a.charAt(0).toUpperCase() + a.slice(1); });
+  if (list.length && confirm(`Set the allergen list to:\n\n${list.join(', ')}?`)) {
+    state.settings.allergens = Array.from(new Set(list));
+    save();
+    toast('Allergen list saved');
+  }
+  history.replaceState(null, '', location.pathname + '#/settings');
+  renderSettings();
 }
 
 /* ---------------- Settings ---------------- */
