@@ -1,5 +1,5 @@
 // Offline support: app files are cached; barcode lookups always go to the network.
-const CACHE = 'allergy-check-v1';
+const CACHE = 'allergy-check-v2';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon.svg'];
 
 self.addEventListener('install', e => {

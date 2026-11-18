@@ -236,6 +236,101 @@ window.addEventListener('hashchange', route);
 $('#backBtn').onclick = () => { location.hash = '#/'; };
 $('#settingsBtn').onclick = () => { location.hash = '#/settings'; };
 
+/* ---------------- Itch tracker ---------------- */
+
+const ITCH = [
+  { v: 0, label: 'None',        face: '😊', color: '#3f9b5f' },
+  { v: 1, label: 'Very little', face: '🙂', color: '#7cb342' },
+  { v: 2, label: 'A little',    face: '😐', color: '#c0ca33' },
+  { v: 3, label: 'Some',        face: '😕', color: '#f2b233' },
+  { v: 4, label: 'Quite a lot', face: '😣', color: '#ef7c32' },
+  { v: 5, label: 'A lot',       face: '😫', color: '#d64533' },
+];
+const itchOf = day => (day && day.itch) || [];
+const peakItch = day => itchOf(day).reduce((m, e) => Math.max(m, e.level), -1);
+const fmtTime = t => new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+function itchEntryRow(e, key, editable) {
+  const s = ITCH[e.level];
+  return `<div class="item" data-itch="${e.id}" data-key="${key}">
+    <div class="src" style="background:${s.color}22">${s.face}</div>
+    <div class="body">
+      <div class="name">${s.label} <span class="itch-num" style="background:${s.color}">${e.level}/5</span></div>
+      <div class="meta">${fmtTime(e.time)}</div>
+      ${e.note ? `<div class="ingr">${h_(e.note)}</div>` : ''}
+    </div>
+    ${editable ? `<button class="del" aria-label="Delete">×</button>` : ''}
+  </div>`;
+}
+
+function itchCard(key) {
+  const day = state.days[key];
+  const list = itchOf(day);
+  const peak = peakItch(day);
+  const last = list[list.length - 1];
+  const sum = list.length
+    ? `Latest: <b>${ITCH[last.level].label}</b> at ${fmtTime(last.time)} · worst today: <b>${ITCH[peak].label}</b>`
+    : 'Not recorded yet today';
+  return `<div class="itch-card card">
+    <div class="itch-head"><div><div class="itch-title">🩹 Itchiness</div><div class="meta">${sum}</div></div>
+    <button class="btn" id="logItch">Record</button></div>
+  </div>`;
+}
+
+function openItchSheet() {
+  const key = todayKey();
+  let chosen = null;
+  const draw = () => {
+    const list = itchOf(state.days[key]);
+    openSheet(`
+      <h2>How itchy has he been?</h2>
+      <div class="hint" style="font-size:15px;margin-top:0">Record as often as you like during the day.</div>
+      <div class="itch-scale">${ITCH.map(s => `<button class="itch-opt${chosen === s.v ? ' on' : ''}" data-v="${s.v}" style="--c:${s.color}">
+        <span class="f">${s.face}</span><span class="l">${s.label}</span></button>`).join('')}</div>
+      <label class="field">Note (optional)
+        <input class="input" id="itchNote" placeholder="e.g. scratching arms after lunch" autocomplete="off"></label>
+      <div class="btn-row"><button class="btn secondary" id="itchCancel">Cancel</button>
+        <button class="btn" id="itchSave" ${chosen === null ? 'disabled' : ''}>Save</button></div>
+      ${list.length ? `<div class="section-title">Today so far</div><div class="card">${list.slice().reverse().map(e => itchEntryRow(e, key, true)).join('')}</div>` : ''}`);
+    document.querySelectorAll('.itch-opt').forEach(b => b.onclick = () => {
+      const note = $('#itchNote').value;
+      chosen = Number(b.dataset.v); draw(); $('#itchNote').value = note;
+    });
+    $('#itchCancel').onclick = closeSheet;
+    $('#itchSave').onclick = () => {
+      const d = dayData(key);
+      d.itch = itchOf(d);
+      d.itch.push({ id: uid(), time: Date.now(), level: chosen, note: $('#itchNote').value.trim() });
+      save(); closeSheet(); renderHome();
+      toast(`Recorded: ${ITCH[chosen].label}`);
+    };
+    document.querySelectorAll('#sheet [data-itch]').forEach(row => row.querySelector('.del').onclick = () => {
+      if (!confirm('Delete this entry?')) return;
+      const d = dayData(key);
+      d.itch = itchOf(d).filter(e => e.id !== row.dataset.itch);
+      save(); draw(); renderHome();
+    });
+  };
+  draw();
+}
+
+/* Small bar chart of the worst itch level for the 7 days ending on `key`. */
+function itchWeek(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const dt = new Date(y, m - 1, d - i);
+    const k = todayKey(dt);
+    days.push({ k, label: dt.toLocaleDateString(undefined, { weekday: 'narrow' }), peak: peakItch(state.days[k]) });
+  }
+  return `<div class="itch-week">${days.map(x => `<div class="col${x.k === key ? ' cur' : ''}" title="${x.k}">
+    <div class="bar-wrap">${x.peak >= 0
+      ? `<div class="bar" style="height:${12 + x.peak * 17.6}%;background:${ITCH[x.peak].color}"></div>`
+      : `<div class="bar none"></div>`}</div>
+    <div class="d">${x.label}</div></div>`).join('')}</div>
+    <div class="hint" style="text-align:center">Worst itch each day, last 7 days</div>`;
+}
+
 /* ---------------- Home ---------------- */
 
 function isEndOfDay() {
@@ -270,6 +365,7 @@ function renderHome() {
   $('#view').innerHTML = `
     ${setup}
     <div class="meal-grid">${tiles}</div>
+    ${itchCard(key)}
     <button class="report-cta" onclick="location.hash='#/report'">
       <span style="font-size:24px">${flagged ? '⚠️' : '📋'}</span>
       <span>${eod ? 'End-of-day report is ready' : "Today's report"}<br>
@@ -277,6 +373,7 @@ function renderHome() {
       <span class="arrow">›</span>
     </button>`;
   document.querySelectorAll('.meal-btn').forEach(b => b.onclick = () => { location.hash = '#/meal/' + b.dataset.meal; });
+  $('#logItch').onclick = openItchSheet;
 }
 
 /* ---------------- Meal screen ---------------- */
@@ -594,6 +691,8 @@ function renderReport(key) {
   // day navigation through stored history
   const keys = Array.from(new Set([...Object.keys(state.days), todayKey()])).sort();
   const i = keys.indexOf(key);
+  const itch = itchOf(day);
+  const peak = peakItch(day);
   const prev = i > 0 ? keys[i - 1] : null;
   const next = i >= 0 && i < keys.length - 1 ? keys[i + 1] : null;
 
@@ -604,7 +703,10 @@ function renderReport(key) {
     </div>
     ${state.settings.allergens.length ? `<div class="subtitle" style="margin-top:10px">Checking for: ${h_(state.settings.allergens.join(', '))}</div>` : ''}
     <div style="margin-top:12px">${verdict}</div>
-    ${total ? `<button class="btn secondary block" style="margin-top:12px" id="shareBtn">Share report</button>` : ''}
+    ${total || itch.length ? `<button class="btn secondary block" style="margin-top:12px" id="shareBtn">Share report</button>` : ''}
+    <div class="section-title">🩹 Itchiness</div>
+    <div class="card">${itch.length ? itch.map(e => itchEntryRow(e, key, false)).join('') : '<div class="empty">Not recorded</div>'}</div>
+    <div class="card" style="margin-top:10px;padding:14px 16px 10px">${itchWeek(key)}</div>
     ${rows.join('')}
     <p class="disclaimer">This is a helper, not a guarantee. Always read the label yourself — databases and photo-reading can miss things.</p>`;
 
@@ -615,6 +717,7 @@ function renderReport(key) {
     const who = state.settings.childName ? `${state.settings.childName}'s` : 'Food';
     const text = `${who} allergy report — ${prettyDate(key)}\nAllergens: ${state.settings.allergens.join(', ')}\n\n` +
       (lines.length ? lines.join('\n') : `✅ All clear — ${total} items, no allergens found.`) +
+      `\n\nItchiness: ${itch.length ? `worst ${ITCH[peak].label} (${peak}/5) — ` + itch.map(e => `${fmtTime(e.time)} ${ITCH[e.level].label}${e.note ? ' (' + e.note + ')' : ''}`).join('; ') : 'not recorded'}` +
       `\n\nEverything logged:\n` + MEALS.map(m => `${m.name}: ${(day[m.id] || []).map(i => i.name).join(', ') || '—'}`).join('\n');
     try {
       if (navigator.share) await navigator.share({ title: 'Allergy report', text });
