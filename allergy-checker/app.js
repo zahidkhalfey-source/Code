@@ -321,14 +321,104 @@ function itchWeek(key) {
   for (let i = 6; i >= 0; i--) {
     const dt = new Date(y, m - 1, d - i);
     const k = todayKey(dt);
-    days.push({ k, label: dt.toLocaleDateString(undefined, { weekday: 'narrow' }), peak: peakItch(state.days[k]) });
+    days.push({ k, label: dt.toLocaleDateString(undefined, { weekday: 'narrow' }), peak: peakItch(state.days[k]), vom: vomitsOf(state.days[k]).length });
   }
   return `<div class="itch-week">${days.map(x => `<div class="col${x.k === key ? ' cur' : ''}" title="${x.k}">
     <div class="bar-wrap">${x.peak >= 0
       ? `<div class="bar" style="height:${12 + x.peak * 17.6}%;background:${ITCH[x.peak].color}"></div>`
       : `<div class="bar none"></div>`}</div>
-    <div class="d">${x.label}</div></div>`).join('')}</div>
-    <div class="hint" style="text-align:center">Worst itch each day, last 7 days</div>`;
+    <div class="d">${x.label}</div><div class="v">${x.vom ? '🤢' : ''}</div></div>`).join('')}</div>
+    <div class="hint" style="text-align:center">Worst itch each day, last 7 days · 🤢 = vomited</div>`;
+}
+
+/* ---------------- Vomiting tracker ---------------- */
+
+const VOMIT_MEALS = [...MEALS, { id: 'unsure', name: 'Not sure', emoji: '❓' }];
+const vomitsOf = day => (day && day.vomit) || [];
+const mealName = id => (VOMIT_MEALS.find(m => m.id === id) || {}).name || id;
+const afterMeal = id => id === 'unsure' ? 'meal not sure' : 'after ' + mealName(id);
+
+function vomitCard(key) {
+  const day = state.days[key];
+  const list = vomitsOf(day);
+  let body;
+  if (list.length) {
+    body = `<div class="meta"><b class="vom-yes">Vomited ${list.length}×</b> · ${h_(list.map(v => afterMeal(v.meal)).join(', '))}</div>
+      </div><button class="btn secondary" id="vomOpen">Edit</button>`;
+  } else if (day && day.noVomit) {
+    body = `<div class="meta"><b class="vom-no">No vomiting today ✓</b></div>
+      </div><button class="btn secondary" id="vomOpen">Change</button>`;
+  } else {
+    body = `<div class="meta">Did he vomit today?</div></div>
+      <div class="vom-btns"><button class="btn secondary" id="vomNo">No</button><button class="btn" id="vomOpen">Yes</button></div>`;
+  }
+  return `<div class="itch-card card"><div class="itch-head"><div><div class="itch-title">🤢 Vomiting</div>${body}</div></div>`;
+}
+
+function openVomitSheet() {
+  const key = todayKey();
+  let chosen = null;
+  const draw = () => {
+    const day = dayData(key);
+    const list = vomitsOf(day);
+    const foods = chosen && chosen !== 'unsure' ? day[chosen] : [];
+    openSheet(`
+      <h2>He vomited — after which meal?</h2>
+      <div class="itch-scale">${VOMIT_MEALS.map(m => `<button class="itch-opt${chosen === m.id ? ' on' : ''}" data-m="${m.id}" style="--c:var(--danger)">
+        <span class="f">${m.emoji}</span><span class="l">${m.name}</span></button>`).join('')}</div>
+      ${chosen && chosen !== 'unsure' ? `<div class="hint" style="font-size:14.5px">${foods.length
+        ? `${mealName(chosen)} today: ${foods.map(f => h_(f.name) + (checkItem(f).level === 'danger' ? ' ⚠️' : '')).join(', ')}`
+        : `No food logged for ${mealName(chosen)} yet.`}</div>` : ''}
+      <label class="field">Note (optional)
+        <input class="input" id="vomNote" placeholder="e.g. about 30 mins after eating" autocomplete="off"></label>
+      <div class="btn-row"><button class="btn secondary" id="vomCancel">Cancel</button>
+        <button class="btn" id="vomSave" ${chosen ? '' : 'disabled'}>Save</button></div>
+      ${list.length ? `<div class="section-title">Today so far</div><div class="card">${list.slice().reverse().map(v => vomitRow(v, key, true)).join('')}</div>`
+        : `<button class="btn secondary block" style="margin-top:12px" id="vomNone">He hasn't vomited today</button>`}`);
+    document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+      const note = $('#vomNote').value; chosen = b.dataset.m; draw(); $('#vomNote').value = note;
+    });
+    $('#vomCancel').onclick = closeSheet;
+    $('#vomSave').onclick = () => {
+      const d = dayData(key);
+      d.vomit = vomitsOf(d);
+      d.vomit.push({ id: uid(), time: Date.now(), meal: chosen, note: $('#vomNote').value.trim() });
+      delete d.noVomit;
+      save(); closeSheet(); renderHome();
+      toast(`Recorded: vomited ${afterMeal(chosen)}`);
+    };
+    const none = $('#vomNone');
+    if (none) none.onclick = () => { setNoVomit(key); closeSheet(); };
+    document.querySelectorAll('#sheet [data-vom]').forEach(row => row.querySelector('.del').onclick = () => {
+      if (!confirm('Delete this entry?')) return;
+      const d = dayData(key);
+      d.vomit = vomitsOf(d).filter(v => v.id !== row.dataset.vom);
+      save(); draw(); renderHome();
+    });
+  };
+  draw();
+}
+
+function setNoVomit(key) {
+  const d = dayData(key);
+  d.noVomit = true; d.vomit = [];
+  save(); renderHome(); toast('Recorded: no vomiting today');
+}
+
+function vomitRow(v, key, editable) {
+  const day = state.days[key] || {};
+  const foods = v.meal !== 'unsure' ? (day[v.meal] || []) : [];
+  const m = VOMIT_MEALS.find(x => x.id === v.meal) || VOMIT_MEALS[4];
+  return `<div class="item" data-vom="${v.id}">
+    <div class="src" style="background:var(--danger-bg)">${m.emoji}</div>
+    <div class="body">
+      <div class="name">Vomited ${h_(afterMeal(v.meal))}</div>
+      <div class="meta">${fmtTime(v.time)}</div>
+      ${v.note ? `<div class="ingr">${h_(v.note)}</div>` : ''}
+      ${foods.length ? `<div class="ingr">Ate: ${foods.map(f => h_(f.name) + (checkItem(f).level === 'danger' ? ' ⚠️' : '')).join(', ')}</div>` : ''}
+    </div>
+    ${editable ? `<button class="del" aria-label="Delete">×</button>` : ''}
+  </div>`;
 }
 
 /* ---------------- Home ---------------- */
@@ -354,7 +444,7 @@ function renderHome() {
       ${bad ? `<span class="flag">${bad}</span>` : ''}
       <span class="emoji">${m.emoji}</span>
       <span><div class="name">${m.name}</div>
-      <div class="count">${items.length ? `${items.length} item${items.length > 1 ? 's' : ''}` : 'Nothing yet'}</div></span>
+      <div class="count">${items.length ? `${items.length} item${items.length > 1 ? 's' : ''}` : 'Nothing yet'}${vomitsOf(day).some(v => v.meal === m.id) ? ' · 🤢' : ''}</div></span>
     </button>`;
   }).join('');
 
@@ -366,6 +456,7 @@ function renderHome() {
     ${setup}
     <div class="meal-grid">${tiles}</div>
     ${itchCard(key)}
+    ${vomitCard(key)}
     <button class="report-cta" onclick="location.hash='#/report'">
       <span style="font-size:24px">${flagged ? '⚠️' : '📋'}</span>
       <span>${eod ? 'End-of-day report is ready' : "Today's report"}<br>
@@ -374,6 +465,8 @@ function renderHome() {
     </button>`;
   document.querySelectorAll('.meal-btn').forEach(b => b.onclick = () => { location.hash = '#/meal/' + b.dataset.meal; });
   $('#logItch').onclick = openItchSheet;
+  $('#vomOpen').onclick = openVomitSheet;
+  const no = $('#vomNo'); if (no) no.onclick = () => setNoVomit(key);
 }
 
 /* ---------------- Meal screen ---------------- */
@@ -693,6 +786,7 @@ function renderReport(key) {
   const i = keys.indexOf(key);
   const itch = itchOf(day);
   const peak = peakItch(day);
+  const vom = vomitsOf(day);
   const prev = i > 0 ? keys[i - 1] : null;
   const next = i >= 0 && i < keys.length - 1 ? keys[i + 1] : null;
 
@@ -703,7 +797,10 @@ function renderReport(key) {
     </div>
     ${state.settings.allergens.length ? `<div class="subtitle" style="margin-top:10px">Checking for: ${h_(state.settings.allergens.join(', '))}</div>` : ''}
     <div style="margin-top:12px">${verdict}</div>
-    ${total || itch.length ? `<button class="btn secondary block" style="margin-top:12px" id="shareBtn">Share report</button>` : ''}
+    ${total || itch.length || vom.length || day.noVomit ? `<button class="btn secondary block" style="margin-top:12px" id="shareBtn">Share report</button>` : ''}
+    <div class="section-title">🤢 Vomiting</div>
+    <div class="card">${vom.length ? vom.map(v => vomitRow(v, key, false)).join('')
+      : `<div class="empty">${day.noVomit ? 'No vomiting ✓' : 'Not recorded'}</div>`}</div>
     <div class="section-title">🩹 Itchiness</div>
     <div class="card">${itch.length ? itch.map(e => itchEntryRow(e, key, false)).join('') : '<div class="empty">Not recorded</div>'}</div>
     <div class="card" style="margin-top:10px;padding:14px 16px 10px">${itchWeek(key)}</div>
@@ -718,6 +815,7 @@ function renderReport(key) {
     const text = `${who} allergy report — ${prettyDate(key)}\nAllergens: ${state.settings.allergens.join(', ')}\n\n` +
       (lines.length ? lines.join('\n') : `✅ All clear — ${total} items, no allergens found.`) +
       `\n\nItchiness: ${itch.length ? `worst ${ITCH[peak].label} (${peak}/5) — ` + itch.map(e => `${fmtTime(e.time)} ${ITCH[e.level].label}${e.note ? ' (' + e.note + ')' : ''}`).join('; ') : 'not recorded'}` +
+      `\nVomiting: ${vom.length ? vom.map(v => `${fmtTime(v.time)} ${afterMeal(v.meal)}${v.note ? ' (' + v.note + ')' : ''}`).join('; ') : day.noVomit ? 'none' : 'not recorded'}` +
       `\n\nEverything logged:\n` + MEALS.map(m => `${m.name}: ${(day[m.id] || []).map(i => i.name).join(', ') || '—'}`).join('\n');
     try {
       if (navigator.share) await navigator.share({ title: 'Allergy report', text });
